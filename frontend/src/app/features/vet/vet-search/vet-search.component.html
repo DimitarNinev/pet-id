@@ -1,0 +1,152 @@
+<section class="vet-search-page">
+    <header-component></header-component>
+
+    <div class="page-wraper">
+        <div class="page-header">
+            <div>
+                <h1>Търсене на животно</h1>
+                <p>
+                    Намери пациент чрез неговия уникален Pet ID или номер на микрочип.
+                </p>
+            </div>
+        </div>
+
+        <section class="search-card">
+            <div class="search-card-heading">
+                <div class="search-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="10.8" cy="10.8" r="6.8"></circle>
+                        <path d="m16 16 4.5 4.5"></path>
+                    </svg>
+                </div>
+
+                <div>
+                    <h2>Намери пациент</h2>
+                    <p>Въведи Pet ID или микрочип номер.</p>
+                </div>
+            </div>
+
+
+            <form class="search-form" [formGroup]="searchForm" (ngSubmit)="searchAnimal()">
+                <div class="search-input-wrapper">
+                    <div class="row-field no-margin-b">
+                        <app-input type="text" label="Pet ID или номер на микрочип" formControlName="searchQuery"
+                            placeholder="Напр. PET-ABC12345" />
+                    </div>
+
+                    <app-button class="button" type="submit" [disabled]="isLoading()">
+                        Търси
+                    </app-button>
+                </div>
+
+                @if (successMessage()) {
+                <div class="feedback feedback-success" role="status">
+                    <span class="feedback-icon" aria-hidden="true">✓</span>
+                    <p>{{ successMessage() }}</p>
+                </div>
+                }
+
+                @if (errorMessage()) {
+                <div class="feedback feedback-error" role="alert">
+                    <span class="feedback-icon" aria-hidden="true">!</span>
+                    <p>{{ errorMessage() }}</p>
+                </div>
+                }
+            </form>
+        </section>
+
+        @if (animal()) {
+        <section class="animal-card">
+            <div class="animal-card-header">
+                <div class="animal-avatar">
+                    @if (photoUrl(); as imageUrl) {
+                    <img [src]="imageUrl" [alt]="'Снимка на ' + animal()!.name" class="animal-photo"
+                        (error)="photoUrl.set(null)">
+                    } @else {
+                    @if (
+                    animal()!.species.toLowerCase().includes('куче') ||
+                    animal()!.species.toLowerCase().includes('dog')
+                    ) {
+                    🐕
+                    } @else if (
+                    animal()!.species.toLowerCase().includes('котка') ||
+                    animal()!.species.toLowerCase().includes('cat')
+                    ) {
+                    🐈
+                    } @else {
+                    🐾
+                    }
+                    }
+                </div>
+
+                <div class="animal-heading">
+                    <span class="result-label">НАМЕРЕН ПАЦИЕНТ</span>
+                    <h2>{{ animal()!.name }}</h2>
+                    <p>{{ animal()!.species }}@if (animal()!.breed) { · {{ animal()!.breed }} }</p>
+                </div>
+
+                <div class="btn-row">
+                    <app-button class="button" type="button" [block]="true" [small]="true"
+                        (btnClick)="openExaminationForm()">
+                        + Добави преглед
+                    </app-button>
+
+                    <app-button class="button" type="button" [block]="true" [small]="true"
+                        (btnClick)="openVaccinationForm()">
+                        + Добави ваксинация
+                    </app-button>
+
+                    <app-button class="button" type="button" [block]="true" [small]="true"
+                        (btnClick)="openDewormingForm()">
+                        + Добави обезпаразитяване
+                    </app-button>
+                </div>
+            </div>
+
+            <div class="animal-details">
+                <div class="detail-item">
+                    <span class="detail-label">Pet ID</span>
+                    <span class="detail-value">{{ animal()!.petId }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Микрочип</span>
+                    <span class="detail-value">
+                        {{ animal()!.microchipId || 'Няма регистриран' }}
+                    </span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Пол</span>
+                    <span class="detail-value">{{ animal()!.sex || 'Не е посочен' }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Дата на раждане</span>
+                    <span class="detail-value">
+                        @if (animal()!.dateOfBirth) {
+                        {{ animal()!.dateOfBirth | date:'dd.MM.yyyy' }}
+                        } @else {
+                        Не е посочена
+                        }
+                    </span>
+                </div>
+            </div>
+
+            <div class="animal-card-footer">
+                <p>
+                    <span class="privacy-indicator"></span>
+                    Показани са само основните данни за животното.
+                </p>
+            </div>
+
+            <div class="btn-row">
+                <app-button class="button" type="button" (btnClick)="openMedicalHistory()">
+                    Медицинска история
+                </app-button>
+            </div>
+        </section>
+        }
+    </div>
+</section>

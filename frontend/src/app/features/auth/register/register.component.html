@@ -1,0 +1,142 @@
+<div class="auth-layout">
+  <section class="auth-form-panel">
+    <a class="brand" routerLink="/login" aria-label="Pet ID — начало">
+      <span class="brand-icon">✦</span>
+      <span>Pet <strong>ID</strong></span>
+    </a>
+
+    <div class="form-content">
+      <p class="eyebrow">JOIN PET ID</p>
+      <h1>Нека се запознаем.</h1>
+      <p class="subtitle">
+        Създай профил за по-лесна и организирана грижа за животните.
+      </p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="name-row">
+          <div>
+            <app-input
+              label="Име"
+              type="text"
+              formControlName="firstName"
+              placeholder="Иван"
+              autocomplete="given-name">
+            </app-input>
+
+            @if (form.controls.firstName.touched && form.controls.firstName.invalid) {
+              <small class="field-err">
+                Въведи името си.
+              </small>
+            }
+          </div>
+          
+          <div>
+            <app-input
+              label="Фамилия"
+              type="text"
+              formControlName="lastName"
+              placeholder="Петров"
+              autocomplete="family-name">
+            </app-input>
+
+            @if (form.controls.lastName.touched && form.controls.lastName.invalid) {
+              <small class="field-err">
+                Въведи фамилията си.
+              </small>
+            }
+          </div>
+        </div>
+
+        <div class="row-field">
+          <app-input
+            label="Имейл адрес"
+            type="email"
+            formControlName="email"
+            placeholder="name@example.com"
+            autocomplete="email">
+          </app-input>
+
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <small class="field-err">Въведи валиден имейл адрес.</small>
+          }
+        </div>
+
+        <div class="row-field">
+          <app-input
+            label="Парола"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Минимум 8 символа"
+            autocomplete="new-password">
+          </app-input>
+
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="showPassword = !showPassword">
+            {{ showPassword ? 'Скрий' : 'Покажи' }}
+          </button>
+
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+          <small class="field-err">
+            Паролата трябва да е между 8 и 72 символа.
+          </small>
+        }
+        </div>
+
+        <div class="row-field">
+          <app-dropdown
+            label="Тип профил"
+            [options]="type"
+            placeholder="test"
+            formControlName="role">
+          </app-dropdown>
+
+          @if (form.controls.role.value === 'VET') {
+            <p class="info-message">
+              Профилът на ветеринарен лекар ще изисква одобрение от
+              администратор, преди да получи достъп до функционалностите за
+              ветеринарни специалисти.
+            </p>
+          }
+
+          @if (errorMessage()) {
+            <p class="form-error" role="alert">{{ errorMessage() }}</p>
+          }
+        </div>
+
+        <app-button
+          class="button"
+          type="submit"
+          [block]="true"
+          [disabled]="loading()">
+          {{ loading() ? 'Създаване...' : 'Създай профил' }}
+        </app-button>
+      </form>
+
+      <p class="switch-auth">
+        Вече имаш профил?
+        <a routerLink="/login">Влез тук</a>
+      </p>
+    </div>
+
+    <p class="legal">© 2026 Pet ID · Грижа с внимание.</p>
+  </section>
+
+  <aside class="auth-visual">
+    <img
+      src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1400&q=85"
+      alt="Куче, което гледа към камерата"
+    />
+
+    <div class="visual-overlay"></div>
+
+    <div class="visual-copy">
+      <span class="visual-tag">CARE STARTS HERE</span>
+      <h2>Всеки любимец заслужава своя здравна история.</h2>
+      <p>
+        Една стъпка към по-добра организация и по-информирана грижа.
+      </p>
+    </div>
+  </aside>
+</div>

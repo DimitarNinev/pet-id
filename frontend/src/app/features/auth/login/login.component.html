@@ -1,0 +1,91 @@
+<div class="auth-layout">
+  <section class="auth-form-panel">
+    <a class="brand" routerLink="/login" aria-label="Pet ID — начало">
+      <span class="brand-icon">✦</span>
+      <span>Pet <strong>ID</strong></span>
+    </a>
+
+    <div class="form-content">
+      <p class="eyebrow">WELCOME BACK</p>
+      <h1>Радваме се, че си тук.</h1>
+      <p class="subtitle">
+        Влез в профила си и се погрижи за здравето на своя любимец.
+      </p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="row-field">
+          <app-input
+            label="Имейл адрес"
+            type="email"
+            formControlName="email"
+            placeholder="name@example.com"
+            autocomplete="email">
+          </app-input>
+
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <small class="field-err">
+              Въведи валиден имейл адрес.
+            </small>
+          }
+        </div>
+
+        <div class="row-field">
+          <app-input
+            label="Парола"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Въведи паролата си"
+            autocomplete="current-password">
+          </app-input>
+
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="showPassword = !showPassword">
+            {{ showPassword ? 'Скрий' : 'Покажи' }}
+        </button>
+
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+          <small class="field-err">Въведи паролата си.</small>
+          }
+
+          @if (errorMessage()) {
+            <small class="form-err" role="alert">{{ errorMessage() }}</small>
+          }
+        </div>
+
+        <app-button
+          class="button"
+          type="submit"
+          [block]="true"
+          [disabled]="loading()">
+          {{ loading() ? 'Влизане...' : 'Влез в профила си' }}
+        </app-button>
+      </form>
+
+      <p class="switch-auth">
+        Нямаш профил?
+        <a routerLink="/register">Регистрирай се</a>
+      </p>
+    </div>
+
+    <p class="legal">© 2026 Pet ID · Грижа с внимание.</p>
+  </section>
+
+  <aside class="auth-visual">
+    <img
+      src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1400&q=85"
+      alt="Куче, което гледа към камерата"
+    />
+
+    <div class="visual-overlay"></div>
+
+    <div class="visual-copy">
+      <span class="visual-tag">ONE PLACE. EVERY PAW.</span>
+      <h2>Повече спокойствие за теб. По-добра грижа за него.</h2>
+      <p>
+        Медицинската история на твоя любимец — организирана на едно място.
+      </p>
+    </div>
+  </aside>
+</div>

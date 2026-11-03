@@ -1,0 +1,140 @@
+<div class="reminders-page">
+  <header-component></header-component>
+
+  <main>
+    <div class="header">
+      <h1>Ваксинации и напомняния</h1>
+      <p>Следи важните дати и се грижи за здравето на своите любимци.</p>
+    </div>
+
+    <section class="stats">
+      <article class="stat-card blue">
+        <span class="stat-icon">📅</span>
+        <div>
+          <p>Всички напомняния</p>
+          <strong>{{ totalCount() }}</strong>
+          <small>Общо събития</small>
+        </div>
+      </article>
+
+      <article class="stat-card green">
+        <span class="stat-icon">✓</span>
+        <div>
+          <p>Предстоящи</p>
+          <strong>{{ upcomingCount() }}</strong>
+          <small>Предстоящи процедури</small>
+        </div>
+      </article>
+
+      <article class="stat-card orange">
+        <span class="stat-icon">!</span>
+        <div>
+          <p>Просрочени</p>
+          <strong>{{ overdueCount() }}</strong>
+          <small>Изискват внимание</small>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel reminders-panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Всички напомняния</h2>
+          <p>Ваксинации и обезпаразитявания на твоите животни.</p>
+        </div>
+      </div>
+
+      <div class="filters">
+        <button type="button" [class.active]="activeFilter() === 'ALL'" (click)="setFilter('ALL')">
+          Всички
+        </button>
+
+        <button type="button" [class.active]="activeFilter() === 'VACCINATION'" (click)="setFilter('VACCINATION')">
+          💉 Ваксинации
+        </button>
+
+        <button type="button" [class.active]="activeFilter() === 'DEWORMING'" (click)="setFilter('DEWORMING')">
+          ❤️ Обезпаразитявания
+        </button>
+      </div>
+
+      @if (isLoading()) {
+      <div class="state-message">
+        <span class="loader"></span>
+        <p>Зареждане на напомнянията...</p>
+      </div>
+      } @else if (errorMessage()) {
+      <div class="state-message error">
+        <p>{{ errorMessage() }}</p>
+        <button type="button" (click)="loadReminders()">Опитай отново</button>
+      </div>
+      } @else if (filteredReminders().length === 0) {
+      <div class="empty-state">
+        <span class="empty-icon">🐾</span>
+
+        @if (reminders().length === 0) {
+        <h3>Все още нямаш напомняния</h3>
+        <p>
+          Когато ветеринар добави ваксинация или обезпаразитяване с
+          посочена следваща дата, тя ще се появи тук.
+        </p>
+        } @else {
+        <h3>Няма напомняния от този тип</h3>
+        <p>Опитай с друг филтър, за да видиш останалите събития.</p>
+        }
+      </div>
+      } @else {
+      <div class="reminder-list">
+        @for (reminder of filteredReminders(); track reminder.id) {
+        <article class="reminder-item" [class.overdue]="reminder.status === 'OVERDUE'">
+          <div class="reminder-icon">
+            @if (reminder.type === 'VACCINATION') {
+            💉
+            } @else {
+            ❤️
+            }
+          </div>
+
+          <div class="reminder-info">
+            <div class="reminder-title">
+              <h3>{{ reminder.title }}</h3>
+
+              <span class="type-label">
+                {{ getTypeLabel(reminder.type) }}
+              </span>
+            </div>
+
+            <p class="animal-name">
+              🐾 {{ reminder.animalName }}
+              <span>· {{ reminder.petId }}</span>
+            </p>
+
+            @if (reminder.dewormingType) {
+            <small>
+              {{
+              reminder.dewormingType === 'INTERNAL'
+              ? 'Вътрешно обезпаразитяване'
+              : 'Външно обезпаразитяване'
+              }}
+            </small>
+            }
+
+            <div class="reminder-date">
+              Дата: {{ reminder.dueAt | date: 'dd.MM.yyyy' }}
+            </div>
+          </div>
+
+          <div class="reminder-status">
+            <span class="status-label" [class.overdue]="reminder.status === 'OVERDUE'">
+              {{ getStatusLabel(reminder.status) }}
+            </span>
+
+            <small>{{ getDaysLabel(reminder) }}</small>
+          </div>
+        </article>
+        }
+      </div>
+      }
+    </section>
+  </main>
+</div>

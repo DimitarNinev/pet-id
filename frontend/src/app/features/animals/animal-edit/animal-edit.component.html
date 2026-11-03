@@ -1,0 +1,124 @@
+<div class="edit-page">
+    <header-component></header-component>
+
+    <main>
+        <div class="header">
+            <h1>Редактиране на любимец</h1>
+            <p>Актуализирай информацията за своето животно.</p>
+        </div>
+
+        @if (isLoading()) {
+        <p class="state-message">Зареждане на данните...</p>
+        } @else if (errorMessage() && !animal()) {
+        <div class="error-box">{{ errorMessage() }}</div>
+        } @else if (animal(); as animalData) {
+        <form [formGroup]="animalForm" (ngSubmit)="onSubmit()">
+            <section class="photo-section">
+                <div class="photo-heading">
+                    <h2>Снимка на любимеца</h2>
+                    <p>Можеш да добавиш нова снимка или да замениш текущата.</p>
+                </div>
+
+                <div class="photo-content">
+                    @if (photoPreview(); as preview) {
+                    <img [src]="preview" alt="Преглед на новата снимка" class="animal-photo">
+                    } @else if (photoUrl(); as currentPhoto) {
+                    <img [src]="currentPhoto" alt="Снимка на любимеца" class="animal-photo">
+                    } @else if (isLoadingPhoto()) {
+                    <div class="photo-placeholder photo-loading">
+                        <span class="photo-spinner"></span>
+                        <small>Зареждане на снимката...</small>
+                    </div>
+                    } @else {
+                    <div class="photo-placeholder">
+                        <span>🐾</span>
+                        <small>Няма добавена снимка</small>
+                    </div>
+                    }
+
+                    <div class="photo-controls">
+                        <label class="photo-select-button">
+                            Избери снимка
+                            <input type="file" accept="image/jpeg,image/png,image/webp"
+                                (change)="onPhotoSelected($event)">
+                        </label>
+
+                        @if (selectedPhoto()) {
+                        <button type="button" class="photo-remove-button" (click)="removeSelectedPhoto()">
+                            Откажи избора
+                        </button>
+                        }
+
+                        @if (photoError()) {
+                        <small class="photo-error">{{ photoError() }}</small>
+                        }
+
+                        <small class="photo-hint">JPEG, PNG или WebP · Максимум 5 MB</small>
+                    </div>
+                </div>
+
+                @if (selectedPhoto()) {
+                <app-button type="button" [disabled]="isUploadingPhoto()" (click)="uploadSelectedPhoto()">
+                    {{ isUploadingPhoto() ? 'Качване...' : 'Качи снимката' }}
+                </app-button>
+                }
+            </section>
+
+            <div class="form-grid">
+                <div class="row-field">
+                    <app-input label="Име" type="text" formControlName="name" [required]="true">
+                    </app-input>
+
+                    @if (animalForm.controls.name.touched && animalForm.controls.name.invalid) {
+                    <small>Въведи име с дължина до 100 символа.</small>
+                    }
+                </div>
+
+                <div class="row-field">
+                    <app-dropdown label="Вид" [options]="species" [required]="true" formControlName="species">
+                    </app-dropdown>
+                </div>
+
+                <div class="row-field">
+                    <app-input label="Порода" type="text" formControlName="breed">
+                    </app-input>
+                </div>
+
+                <div class="row-field">
+                    <app-dropdown label="Пол" [options]="sex" formControlName="sex">
+                    </app-dropdown>
+                </div>
+
+                <div class="row-field">
+                    <app-calendar label="Дата на раждане" formControlName="dateOfBirth" [max]="today">
+                    </app-calendar>
+                </div>
+
+                <div class="row-field">
+                    <app-input label="Номер на микрочип" type="text" formControlName="microchipId">
+                    </app-input>
+                </div>
+
+                <div class="row-field full-width">
+                    <app-input label="Бележки" type="textarea" formControlName="notes">
+                    </app-input>
+                </div>
+            </div>
+
+            @if (errorMessage()) {
+            <p class="error-message">{{ errorMessage() }}</p>
+            }
+
+            <div class="form-actions">
+                <app-button class="button" type="reset" [routerLink]="['/animals', animalData.id]">
+                    Отказ
+                </app-button>
+
+                <app-button class="button" type="submit" [disabled]="isSubmitting()">
+                    {{ isSubmitting() ? 'Запазване...' : 'Запази промените' }}
+                </app-button>
+            </div>
+        </form>
+        }
+    </main>
+</div>

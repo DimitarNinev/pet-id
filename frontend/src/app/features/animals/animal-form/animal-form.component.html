@@ -1,0 +1,142 @@
+<div class="animal-page">
+  <header-component></header-component>
+
+  <main class="form-container">
+    <div class="intro">
+      <h1>Добави животно</h1>
+      <p>
+        Създай профил на своя любимец, за да можеш да съхраняваш
+        информацията и медицинската му история на едно място.
+      </p>
+    </div>
+
+    <form [formGroup]="animalForm" (ngSubmit)="onSubmit()" class="animal-form">
+      <section class="form-section">
+        <div class="section-heading">
+          <span class="section-icon">🐾</span>
+          <div>
+            <h2>Основна информация</h2>
+            <p>Данни за твоя любимец</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="row-field">
+            <app-input label="Име" type="text" formControlName="name" placeholder="Например: Бъди" [required]="true"
+              maxlength="100">
+            </app-input>
+
+            @if (name.touched && name.hasError('required')) {
+            <small class="field-error">Името е задължително.</small>
+            }
+            @if (name.touched && name.hasError('maxlength')) {
+            <small class="field-error">Името е твърде дълго.</small>
+            }
+          </div>
+
+          <div class="row-field">
+            <app-dropdown label="Вид" [options]="species" [required]="true" formControlName="species">
+            </app-dropdown>
+          </div>
+
+          <div class="row-field">
+            <app-input label="Порода" type="text" formControlName="breed" placeholder="Например: Златен ретривър">
+            </app-input>
+          </div>
+
+          <div class="row-field">
+            <app-dropdown label="Пол" [options]="sex" formControlName="sex">
+            </app-dropdown>
+          </div>
+
+          <div class="row-field">
+            <app-calendar label="Дата на раждане" formControlName="dateOfBirth" [max]="today">
+            </app-calendar>
+          </div>
+
+          <div class="row-field">
+            <app-input label="Номер на микрочип" type="text" formControlName="microchipId"
+              placeholder="Въведи номер, ако има">
+            </app-input>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <div class="section-heading">
+          <span class="section-icon">📷</span>
+          <div>
+            <h2>Снимка на любимеца</h2>
+            <p>Добави снимка, за да персонализираш профила му</p>
+          </div>
+        </div>
+
+        <div class="photo-upload">
+          @if (photoPreview(); as preview) {
+          <div class="photo-preview">
+            <img [src]="preview" alt="Преглед на снимката на любимеца">
+
+            <button type="button" class="remove-photo" (click)="removeSelectedPhoto()">
+              Премахни снимката
+            </button>
+          </div>
+          } @else {
+          <label class="photo-upload-area">
+            <span class="upload-icon">📁</span>
+            <span>Избери снимка</span>
+            <small>JPEG, PNG или WebP · Максимум 5 MB</small>
+
+            <input type="file" accept="image/jpeg,image/png,image/webp" (change)="onPhotoSelected($event)">
+          </label>
+          }
+        </div>
+
+        @if (photoError()) {
+        <small class="field-error">{{ photoError() }}</small>
+        }
+      </section>
+
+      <section class="form-section">
+        <div class="section-heading">
+          <span class="section-icon">📋</span>
+          <div>
+            <h2>Допълнителни бележки</h2>
+            <p>Информация, която е полезно да запазиш</p>
+          </div>
+        </div>
+
+        <div class="row-field">
+          <app-input label="Бележки" type="textarea" formControlName="notes"
+            placeholder="Например: алергии, особености или друга важна информация...">
+          </app-input>
+        </div>
+      </section>
+
+      @if (errorMessage()) {
+      <div class="error-banner" role="alert">
+        {{ errorMessage() }}
+      </div>
+      }
+
+      <div class="form-actions">
+        <app-button class="button" type="reset" routerLink="/dashboard" [disabled]="isSubmitting()">
+          Отказ
+        </app-button>
+
+        @if (createdAnimalId()) {
+        <app-button class="button" type="button" [disabled]="isSubmitting()" (click)="retryPhotoUpload()">
+          {{ isSubmitting() ? 'Качване...' : 'Опитай отново →' }}
+        </app-button>
+        } @else {
+        <app-button class="button" type="submit" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Записване...' : 'Запази любимеца →' }}
+        </app-button>
+        }
+      </div>
+    </form>
+
+    <p class="privacy-note">
+      🔒 Данните се записват в профила ти в Pet ID.
+    </p>
+  </main>
+</div>

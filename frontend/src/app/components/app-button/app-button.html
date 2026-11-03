@@ -1,0 +1,17 @@
+<button
+    class="button"
+    [type]="type"
+    [disabled]="disabled || isLoading"
+    [ngClass]="[block ? 'btn--block' : '', small ? 'btn--small' : '', type === 'reset' ? 'reset' : '']"
+    (click)="onButtonClick($event)">
+    
+    <!-- Ако бутонът зарежда, показваме спинер -->
+    @if (isLoading) {
+    <span class="spinner"></span>
+    }
+
+    <!-- Мястото, където ще се вкара текстът/иконата от родителя -->
+    <span [class.text-hidden]="isLoading">
+        <ng-content></ng-content>
+    </span>
+</button>

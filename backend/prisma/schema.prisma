@@ -1,0 +1,213 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  OWNER
+  VET
+  ADMIN
+}
+
+enum OrganizationType {
+  VETERINARY_CLINIC
+}
+
+enum MedicalRecordType {
+  OWNER_NOTE
+  EXAMINATION
+  VACCINATION
+  DEWORMING
+  LAB_RESULT
+  TREATMENT
+  PROCEDURE
+  OTHER
+}
+
+enum DewormingType {
+  INTERNAL
+  EXTERNAL
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  phone        String?
+  role         UserRole @default(OWNER)
+  vetApproved  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  ownedAnimals AnimalOwner[]
+  memberships OrganizationMember[]
+  createdMedicalRecords MedicalRecord[] @relation("MedicalRecordAuthor")
+}
+
+model Organization {
+  id        String           @id @default(cuid())
+  name      String
+  type      OrganizationType @default(VETERINARY_CLINIC)
+  phone     String?
+  email     String?
+  address   String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  members OrganizationMember[]
+  medicalRecords MedicalRecord[]
+}
+
+model OrganizationMember {
+  id             String   @id @default(cuid())
+  userId         String
+  organizationId String
+  position       String?
+  createdAt      DateTime @default(now())
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+}
+
+model Animal {
+  id          String   @id @default(cuid())
+  petId       String   @unique
+  name        String
+  species     String
+  breed       String?
+  sex         String?
+  dateOfBirth DateTime?
+  microchipId String?  @unique
+  notes       String?
+
+  photoPath   String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owners AnimalOwner[]
+  medicalRecords MedicalRecord[]
+}
+
+model AnimalOwner {
+  id        String   @id @default(cuid())
+  userId    String
+  animalId  String
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  animal Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, animalId])
+}
+
+
+model MedicalRecord {
+  id             String            @id @default(cuid())
+  animalId       String
+  createdById    String
+  organizationId String?
+  type           MedicalRecordType
+  title          String
+  notes          String?
+  occurredAt     DateTime
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  animal       Animal       @relation(fields: [animalId], references: [id], onDelete: Restrict)
+  createdBy    User         @relation("MedicalRecordAuthor", fields: [createdById], references: [id], onDelete: Restrict)
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+
+  examination Examination?
+  vaccination Vaccination?
+  deworming Deworming?
+  labResult   LabResult?
+
+  @@index([animalId, occurredAt])
+  @@index([createdById])
+  @@index([organizationId])
+  @@index([type])
+}
+
+
+model Examination {
+  id                 String   @id @default(cuid())
+  medicalRecordId    String   @unique
+  reason             String?
+  symptoms           String?
+  clinicalFindings   String?
+  diagnosis          String?
+  recommendations    String?
+  weightKg           Float?
+  temperatureC       Float?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id], onDelete: Restrict)
+}
+
+model Vaccination {
+  id              String   @id @default(cuid())
+  medicalRecordId String   @unique
+  vaccineName     String
+  manufacturer    String?
+  batchNumber     String?
+  administeredAt  DateTime
+  nextDueAt       DateTime?
+  validUntil      DateTime?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id], onDelete: Restrict)
+}
+
+model Deworming {
+  id                 String   @id @default(cuid())
+  medicalRecordId    String   @unique
+  productName        String
+  manufacturer       String?
+  batchNumber        String?
+  dewormingType      DewormingType
+  administeredAt     DateTime
+  dose               String?
+  administrationMethod String?
+  nextDueAt          DateTime?
+  notes              String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id], onDelete: Restrict)
+}
+
+model LabResult {
+  id              String   @id @default(cuid())
+  medicalRecordId String   @unique
+  testName        String
+  result          String?
+  conclusion      String?
+  performedAt     DateTime?
+  laboratory      String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id], onDelete: Restrict)
+}
+
+
+

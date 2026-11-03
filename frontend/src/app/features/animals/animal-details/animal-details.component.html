@@ -1,0 +1,123 @@
+<div class="animal-details-page">
+    <header-component></header-component>
+
+    <main>
+        <div class="header">
+            <h1>Профил на любимеца</h1>
+        </div>
+
+        @if (isLoading()) {
+        <p class="state-message">Зареждане на профила...</p>
+        } @else if (errorMessage()) {
+        <section class="state-card">
+            <p class="error-message">{{ errorMessage() }}</p>
+            <a routerLink="/dashboard" class="back-button">Обратно към Dashboard</a>
+        </section>
+        } @else if (animal(); as pet) {
+        <section class="animal-card">
+            <div class="animal-hero">
+                <div class="animal-avatar">
+                    @if (photoUrl(); as imageUrl) {
+                    <img [src]="imageUrl" [alt]="'Снимка на ' + pet.name" (error)="photoUrl.set(null)"
+                        class="animal-photo">
+                    } @else {
+                    @if (
+                    pet.species.toLowerCase().includes('куче') ||
+                    pet.species.toLowerCase().includes('dog')
+                    ) {
+                    🐕
+                    } @else if (
+                    pet.species.toLowerCase().includes('котка') ||
+                    pet.species.toLowerCase().includes('cat')
+                    ) {
+                    🐈
+                    } @else {
+                    🐾
+                    }
+                    }
+                </div>
+
+                <div>
+                    <p class="animal-species">{{ pet.species }}</p>
+                    <h2>{{ pet.name }}</h2>
+                    <p>{{ pet.breed || 'Породата не е посочена' }}</p>
+                </div>
+            </div>
+
+            <div class="animal-id"><span>ID: {{pet.petId}}</span></div>
+
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span>Пол</span>
+                    <strong>{{ pet.sex || 'Не е посочен' }}</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Дата на раждане</span>
+                    <strong>
+                        {{ pet.dateOfBirth ? (pet.dateOfBirth | date:'dd.MM.yyyy') : 'Не е посочена' }}
+                    </strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Микрочип</span>
+                    <strong>{{ pet.microchipId || 'Няма въведен номер' }}</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Добавен на</span>
+                    <strong>{{ pet.createdAt | date:'dd.MM.yyyy' }}</strong>
+                </div>
+            </div>
+
+            <div class="notes-section">
+                <h3>Бележки</h3>
+                <p>{{ pet.notes || 'Няма добавени бележки все още.' }}</p>
+            </div>
+
+            <div class="animal-actions">
+                <app-button class="button" type="reset" (click)="confirmDelete()">
+                    Изтрий профила
+                </app-button>
+
+                <app-button class="button" type="button" [routerLink]="['/animals', pet.id, 'medical-records']">
+                    Медицинска история
+                </app-button>
+
+                <app-button class="button" type="button" (click)="editAnimal()">
+                    Редактирай профила
+                </app-button>
+            </div>
+
+            @if (showDeleteConfirmation()) {
+            <div class="delete-confirmation">
+                <h3>Изтриване на профила</h3>
+
+                <p>
+                    Сигурен ли си, че искаш да изтриеш профила на
+                    <strong>{{ pet.name }}</strong>?
+                    Това действие не може да бъде отменено.
+                </p>
+
+                @if (deleteError()) {
+                <p class="delete-error">
+                    {{ deleteError() }}
+                </p>
+                }
+
+                <div class="confirmation-actions">
+                    <app-button class="button" type="reset" (click)="cancelDelete()" [disabled]="isDeleting()">
+                        Отказ
+                    </app-button>
+
+                    <app-button class="button" type="button" (click)="deleteAnimal()" [disabled]="isDeleting()">
+                        {{ isDeleting() ? 'Изтриване...' : 'Да, изтрий' }}
+                    </app-button>
+                </div>
+            </div>
+            }
+        </section>
+        }
+    </main>
+
+</div>

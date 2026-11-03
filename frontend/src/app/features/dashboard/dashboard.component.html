@@ -1,0 +1,239 @@
+<div class="dashboard">
+  <aside class="sidebar">
+    <a class="brand" routerLink="/dashboard">
+      <span class="brand-icon">✦</span>
+      <span>
+        <strong>Pet ID</strong>
+        <small>Здрави животни. Спокойни стопани.</small>
+      </span>
+    </a>
+
+    <nav class="navigation">
+      <a class="nav-item active" routerLink="/dashboard">
+        <span>⌂</span> Начало
+      </a>
+
+      <a class="nav-item" routerLink="/animals">
+        Моите животни
+      </a>
+
+      <!-- <a class="nav-item" routerLink="/medical-records">
+        Медицински досиета
+      </a> -->
+
+      <a class="nav-item" routerLink="/reminders">
+        Ваксинации и напомняния
+      </a>
+
+      <a class="nav-item" routerLink="/clinics">
+        Ветеринарни клиники
+      </a>
+
+      <a class="nav-item" routerLink="/profile">
+        Настройки на профила
+      </a>
+    </nav>
+
+    <button class="logout-button" type="button" (click)="logout()">
+      <span>↪</span> Изход
+    </button>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <span class="mobile-brand"><span>✦</span>Pet ID</span>
+
+      <a class="mobile-logout" (click)="logout()">➜]</a>
+    </header>
+
+    <section class="welcome">
+      <div>
+        <h1>Добре дошъл, {{ userName() }}!</h1>
+        <p>Ето какво се случва с твоите любимци.</p>
+      </div>
+    </section>
+
+    <section class="stats">
+      <article class="stat-card blue">
+        <span class="stat-icon">🐾</span>
+        <div>
+          <p>Моите животни</p>
+          <strong>{{ pets().length }}</strong>
+          <small>Регистрирани любимци</small>
+        </div>
+      </article>
+
+      <article class="stat-card green">
+        <span class="stat-icon">💉</span>
+        <div>
+          <p>Ваксинации</p>
+          <strong>{{ vaccineCount }}</strong>
+          <small>Предстоящи напомняния</small>
+        </div>
+      </article>
+
+      <article class="stat-card purple">
+        <span class="stat-icon">✚</span>
+        <div>
+          <p>Обезпаразитявания</p>
+          <strong>{{ dewormingCount }}</strong>
+          <small>Предстоящи прегледи</small>
+        </div>
+      </article>
+
+      <!-- <article class="stat-card orange">
+        <span class="stat-icon">▤</span>
+        <div>
+          <p>Медицински досиета</p>
+          <strong>—</strong>
+          <small>Все още няма данни</small>
+        </div>
+      </article> -->
+    </section>
+
+    <section class="content-grid">
+      <article class="panel pets-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Моите животни</h2>
+            <p>Всички твои любимци на едно място.</p>
+          </div>
+        </div>
+
+        <div class="pet-grid">
+          @if (isLoadingPets()) {
+          <p class="pets-message">Зареждане на любимците...</p>
+          } @else if (petsError()) {
+          <p class="pets-message error">{{ petsError() }}</p>
+          } @else if (pets().length === 0) {
+          <div class="pets-empty">
+            <span class="empty-icon">🐾</span>
+            <h3>Все още нямаш регистрирани любимци</h3>
+            <p>Добави първото си животно и съхранявай медицинската му история на едно място.</p>
+            <a routerLink="/animals/new" class="add-pet-button">
+              <span>＋</span> Добави животно
+            </a>
+          </div>
+          } @else {
+          @for (pet of pets(); track pet.id) {
+          <article class="pet-card">
+            <div class="pet-image-placeholder">
+              @if (pet.photoUrl) {
+              <img [src]="pet.photoUrl" [alt]="'Снимка на ' + pet.name" class="pet-photo">
+              } @else {
+              @if (pet.species.toLowerCase().includes('куче') ||
+              pet.species.toLowerCase().includes('dog')) {
+              🐕
+              } @else if (pet.species.toLowerCase().includes('котка') ||
+              pet.species.toLowerCase().includes('cat')) {
+              🐈
+              } @else {
+              🐾
+              }
+              }
+            </div>
+
+            <div class="pet-info">
+              <h3>{{pet.petId}}</h3>
+              <span class="pet-species">{{ pet.species }}</span>
+              <h3>{{ pet.name }}</h3>
+              <p>{{ pet.breed || 'Породата не е посочена' }}</p>
+
+              @if (pet.dateOfBirth) {
+              <p>Роден/а: {{ pet.dateOfBirth | date:'dd.MM.yyyy' }}</p>
+              } @else {
+              <p>Няма въведена дата на раждане</p>
+              }
+
+              @if (pet.microchipId) {
+              <p class="microchip">Микрочип: {{ pet.microchipId }}</p>
+              }
+
+              <a class="details-button" (click)="openAnimalDetails(pet)">
+                Виж профила <span>➔</span>
+              </a>
+            </div>
+          </article>
+          }
+          }
+        </div>
+      </article>
+
+      <div class="right-column">
+        <article class="panel reminders-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Предстоящи събития</h2>
+              <p>Не пропускай важните дати.</p>
+            </div>
+            <a routerLink="/reminders" class="text-link">Всички ➔</a>
+          </div>
+
+          <div class="reminder-list">
+            @if (isLoadingReminders()) {
+            <p class="pets-message">Зареждане на напомнянията...</p>
+            } @else if (remindersError()) {
+            <p class="pets-message error">{{ remindersError() }}</p>
+            } @else if (reminders().length === 0) {
+            <div class="pets-empty">
+              <span class="empty-icon">🐾</span>
+              <h3>Няма предстоящи събития</h3>
+              <p>Тук ще виждаш следващите ваксинации и обезпаразитявания.</p>
+            </div>
+            } @else {
+            @for (reminder of reminders(); track reminder.id) {
+            <article class="reminder" [class.vaccine]="reminder.type === 'vaccine'"
+              [class.medicine]="reminder.type === 'medicine'">
+              <span class="reminder-icon">
+                {{ reminder.type === 'vaccine' ? '💉' : '❤️' }}
+              </span>
+
+              <div class="reminder-info">
+                <strong>{{ reminder.title }} — {{ reminder.petName }}</strong>
+                <small>{{ reminder.date }}</small>
+              </div>
+
+              <span class="days-left">
+                @if (reminder.daysLeft < 0) { Просрочено } @else if (reminder.daysLeft===0) { Днес } @else if
+                  (reminder.daysLeft===1) { 1 ден } @else { {{ reminder.daysLeft }} дни } </span>
+            </article>
+            }
+            }
+          </div>
+        </article>
+
+        <article class="panel quick-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Бързи действия</h2>
+              <p>Какво искаш да направиш?</p>
+            </div>
+          </div>
+
+          <div class="quick-actions">
+            <a routerLink="/animals/new" class="quick-action">
+              <strong>Добави животно</strong>
+            </a>
+
+            <a routerLink="/reminders/new" class="quick-action">
+              <strong>Добави напомняне</strong>
+            </a>
+
+            <a routerLink="/medical-records/new" class="quick-action">
+              <strong>Добави запис</strong>
+            </a>
+
+            <a routerLink="/clinics" class="quick-action">
+              <strong>Ветеринарни клиники</strong>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="dashboard-footer">
+      <span>Pet ID · v0.1.0</span>
+      <span>С грижа за твоите любимци ♥</span>
+    </footer>
+  </main>
+</div>

@@ -1,0 +1,262 @@
+<section class="medical-history">
+    <header-component></header-component>
+
+    <div class="header">
+        <h1>Медицинска история</h1>
+        <p>Преглед на медицинските записи.</p>
+    </div>
+
+    <div class="create-record-section">
+        @if (userRole() == 'OWNER') {
+        <app-button class="button" type="submit" (click)="toggleCreateForm()">
+            {{ showCreateForm() ? 'Отказ' : '+ Добави лична бележка' }}
+        </app-button>
+        }
+
+        @if (showCreateForm()) {
+        <form [formGroup]="recordForm" (ngSubmit)="createRecord()">
+            <div class="row-field">
+                <app-input label="Заглавие" type="text" formControlName="title" [required]="true"
+                    placeholder="Напр. Промяна в храненето" maxlength="200">
+                </app-input>
+            </div>
+
+            <div class="row-field calendar-field">
+                <app-calendar label="Дата" formControlName="occurredAt" [required]="true">
+                </app-calendar>
+            </div>
+
+            <div class="row-field">
+                <app-input label="Описание" type="textarea" formControlName="notes"
+                    placeholder="Опиши наблюденията си...">
+                </app-input>
+            </div>
+
+            @if (saveError()) {
+            <p class="error-message">{{ saveError() }}</p>
+            }
+
+            <app-button class="button" type="submit" [disabled]="isSaving()">
+                {{ isSaving() ? 'Запазване...' : 'Запази бележката' }}
+            </app-button>
+        </form>
+        }
+
+        @if (saveSuccess()) {
+        <p class="success-message">{{ saveSuccess() }}</p>
+        }
+
+        @if (isLoading()) {
+        <p class="status-message">Зареждане на медицинската история...</p>
+        } @else if (errorMessage()) {
+        <p class="error-message">{{ errorMessage() }}</p>
+
+        <app-button class="button" type="button" (click)="loadRecords()">
+            Опитай отново
+        </app-button>
+
+        } @else if (records().length === 0) {
+        <div class="empty-state">
+            <h2>Все още няма записи</h2>
+            <p>Медицинските събития ще се показват тук.</p>
+        </div>
+        } @else {
+        <div class="records-list">
+            @for (record of records(); track record.id) {
+            <article class="record-card">
+                <div class="record-header">
+                    <span class="record-type">{{ getRecordTypeLabel(record.type) }}</span>
+                    <time>{{ record.occurredAt | date:'dd.MM.yyyy' }}</time>
+                </div>
+
+                <h2>{{ record.title }}</h2>
+
+                @if (record.notes) {
+                <p>{{ record.notes }}</p>
+                }
+
+                @if (record.examination; as examination) {
+                <div class="examination-details">
+                    @if (examination.reason) {
+                    <div class="detail-row">
+                        <strong>Причина за посещението</strong>
+                        <p>{{ examination.reason }}</p>
+                    </div>
+                    }
+
+                    @if (examination.symptoms) {
+                    <div class="detail-row">
+                        <strong>Симптоми</strong>
+                        <p>{{ examination.symptoms }}</p>
+                    </div>
+                    }
+
+                    @if (examination.clinicalFindings) {
+                    <div class="detail-row">
+                        <strong>Клинични находки</strong>
+                        <p>{{ examination.clinicalFindings }}</p>
+                    </div>
+                    }
+
+                    @if (examination.diagnosis) {
+                    <div class="detail-row">
+                        <strong>Диагноза</strong>
+                        <p>{{ examination.diagnosis }}</p>
+                    </div>
+                    }
+
+                    @if (examination.recommendations) {
+                    <div class="detail-row">
+                        <strong>Препоръки и лечение</strong>
+                        <p>{{ examination.recommendations }}</p>
+                    </div>
+                    }
+
+                    @if (examination.weightKg != null || examination.temperatureC != null) {
+                    <div class="measurements">
+                        @if (examination.weightKg != null) {
+                        <div class="measurement">
+                            <span>Тегло</span>
+                            <strong>{{ examination.weightKg }} kg</strong>
+                        </div>
+                        }
+
+                        @if (examination.temperatureC != null) {
+                        <div class="measurement">
+                            <span>Температура</span>
+                            <strong>{{ examination.temperatureC }} °C</strong>
+                        </div>
+                        }
+                    </div>
+                    }
+                </div>
+                }
+
+                @if (record.vaccination; as vaccination) {
+                <div class="vaccination-details">
+                    <h4>{{ vaccination.vaccineName }}</h4>
+
+                    @if (vaccination.manufacturer) {
+                    <div class="detail-row">
+                        <strong>Производител</strong>
+                        <p>{{ vaccination.manufacturer }}</p>
+                    </div>
+                    }
+
+                    @if (vaccination.batchNumber) {
+                    <div class="detail-row">
+                        <strong>Партиден номер</strong>
+                        <p>{{ vaccination.batchNumber }}</p>
+                    </div>
+                    }
+
+                    <div class="detail-row">
+                        <strong>Дата на поставяне</strong>
+                        <p>{{ vaccination.administeredAt | date:'dd.MM.yyyy' }}</p>
+                    </div>
+
+                    @if (vaccination.nextDueAt) {
+                    <div class="detail-row">
+                        <strong>Следваща ваксинация</strong>
+                        <p>{{ vaccination.nextDueAt | date:'dd.MM.yyyy' }}</p>
+                    </div>
+                    }
+
+                    @if (vaccination.validUntil) {
+                    <div class="detail-row">
+                        <strong>Валидна до</strong>
+                        <p>{{ vaccination.validUntil | date:'dd.MM.yyyy' }}</p>
+                    </div>
+                    }
+
+                    @if (vaccination.notes) {
+                    <div class="detail-row">
+                        <strong>Бележки</strong>
+                        <p>{{ vaccination.notes }}</p>
+                    </div>
+                    }
+                </div>
+                }
+
+                @if (record.deworming; as deworming) {
+                <div class="deworming-details">
+                    <h4>{{ deworming.productName }}</h4>
+
+                    <div class="detail-row">
+                        <strong>Вид обезпаразитяване</strong>
+                        <p>
+                            {{
+                            deworming.dewormingType === 'INTERNAL'
+                            ? 'Вътрешно'
+                            : 'Външно'
+                            }}
+                        </p>
+                    </div>
+
+                    @if (deworming.manufacturer) {
+                    <div class="detail-row">
+                        <strong>Производител</strong>
+                        <p>{{ deworming.manufacturer }}</p>
+                    </div>
+                    }
+
+                    @if (deworming.batchNumber) {
+                    <div class="detail-row">
+                        <strong>Партиден номер</strong>
+                        <p>{{ deworming.batchNumber }}</p>
+                    </div>
+                    }
+
+                    <div class="detail-row">
+                        <strong>Дата на приложение</strong>
+                        <p>{{ deworming.administeredAt | date:'dd.MM.yyyy' }}</p>
+                    </div>
+
+                    @if (deworming.dose) {
+                    <div class="detail-row">
+                        <strong>Доза</strong>
+                        <p>{{ deworming.dose }}</p>
+                    </div>
+                    }
+
+                    @if (deworming.administrationMethod) {
+                    <div class="detail-row">
+                        <strong>Начин на приложение</strong>
+                        <p>{{ deworming.administrationMethod }}</p>
+                    </div>
+                    }
+
+                    @if (deworming.nextDueAt) {
+                    <div class="detail-row">
+                        <strong>Следващо обезпаразитяване</strong>
+                        <p>{{ deworming.nextDueAt | date:'dd.MM.yyyy' }}</p>
+                    </div>
+                    }
+
+                    @if (deworming.notes) {
+                    <div class="detail-row">
+                        <strong>Бележки</strong>
+                        <p>{{ deworming.notes }}</p>
+                    </div>
+                    }
+                </div>
+                }
+
+                @if (record.createdBy) {
+                <small>
+                    Автор: {{ record.createdBy.firstName }}
+                    {{ record.createdBy.lastName }}
+                </small>
+                }
+            </article>
+            }
+        </div>
+        }
+
+        <div class="btn-row">
+            <app-button class="button" type="reset" (btnClick)="navigate()">
+                Назад
+            </app-button>
+        </div>
+    </div>
+</section>

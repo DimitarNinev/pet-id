@@ -1,0 +1,31 @@
+<div class="dropdown-wrapper" [class.is--disabled]="disabled">
+  @if (label) {
+  <label class="dropdown-label">{{ label }}
+    @if (required) {
+    <span class="required">*</span>
+    }
+  </label>
+  }
+
+  <div class="dropdown-container" [class.is--open]="isOpen" (click)="toggleDropdown()">
+    <!-- Основното поле, което показва избраното в момента -->
+    <div class="dropdown-selected" [class.has-value]="selectedValue !== null">
+      {{ selectedLabel || placeholder }}
+    </div>
+
+    <!-- Малка стрелка вдясно (нарисувана с CSS) -->
+    <span class="dropdown-arrow"></span>
+
+    <!-- Падащият списък с опции -->
+    @if (isOpen) {
+    <ul class="dropdown-menu">
+      @for (option of options; track option.value) {
+      <li class="dropdown-item" [class.is--selected]="option.value === selectedValue"
+        (click)="selectOption(option); $event.stopPropagation()">
+        {{ option.label }}
+      </li>
+      }
+    </ul>
+    }
+  </div>
+</div>

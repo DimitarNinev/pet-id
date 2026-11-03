@@ -1,0 +1,134 @@
+<section class="examination-page">
+    <header-component></header-component>
+
+    <div class="page-wrapper">
+        <header class="page-header">
+            <div>
+                <h1>Нов ветеринарен преглед</h1>
+                <p>Попълни данните от прегледа на пациента.</p>
+            </div>
+        </header>
+
+        @if (patient(); as animal) {
+        <section class="patient-card">
+            <div>
+                <span>Пациент</span>
+                <h2>{{ animal.name }}</h2>
+            </div>
+
+            <div>
+                <span>Pet ID</span>
+                <strong>{{ animal.petId }}</strong>
+            </div>
+
+            <div>
+                <span>Вид</span>
+                <strong>{{ animal.species }}</strong>
+            </div>
+
+            <div>
+                <span>Порода</span>
+                <strong>{{ animal.breed || 'Не е посочена' }}</strong>
+            </div>
+        </section>
+        } @else {
+        <p class="error-message">
+            Информацията за пациента не е налична. Върни се към търсенето и отвори
+            пациента отново.
+        </p>
+
+        <div class="form-actions">
+            <app-button type="button" (btnClick)="cancel()">
+                Към търсенето
+            </app-button>
+        </div>
+        }
+
+        <form [formGroup]="examinationForm" (ngSubmit)="onSubmit()" class="examination-form">
+            <section class="form-section">
+                <h2>Данни за прегледа</h2>
+
+                <div class="form-grid">
+                    <div class="row-field">
+                        <app-calendar label="Дата на прегледа" formControlName="occurredAt" [max]="today"
+                            [required]="true"></app-calendar>
+
+                        @if (
+                        examinationForm.controls.occurredAt.touched &&
+                        examinationForm.controls.occurredAt.invalid
+                        ) {
+                        <small>Избери дата на прегледа.</small>
+                        }
+                    </div>
+
+                    <div class="row-field">
+                        <app-input label="Причина за посещението" type="text" formControlName="reason" [required]="true"
+                            [max]="500" placeholder="Напр. профилактичен преглед"></app-input>
+
+                        @if (
+                        examinationForm.controls.reason.touched &&
+                        examinationForm.controls.reason.invalid
+                        ) {
+                        <small>Въведи причина за посещението.</small>
+                        }
+                    </div>
+
+                    <div class="row-field full-width">
+                        <app-input label="Симптоми" type="textarea" formControlName="symptoms"
+                            placeholder="Опиши симптомите, съобщени от стопанина..."></app-input>
+                    </div>
+
+                    <div class="row-field full-width">
+                        <app-input label="Клинични находки" type="textarea" formControlName="clinicalFindings"
+                            placeholder="Резултати от физикалния преглед..."></app-input>
+                    </div>
+
+                    <div class="row-field full-width">
+                        <app-input label="Диагноза" type="textarea" formControlName="diagnosis"
+                            placeholder="Въведи диагноза..."></app-input>
+                    </div>
+
+                    <div class="row-field full-width">
+                        <app-input label="Препоръки и лечение" type="textarea" formControlName="recommendations"
+                            placeholder="Назначения, терапия и последващи действия..."></app-input>
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h2>Измервания</h2>
+
+                <div class="form-grid">
+                    <div class="row-field">
+                        <app-input label="Тегло (kg)" type="number" formControlName="weightKg"
+                            placeholder="Напр. 12.5"></app-input>
+                    </div>
+
+                    <div class="row-field">
+                        <app-input label="Температура (°C)" type="number" formControlName="temperatureC"
+                            placeholder="Напр. 38.5"></app-input>
+                    </div>
+                </div>
+            </section>
+
+            @if (errorMessage()) {
+            <p class="error-message">{{ errorMessage() }}</p>
+            }
+
+            @if (successMessage()) {
+            <p class="success-message">{{ successMessage() }}</p>
+            }
+
+            <div class="form-actions">
+                <app-button class="button" type="reset" (btnClick)="cancel()" [disabled]="isSubmitting()">
+                    Отказ
+                </app-button>
+
+                <app-button class="button" type="submit" [disabled]="isSubmitting() || !patient()"
+                    [isLoading]="isSubmitting()">
+                    {{ isSubmitting() ? 'Запазване...' : 'Запази прегледа' }}
+                </app-button>
+            </div>
+        </form>
+    </div>
+</section>

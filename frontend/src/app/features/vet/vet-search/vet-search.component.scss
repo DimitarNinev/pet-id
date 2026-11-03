@@ -1,0 +1,343 @@
+:host {
+  display: block;
+  color: #172b24;
+}
+
+.vet-search-page {
+  width: 100%;
+  box-sizing: border-box;
+  padding-bottom: 30px;
+
+  .page-wraper {
+    max-width: 900px;
+    margin: 0 auto;
+
+    .page-header {
+      margin-bottom: 28px;
+
+      h1 {
+        margin: 0 0 10px;
+        font-size: clamp(26px, 4vw, 34px);
+        font-weight: 750;
+        letter-spacing: -1px;
+      }
+
+      p {
+        margin: 0;
+        color: #718078;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+    }
+
+    .search-card,
+    .animal-card {
+      overflow: hidden;
+      border: 1px solid #e5ece7;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 8px 30px rgb(29 68 49 / 4%);
+    }
+
+    .search-card {
+      padding: 28px;
+
+      .search-card-heading {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 26px;
+
+        h2 {
+          margin: 0 0 5px;
+          font-size: 18px;
+          font-weight: 700;
+        }
+
+        p {
+          margin: 0;
+          color: #7a8980;
+          font-size: 13px;
+        }
+
+        .search-icon {
+          display: grid;
+          width: 48px;
+          height: 48px;
+          flex-shrink: 0;
+          place-items: center;
+          border-radius: 14px;
+          background: #eaf6ef;
+          color: #368563;
+
+          svg {
+            width: 23px;
+            height: 23px;
+          }
+        }
+      }
+
+      .search-form {
+        .search-input-wrapper {
+          display: flex;
+          gap: 20px;
+          align-items: baseline;
+
+          .row-field,
+          app-button {
+            flex: 1;
+          }
+        }
+
+        .clear-button {
+          flex-shrink: 0;
+          padding: 0 8px;
+          border: none;
+          background: transparent;
+          color: #7a8980;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .feedback {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 20px;
+      padding: 14px 16px;
+      border: 1px solid;
+      border-radius: 12px;
+
+      p {
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .feedback-icon {
+        display: grid;
+        width: 25px;
+        height: 25px;
+        flex-shrink: 0;
+        place-items: center;
+        border-radius: 50%;
+        font-weight: 800;
+      }
+
+      &.feedback-error {
+        border-color: #f0d5d2;
+        background: #fff7f6;
+        color: #a63f38;
+
+        .feedback-icon {
+          background: #fce4e1;
+        }
+      }
+
+      &.feedback-success {
+        border-color: #d5eade;
+        background: #f3faf5;
+        color: #28734f;
+
+        .feedback-icon {
+          background: #dcefe2;
+        }
+      }
+    }
+
+    .animal-card {
+      margin-top: 20px;
+
+      .animal-card-header {
+        display: flex;
+        // align-items: center;
+        gap: 16px;
+        padding: 25px;
+        border-bottom: 1px solid #edf1ee;
+
+        .animal-avatar {
+          display: grid;
+          width: 100px;
+          height: 100px;
+          flex-shrink: 0;
+          place-items: center;
+          border-radius: 18px;
+          background: #edf7f0;
+          font-size: 32px;
+          overflow: hidden;
+
+          .animal-photo {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: inherit;
+          }
+        }
+
+        .animal-heading {
+          flex: 1;
+          min-width: 0;
+
+          .result-label {
+            display: block;
+            margin-bottom: 6px;
+            color: #39866b;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+          }
+
+          h2 {
+            margin: 0 0 5px;
+            overflow-wrap: anywhere;
+            font-size: 22px;
+            font-weight: 750;
+          }
+
+          p {
+            margin: 0;
+            color: #77857c;
+            font-size: 13px;
+          }
+        }
+
+        .btn-row {
+          display: flex;
+          flex-direction: column;
+          padding: 0;
+        }
+      }
+
+      .animal-details {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0;
+        padding: 8px 25px;
+
+        .detail-item {
+          display: flex;
+          min-width: 0;
+          flex-direction: column;
+          gap: 8px;
+          padding: 17px 12px;
+          border-bottom: 1px solid #edf1ee;
+
+          &:nth-last-child(-n + 2) {
+            border-bottom: none;
+          }
+
+          .detail-label {
+            color: #87938b;
+            font-size: 12px;
+          }
+
+          .detail-value {
+            overflow-wrap: anywhere;
+            color: #293d31;
+            font-size: 14px;
+            font-weight: 650;
+          }
+        }
+      }
+
+      .animal-card-footer {
+        padding: 14px 25px;
+        border-top: 1px solid #edf1ee;
+        background: #fbfdfb;
+
+        p {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+          margin: 0;
+          color: #78877d;
+          font-size: 12px;
+          line-height: 1.6;
+        }
+
+        .privacy-indicator {
+          width: 7px;
+          height: 7px;
+          flex-shrink: 0;
+          border-radius: 50%;
+          background: #48a675;
+        }
+      }
+
+      .btn-row {
+        display: flex;
+        justify-content: flex-end;
+        padding: 20px;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 700px) {
+  .vet-search-page {
+    .page-wraper {
+      width: 100%;
+      padding: 0 20px 20px;
+
+      .search-card {
+        padding: 16px;
+
+        .search-card-heading {
+          margin-bottom: 40px;
+
+          h2 {
+            font-size: 14px;
+          }
+
+          p {
+            font-size: 12px;
+          }
+        }
+
+        .search-form {
+
+          .search-input-wrapper {
+            display: block;
+          }
+        }
+      }
+
+      .animal-card {
+
+        .animal-card-header {
+          flex-wrap: wrap;
+          padding: 20px 16px;
+
+          .animal-avatar {
+            display: none;
+          }
+
+          .animal-heading h2 {
+            font-size: 19px;
+          }
+        }
+
+        .animal-details {
+          padding: 6px 12px;
+          grid-template-columns: auto;
+
+          .detail-item {
+            padding: 14px 8px;
+          }
+        }
+
+        .animal-card-footer {
+          padding: 16px;
+        }
+      }
+    }
+  }
+}

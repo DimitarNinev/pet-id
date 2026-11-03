@@ -1,0 +1,104 @@
+<section class="vaccination-page">
+  <header-component></header-component>
+
+  <div class="page-wrapper">
+    <header class="page-header">
+      <h1>Нова ваксинация</h1>
+      <p>Регистрирай поставена ваксина в медицинското досие.</p>
+    </header>
+
+    @if (patient(); as animal) {
+    <section class="patient-card">
+      <div>
+        <span>Пациент</span>
+        <h2>{{ animal.name }}</h2>
+      </div>
+
+      <div>
+        <span>Pet ID</span>
+        <strong>{{ animal.petId }}</strong>
+      </div>
+
+      <div>
+        <span>Вид</span>
+        <strong>{{ animal.species }}</strong>
+      </div>
+
+      <div>
+        <span>Порода</span>
+        <strong>{{ animal.breed || 'Не е посочена' }}</strong>
+      </div>
+    </section>
+    } @else {
+    <p class="error-message">
+      Информацията за пациента не е налична. Върни се към търсенето.
+    </p>
+    }
+
+    <form [formGroup]="vaccinationForm" (ngSubmit)="onSubmit()" class="vaccination-form">
+      <section class="form-section">
+        <h2>Данни за ваксината</h2>
+
+        <div class="form-grid">
+          <div class="row-field">
+            <app-input label="Име на ваксината" formControlName="vaccineName" [required]="true"
+              placeholder="Напр. Nobivac"></app-input>
+
+            @if (
+            vaccinationForm.controls.vaccineName.touched &&
+            vaccinationForm.controls.vaccineName.invalid
+            ) {
+            <small>Въведи името на ваксината.</small>
+            }
+          </div>
+
+          <div class="row-field">
+            <app-input label="Производител" formControlName="manufacturer"
+              placeholder="Име на производителя"></app-input>
+          </div>
+
+          <div class="row-field">
+            <app-input label="Номер на партида" formControlName="batchNumber"
+              placeholder="Номер от опаковката"></app-input>
+          </div>
+
+          <div class="row-field">
+            <app-calendar label="Дата на поставяне" formControlName="administeredAt" [max]="today"
+              [required]="true"></app-calendar>
+          </div>
+
+          <div class="row-field">
+            <app-calendar label="Следваща доза" formControlName="nextDueAt"></app-calendar>
+          </div>
+
+          <div class="row-field">
+            <app-calendar label="Валидна до" formControlName="validUntil"></app-calendar>
+          </div>
+
+          <div class="row-field full-width">
+            <app-input label="Бележки" type="textarea" formControlName="notes"
+              placeholder="Допълнителна информация за ваксинацията..."></app-input>
+          </div>
+        </div>
+      </section>
+
+      @if (errorMessage()) {
+      <p class="error-message">{{ errorMessage() }}</p>
+      }
+
+      @if (successMessage()) {
+      <p class="success-message">{{ successMessage() }}</p>
+      }
+
+      <div class="form-actions">
+        <app-button class="button" type="reset" (btnClick)="cancel()" [disabled]="isSubmitting()">
+          Отказ
+        </app-button>
+
+        <app-button class="button" type="submit" [disabled]="isSubmitting() || !patient()" [isLoading]="isSubmitting()">
+          {{ isSubmitting() ? 'Запазване...' : 'Запази ваксинацията' }}
+        </app-button>
+      </div>
+    </form>
+  </div>
+</section>

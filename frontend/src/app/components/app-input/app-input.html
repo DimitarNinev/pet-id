@@ -1,0 +1,35 @@
+<div class="input-container">
+  
+  @if (type !== 'textarea') {
+    <input 
+      [type]="type" 
+      [value]="value"
+      [disabled]="disabled"
+      [required]="required"
+      [placeholder]="placeholder || ' '" 
+      (input)="onInputChange($event)"
+      (blur)="onTouch()"
+      class="custom-field"
+      [max]="max"
+    />
+  }
+
+  @if (type === 'textarea') {
+    <textarea
+      [value]="value"
+      [disabled]="disabled"
+      [required]="required"
+      [placeholder]="placeholder || ' '" 
+      (input)="onInputChange($event)"
+      (blur)="onTouch()"
+      class="custom-textarea"
+      rows="4">
+    </textarea>
+  }
+
+  <label class="custom-label">{{ label }} 
+    @if (required) {
+      <span class="required">*</span>
+    }
+  </label>
+</div>

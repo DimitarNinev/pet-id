@@ -1,0 +1,55 @@
+<div class="datepicker-wrapper" [class.is--disabled]="disabled">
+  @if (label) {
+  <label class="datepicker-label">{{ label }}
+    @if (required) {
+    <span class="required">*</span>
+    }
+  </label>
+  }
+
+  <div class="datepicker-container" [class.is--open]="isOpen" (click)="toggleCalendar()">
+    <div class="datepicker-value" [class.has-value]="formattedDate">
+      {{ formattedDate || placeholder }}
+    </div>
+    <span class="calendar-icon">📅</span>
+
+    @if (isOpen) {
+    <div class="calendar-popup" (click)="$event.stopPropagation()">
+
+      <div class="calendar-header">
+        <button type="button" class="nav-btn" (click)="prevMonth($event)">❮</button>
+
+        <!-- ХЕДЪР: Месецът + Избор на година чрез селект -->
+        <div class="header-title">
+          <span class="month-title">{{ monthNames[currentMonth] }}</span>
+          <select class="year-select" [(ngModel)]="currentYear" (change)="onYearChange()"
+            (click)="$event.stopPropagation()">
+            @for (year of years; track year) {
+            <option [value]="year">{{ year }}</option>
+            }
+          </select>
+        </div>
+
+        <button type="button" class="nav-btn" (click)="nextMonth($event)">❯</button>
+      </div>
+
+      <div class="calendar-weekdays">
+        @for (day of weekDays; track day) {
+        <span class="weekday">{{ day }}</span>
+        }
+      </div>
+
+      <div class="calendar-days">
+        @for (day of daysInMonth; track $index) {
+        <span class="day-cell" [class.is--empty]="!day" [class.is--today]="isToday(day)"
+          [class.is--selected]="isSelected(day)" [class.is--disabled]="isDayDisabled(day)"
+          (click)="selectDay(day)">
+          {{ day }}
+        </span>
+        }
+      </div>
+
+    </div>
+    }
+  </div>
+</div>

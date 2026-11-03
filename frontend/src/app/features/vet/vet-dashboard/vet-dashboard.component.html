@@ -1,0 +1,143 @@
+<div class="vet-dashboard">
+    <aside class="sidebar">
+        <a class="brand" routerLink="/vet/dashboard">
+            <span class="brand-icon">✦</span>
+            <span>
+                <strong>Pet ID</strong>
+                <small>Ветеринарен портал</small>
+            </span>
+        </a>
+
+        <nav class="navigation">
+            <a class="nav-item active" routerLink="/vet/dashboard">
+                <span class="nav-icon">⌂</span>
+                <span>Начало</span>
+            </a>
+
+            <a class="nav-item" routerLink="/vet/search">
+                <span class="nav-icon">⌕</span>
+                <span>Търсене на пациент</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="help-card">
+                <strong>Нужда от помощ?</strong>
+                <p>Информацията за пациентите е достъпна чрез техния идентификатор.</p>
+            </div>
+
+            <button class="logout-button" type="button" routerLink="/login">
+                <span>↪</span> Изход
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar-mobile">
+            <span class="mobile-brand"><span>✦</span>Pet ID</span>
+
+            <div class="profile">
+                <div class="profile-avatar">{{userName().charAt(0)}}</div>
+                <div class="profile-info">
+                    <strong>Д-р {{userName()}}</strong>
+                    <span>Одобрен профил</span>
+                </div>
+            </div>
+        </header>
+
+        <header class="topbar">
+            <div>
+                <h1>Добре дошли в Pet ID</h1>
+                <p class="page-subtitle">
+                    Всичко необходимо за грижата за вашите пациенти на едно място.
+                </p>
+            </div>
+
+            <div class="profile">
+                <div class="profile-avatar">{{userName().charAt(0)}}</div>
+                <div class="profile-info">
+                    <strong>Д-р {{userName()}}</strong>
+                    <span>Одобрен профил</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="welcome-banner">
+            <div class="welcome-content">
+                <span class="eyebrow">ВЕТЕРИНАРНА ПРАКТИКА</span>
+                <h2>Всяко досие разказва история.</h2>
+                <p>
+                    Намерете пациента по неговия микрочип или Pet ID и продължете
+                    медицинската му история.
+                </p>
+
+                <a class="primary-button" routerLink="/vet/search">
+                    Намери пациент
+                    <span class="button-arrow">→</span>
+                </a>
+            </div>
+
+            <div class="banner-decoration" aria-hidden="true">
+                <div class="circle circle-one"></div>
+                <div class="circle circle-two"></div>
+                <div class="pet-symbol">✚</div>
+                <div class="floating-tag tag-one">PET ID</div>
+                <div class="floating-tag tag-two">Здраве и грижа</div>
+            </div>
+        </section>
+
+        <section class="section-heading">
+            <div>
+                <h2>Бързи действия</h2>
+                <p>Изберете какво искате да направите.</p>
+            </div>
+        </section>
+
+        <section class="action-grid">
+            <a class="action-card search-card" routerLink="/vet/search">
+                <span class="action-icon blue">⌕</span>
+                <span class="action-card-content">
+                    <strong>Намери пациент</strong>
+                    <span>Търсене чрез микрочип или идентификатор на Pet ID.</span>
+                </span>
+                <span class="card-arrow">→</span>
+            </a>
+
+            <div class="action-card disabled-card">
+                <span class="action-icon green">▤</span>
+                <span class="action-card-content">
+                    <strong>Медицински записи</strong>
+                    <span>Добавяне на прегледи, ваксинации и лечения.</span>
+                    <small>Достъпно след отваряне на досие</small>
+                </span>
+                <span class="card-arrow">→</span>
+            </div>
+
+            <div class="action-card disabled-card">
+                <span class="action-icon purple">⌂</span>
+                <span class="action-card-content">
+                    <strong>Профил на клиниката</strong>
+                    <span>Информация за практиката и екипа.</span>
+                    <small>Предстои разработка</small>
+                </span>
+                <span class="card-arrow">→</span>
+            </div>
+        </section>
+
+        <section class="notice">
+            <span class="notice-icon">i</span>
+            <div>
+                <strong>Работа с медицински досиета</strong>
+                <p>
+                    Търсете животно чрез неговия идентификатор. Професионалните записи
+                    се свързват с автора и се съхраняват в медицинската история.
+                </p>
+            </div>
+        </section>
+
+        <footer class="dashboard-footer">
+            <span>Pet ID · Ветеринарен портал</span>
+            <span>Здрави животни. Спокойни стопани.</span>
+        </footer>
+    </main>
+</div>
