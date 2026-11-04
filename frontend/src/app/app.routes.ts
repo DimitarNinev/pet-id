@@ -1,28 +1,49 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
-import { DashboardComponent } from './features/dashboard/dashboard.component';
-import { AnimalFormComponent } from './features/animals/animal-form/animal-form.component';
-import { AnimalDetailsComponent } from './features/animals/animal-details/animal-details.component';
-import { AnimalEditComponent } from './features/animals/animal-edit/animal-edit.component';
-import { MedicalRecordsComponent } from './features/medical-records/medical-records/medical-records.component';
-import { RemindersComponent } from './features/reminders/reminders/reminders.component';
+import { authenticatedGuard, ownerGuard, pendingApprovalGuard, vetGuard } from './core/guards/auth.guards';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
   // Дашборд за собственици
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'animals/new', component: AnimalFormComponent },
-  { path: 'animals/:id/edit', component: AnimalEditComponent },
-  { path: 'animals/:id', component: AnimalDetailsComponent },
-  { path: 'animals/:animalId/medical-records', component: MedicalRecordsComponent },
-  { path: 'reminders', component: RemindersComponent },
+  {
+    path: 'dashboard',
+    canActivate: [ownerGuard],
+    loadComponent: () => import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+  },
+  {
+    path: 'animals/new',
+    canActivate: [ownerGuard],
+    loadComponent: () => import('./features/animals/animal-form/animal-form.component').then((m) => m.AnimalFormComponent),
+  },
+  {
+    path: 'animals/:id/edit',
+    canActivate: [ownerGuard],
+    loadComponent: () => import('./features/animals/animal-edit/animal-edit.component').then((m) => m.AnimalEditComponent),
+  },
+  {
+    path: 'animals/:id',
+    canActivate: [ownerGuard],
+    loadComponent: () => import('./features/animals/animal-details/animal-details.component').then((m) => m.AnimalDetailsComponent),
+  },
+  {
+    path: 'animals/:animalId/medical-records',
+    canActivate: [authenticatedGuard],
+    loadComponent: () => import('./features/medical-records/medical-records/medical-records.component').then((m) => m.MedicalRecordsComponent),
+  },
+  {
+    path: 'reminders',
+    canActivate: [ownerGuard],
+    loadComponent: () => import('./features/reminders/reminders/reminders.component').then((m) => m.RemindersComponent),
+  },
 
   // Ветеринарна зона — компонентите ще добавим в следващите стъпки
   {
     path: 'vet',
+    canActivate: [vetGuard],
+    canActivateChild: [vetGuard],
     children: [
       {
         path: 'dashboard',
@@ -63,6 +84,7 @@ export const routes: Routes = [
   // Страница за неодобрени ветеринари
   {
     path: 'pending-approval',
+    canActivate: [pendingApprovalGuard],
     loadComponent: () =>
       import('./features/auth/pending-approval/pending-approval.component')
         .then((m) => m.PendingApprovalComponent),

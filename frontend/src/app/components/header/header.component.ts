@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'header-component',
@@ -10,15 +11,10 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent {
   private readonly router = inject(Router);
-
-  readonly userRole = signal('');
-
-  ngOnInit(): void {
-    const user = localStorage.getItem('user-role');
-    this.userRole.set(user!);
-  }
+  private readonly auth = inject(AuthService);
+  readonly userRole = this.auth.currentRole;
 
   navigate() {
-    this.userRole() == 'OWNER' ? this.router.navigate(['/dashboard']) : this.router.navigate(['/vet/dashboard']);
+    void this.router.navigate(this.userRole() === 'OWNER' ? ['/dashboard'] : ['/vet/dashboard']);
   }
 }

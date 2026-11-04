@@ -1,10 +1,12 @@
 import {
   Component,
+  DestroyRef,
   inject,
   OnInit,
   OnDestroy,
   signal
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
@@ -26,6 +28,7 @@ import { AppDropdownComponent } from "../../../components/app-dropdown/app-dropd
 import { AppButtonComponent } from "../../../components/app-button/app-button";
 import { AppCalendarComponent } from "../../../components/app-calendar/app-calendar";
 import { HeaderComponent } from "../../../components/header/header.component";
+import { toDateInputValue } from '../../../core/utils/date.utils';
 
 @Component({
   selector: 'app-animal-edit',
@@ -35,6 +38,7 @@ import { HeaderComponent } from "../../../components/header/header.component";
   styleUrl: './animal-edit.component.scss',
 })
 export class AnimalEditComponent implements OnInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -60,7 +64,7 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
 
   private readonly maxPhotoSize = 5 * 1024 * 1024;
 
-  readonly today = new Date().toISOString().slice(0, 10);
+  readonly today = toDateInputValue(new Date());
 
   readonly animalForm = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -124,7 +128,7 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.animalsService.getById(id).subscribe({
+    this.animalsService.getById(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (animal) => {
         this.setAnimalData(animal);
 
@@ -213,7 +217,7 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
     this.isSubmitting.set(true);
     this.errorMessage.set('');
 
-    this.animalsService.update(animal.id, data).subscribe({
+    this.animalsService.update(animal.id, data).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (updatedAnimal) => {
         this.isSubmitting.set(false);
 
@@ -248,7 +252,7 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
   private loadPhotoUrl(animalId: string): void {
     this.isLoadingPhoto.set(true);
 
-    this.animalsService.getPhotoUrl(animalId).subscribe({
+    this.animalsService.getPhotoUrl(animalId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (response) => {
         this.photoUrl.set(response.photoUrl);
         this.isLoadingPhoto.set(false);
@@ -313,7 +317,7 @@ export class AnimalEditComponent implements OnInit, OnDestroy {
     this.isUploadingPhoto.set(true);
     this.photoError.set('');
 
-    this.animalsService.uploadPhoto(animal.id, photo).subscribe({
+    this.animalsService.uploadPhoto(animal.id, photo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.isUploadingPhoto.set(false);
         this.selectedPhoto.set(null);

@@ -1,11 +1,11 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-
-const TOKEN_KEY = 'pet-id-access-token';
-const API_URL = 'http://localhost:3000/api/v1/';
+import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
+import { API_BASE_URL } from '../config/api.config';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
     // Добавяме токена само към заявките към нашия backend.
-    if (!req.url.startsWith(API_URL)) {
+    if (!req.url.startsWith(`${API_BASE_URL}/`)) {
         return next(req);
     }
 
@@ -16,7 +16,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         return next(req);
     }
 
-    const token = localStorage.getItem(TOKEN_KEY);
+    const token = inject(AuthService).getToken();
 
     if (!token) {
         return next(req);

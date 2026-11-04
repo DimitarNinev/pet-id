@@ -119,17 +119,6 @@
     }
   }
 
-  .section-icon {
-    display: grid;
-    flex-shrink: 0;
-    width: 44px;
-    height: 44px;
-    place-items: center;
-    border-radius: 13px;
-    background: #edf7f0;
-    font-size: 21px;
-  }
-
   .form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -181,7 +170,8 @@
     }
 
     .form-container {
-      padding-top: 30px;
+      padding: 0 18px 18px;
+      width: 100%;
     }
 
     .animal-form {

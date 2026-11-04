@@ -1,8 +1,8 @@
-import { Component, Input, forwardRef, ElementRef, HostListener } from '@angular/core';
+import { Component, Input, forwardRef, ElementRef, HostListener, OnChanges, SimpleChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 interface DropdownOption {
-  value: any;
+  value: string;
   label: string;
 }
 
@@ -20,21 +20,25 @@ interface DropdownOption {
     }
   ]
 })
-export class AppDropdownComponent implements ControlValueAccessor {
+export class AppDropdownComponent implements ControlValueAccessor, OnChanges {
   @Input() label: string = '';
   @Input() required: boolean = false;
   @Input() placeholder: string = 'Изберете опция';
   @Input() options: DropdownOption[] = [];
   @Input() disabled: boolean = false;
 
-  selectedValue: any = null;
+  selectedValue: string | null = null;
   selectedLabel: string = '';
   isOpen: boolean = false;
 
-  onChange: any = () => {};
-  onTouch: any = () => {};
+  private onChange: (value: string | null) => void = () => {};
+  private onTouch: () => void = () => {};
 
   constructor(private elementRef: ElementRef) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['options']) this.updateSelectedLabel();
+  }
 
   // Превключва отварянето/затварянето на менюто
   toggleDropdown(): void {
@@ -49,7 +53,8 @@ export class AppDropdownComponent implements ControlValueAccessor {
     this.selectedValue = option.value;
     this.selectedLabel = option.label;
     this.isOpen = false;
-    this.onChange(this.selectedValue); // Уведомява Angular формата
+    this.onChange(this.selectedValue);
+    this.onTouch();
   }
 
   // АВТОМАТИЧНО ЗАТВАРЯНЕ: Ако потребителят кликне извън менюто, го затваряме
@@ -61,10 +66,9 @@ export class AppDropdownComponent implements ControlValueAccessor {
   }
 
   // --- Имплементация на ControlValueAccessor ---
-  writeValue(val: any): void {
-    this.selectedValue = val;
-    const foundOption = this.options.find(opt => opt.value === val);
-    this.selectedLabel = foundOption ? foundOption.label : '';
+  writeValue(val: unknown): void {
+    this.selectedValue = typeof val === 'string' ? val : null;
+    this.updateSelectedLabel();
   }
 
   registerOnChange(fn: any): void {
@@ -75,7 +79,11 @@ export class AppDropdownComponent implements ControlValueAccessor {
     this.onTouch = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {
+  private updateSelectedLabel(): void {
+    this.selectedLabel = this.options.find((option) => option.value === this.selectedValue)?.label ?? '';
+  }
+
+  setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
     if (isDisabled) this.isOpen = false;
   }

@@ -1,15 +1,14 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
-} from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
+import type { Subscription } from 'rxjs';
 import { AppInputComponent } from "../../../components/app-input/app-input";
 import { AppButtonComponent } from "../../../components/app-button/app-button";
 import { HeaderComponent } from "../../../components/header/header.component";
@@ -42,13 +41,11 @@ interface AnimalSearchResult {
   templateUrl: './vet-search.component.html',
   styleUrl: './vet-search.component.scss',
 })
-export class VetSearchComponent implements OnInit {
+export class VetSearchComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
-  private readonly http = inject(HttpClient);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly animalsService = inject(AnimalsService);
-
-  private readonly apiUrl = 'http://localhost:3000/api/v1/animals';
 
   readonly searchForm = this.fb.group({
     searchQuery: [
@@ -71,6 +68,7 @@ export class VetSearchComponent implements OnInit {
   }
 
   private successMessageTimeout?: ReturnType<typeof setTimeout>;
+  private photoRequest?: Subscription;
 
   ngOnInit(): void {
     this.loadAnimalPhoto(this.animal());
@@ -97,31 +95,17 @@ export class VetSearchComponent implements OnInit {
       return;
     }
 
-    const token = localStorage.getItem('pet-id-access-token');
-
-    if (!token) {
-      this.errorMessage.set('Сесията ти е изтекла. Моля, влез отново.');
-      return;
-    }
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
     this.isLoading.set(true);
 
-    this.http
-      .get<AnimalSearchResult>(`${this.apiUrl}/search`, {
-        headers,
-        params: { q: query },
-      })
+    this.animalsService
+      .search(query)
+      .pipe(finalize(() => this.isLoading.set(false)), takeUntilDestroyed(this.destroyRef))
       .subscribe({
+
         next: (animal) => {
           this.animal.set(animal);
           this.loadAnimalPhoto(animal);
           this.successMessage.set('Животното е намерено успешно.');
-          this.isLoading.set(false);
-
           if (this.successMessageTimeout) {
             clearTimeout(this.successMessageTimeout);
           }
@@ -141,7 +125,6 @@ export class VetSearchComponent implements OnInit {
             this.errorMessage.set('Възникна грешка при търсенето. Опитай отново.');
           }
 
-          this.isLoading.set(false);
         },
       });
   }
@@ -202,13 +185,15 @@ export class VetSearchComponent implements OnInit {
   }
 
   private loadAnimalPhoto(animal: AnimalSearchResult | null): void {
+    this.photoRequest?.unsubscribe();
+    this.photoRequest = undefined;
     this.photoUrl.set(null);
 
     if (!animal?.photoPath) {
       return;
     }
 
-    this.animalsService.getVetPhotoUrl(animal.id).subscribe({
+    this.photoRequest = this.animalsService.getVetPhotoUrl(animal.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (response) => {
         this.photoUrl.set(response.photoUrl);
       },
@@ -218,4 +203,10 @@ export class VetSearchComponent implements OnInit {
       },
     });
   }
+
+  ngOnDestroy(): void {
+    if (this.successMessageTimeout) clearTimeout(this.successMessageTimeout);
+    this.photoRequest?.unsubscribe();
+  }
+
 }

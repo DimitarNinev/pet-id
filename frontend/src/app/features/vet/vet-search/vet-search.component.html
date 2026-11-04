@@ -64,19 +64,7 @@
                     <img [src]="imageUrl" [alt]="'Снимка на ' + animal()!.name" class="animal-photo"
                         (error)="photoUrl.set(null)">
                     } @else {
-                    @if (
-                    animal()!.species.toLowerCase().includes('куче') ||
-                    animal()!.species.toLowerCase().includes('dog')
-                    ) {
-                    🐕
-                    } @else if (
-                    animal()!.species.toLowerCase().includes('котка') ||
-                    animal()!.species.toLowerCase().includes('cat')
-                    ) {
-                    🐈
-                    } @else {
                     🐾
-                    }
                     }
                 </div>
 

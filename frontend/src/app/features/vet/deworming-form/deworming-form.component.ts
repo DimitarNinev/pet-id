@@ -1,15 +1,18 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { finalize } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize, timer } from 'rxjs';
 
 import { AppInputComponent } from '../../../components/app-input/app-input';
 import { AppDropdownComponent } from '../../../components/app-dropdown/app-dropdown';
 import { AppCalendarComponent } from '../../../components/app-calendar/app-calendar';
 import { AppButtonComponent } from '../../../components/app-button/app-button';
 import { HeaderComponent } from '../../../components/header/header.component';
+import { MedicalRecordsService } from '../../../core/services/medical-records.service';
+import type { CreateVeterinaryMedicalRecord } from '../../../core/services/medical-records.service';
 
 interface Patient {
   id: string;
@@ -39,7 +42,8 @@ interface Patient {
 })
 export class DewormingFormComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly http = inject(HttpClient);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly medicalRecordsService = inject(MedicalRecordsService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -98,7 +102,7 @@ export class DewormingFormComponent {
       return;
     }
 
-    if (!this.patient()) {
+    if (!this.patient() || this.patient()?.id !== this.animalId) {
       this.errorMessage.set('Информацията за животното не е намерена. Моля, потърсете го отново.');
       return;
     }
@@ -106,13 +110,6 @@ export class DewormingFormComponent {
     if (this.dewormingForm.invalid) {
       this.dewormingForm.markAllAsTouched();
       this.errorMessage.set('Моля, попълнете задължителните полета.');
-      return;
-    }
-
-    const token = localStorage.getItem('pet-id-access-token');
-
-    if (!token) {
-      this.errorMessage.set('Сесията е изтекла. Моля, влезте отново.');
       return;
     }
 
@@ -125,7 +122,7 @@ export class DewormingFormComponent {
       return;
     }
 
-    const payload = {
+    const payload: CreateVeterinaryMedicalRecord = {
       type: 'DEWORMING',
       title: `Обезпаразитяване: ${form.productName!.trim()}`,
       occurredAt: `${form.administeredAt}T12:00:00.000Z`,
@@ -133,7 +130,7 @@ export class DewormingFormComponent {
         productName: form.productName!.trim(),
         manufacturer: form.manufacturer?.trim() || undefined,
         batchNumber: form.batchNumber?.trim() || undefined,
-        dewormingType: form.dewormingType,
+        dewormingType: form.dewormingType as 'INTERNAL' | 'EXTERNAL',
         administeredAt: `${form.administeredAt}T12:00:00.000Z`,
         dose: form.dose?.trim() || undefined,
         administrationMethod: form.administrationMethod?.trim() || undefined,
@@ -148,17 +145,9 @@ export class DewormingFormComponent {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    this.http
-      .post(
-        `${'http://localhost:3000/api/v1/animals'}/${this.animalId}/medical-records`,
-        payload,
-        {
-          headers: new HttpHeaders({
-            Authorization: `Bearer ${token}`,
-          }),
-        },
-      )
-      .pipe(finalize(() => this.isSubmitting.set(false)))
+    this.medicalRecordsService
+      .createVeterinaryRecord(this.animalId, payload)
+      .pipe(finalize(() => this.isSubmitting.set(false)), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.successMessage.set(
@@ -177,9 +166,7 @@ export class DewormingFormComponent {
             notes: '',
           });
 
-          setTimeout(() => {
-            this.cancel();
-          }, 2500);
+          timer(2500).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.cancel());
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 401) {

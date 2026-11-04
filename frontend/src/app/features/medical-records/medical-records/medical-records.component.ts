@@ -22,6 +22,7 @@ import {
   MedicalRecordType,
   MedicalRecordsService,
 } from '../../../core/services/medical-records.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 const notBlankValidator: ValidatorFn = (control) =>
   typeof control.value === 'string' && control.value.trim().length === 0
@@ -68,6 +69,7 @@ export class MedicalRecordsComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly medicalRecordsService = inject(MedicalRecordsService);
+  private readonly authService = inject(AuthService);
 
   readonly animalId = signal('');
   readonly records = signal<MedicalRecord[]>([]);
@@ -78,7 +80,7 @@ export class MedicalRecordsComponent implements OnInit {
   readonly isSaving = signal(false);
   readonly saveError = signal('');
   readonly saveSuccess = signal('');
-  readonly userRole = signal('');
+  readonly userRole = this.authService.currentRole;
 
   readonly recordForm = this.formBuilder.nonNullable.group({
     title: ['', [Validators.required, notBlankValidator, Validators.maxLength(200)]],
@@ -127,8 +129,6 @@ export class MedicalRecordsComponent implements OnInit {
       )
       .subscribe();
 
-    const user = localStorage.getItem('user-role');
-    this.userRole.set(user!);
   }
 
   toggleCreateForm(): void {

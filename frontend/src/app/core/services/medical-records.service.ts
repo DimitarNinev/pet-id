@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_BASE_URL } from '../config/api.config';
 
 export type MedicalRecordType =
   | 'OWNER_NOTE'
@@ -87,12 +88,21 @@ export interface CreateMedicalRecord {
   occurredAt: string;
 }
 
+export interface CreateVeterinaryMedicalRecord {
+  type: 'EXAMINATION' | 'VACCINATION' | 'DEWORMING';
+  title: string;
+  occurredAt: string;
+  examination?: Partial<ExaminationDetails>;
+  vaccination?: Partial<VaccinationDetails>;
+  deworming?: Partial<DewormingDetails>;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class MedicalRecordsService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/api/v1/animals';
+  private readonly apiUrl = `${API_BASE_URL}/animals`;
 
   getByAnimalId(animalId: string): Observable<MedicalRecord[]> {
     return this.http.get<MedicalRecord[]>(
@@ -103,6 +113,16 @@ export class MedicalRecordsService {
   create(
     animalId: string,
     data: CreateMedicalRecord,
+  ): Observable<MedicalRecord> {
+    return this.http.post<MedicalRecord>(
+      `${this.apiUrl}/${animalId}/medical-records`,
+      data,
+    );
+  }
+
+  createVeterinaryRecord(
+    animalId: string,
+    data: CreateVeterinaryMedicalRecord,
   ): Observable<MedicalRecord> {
     return this.http.post<MedicalRecord>(
       `${this.apiUrl}/${animalId}/medical-records`,

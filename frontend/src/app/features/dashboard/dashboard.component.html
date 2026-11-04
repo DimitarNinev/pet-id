@@ -73,7 +73,7 @@
       </article>
 
       <article class="stat-card purple">
-        <span class="stat-icon">✚</span>
+        <span class="stat-icon">❤️</span>
         <div>
           <p>Обезпаразитявания</p>
           <strong>{{ dewormingCount }}</strong>
@@ -121,15 +121,7 @@
               @if (pet.photoUrl) {
               <img [src]="pet.photoUrl" [alt]="'Снимка на ' + pet.name" class="pet-photo">
               } @else {
-              @if (pet.species.toLowerCase().includes('куче') ||
-              pet.species.toLowerCase().includes('dog')) {
-              🐕
-              } @else if (pet.species.toLowerCase().includes('котка') ||
-              pet.species.toLowerCase().includes('cat')) {
-              🐈
-              } @else {
               🐾
-              }
               }
             </div>
 

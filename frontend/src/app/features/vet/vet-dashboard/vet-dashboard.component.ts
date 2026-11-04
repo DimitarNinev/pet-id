@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -10,6 +11,7 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './vet-dashboard.component.scss',
 })
 export class VetDashboardComponent {
+  private readonly destroyRef = inject(DestroyRef);
   readonly currentDate = new Date();
   private readonly authService = inject(AuthService);
   userName = signal('Потребител');
@@ -19,7 +21,7 @@ export class VetDashboardComponent {
   }
 
   private loadCurrentUser(): void {
-    this.authService.getCurrentUser().subscribe({
+    this.authService.getCurrentUser().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (user) => {
         this.userName.set(user.firstName + ' ' + user.lastName);
       },

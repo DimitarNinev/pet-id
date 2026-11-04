@@ -1,4 +1,6 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
 import { CommonModule, DatePipe } from '@angular/common';
 
 import { RemindersService } from '../../../core/services/reminders.service';
@@ -15,6 +17,7 @@ type ReminderFilter = 'ALL' | ReminderType;
   styleUrl: './reminders.component.scss',
 })
 export class RemindersComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly remindersService = inject(RemindersService);
 
   readonly reminders = signal<Reminder[]>([]);
@@ -51,16 +54,17 @@ export class RemindersComponent implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.remindersService.getAll().subscribe({
+    this.remindersService.getAll().pipe(
+      finalize(() => this.isLoading.set(false)),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe({
       next: (data) => {
         this.reminders.set(data);
-        this.isLoading.set(false);
       },
       error: () => {
         this.errorMessage.set(
           'Възникна грешка при зареждането на напомнянията. Опитай отново.',
         );
-        this.isLoading.set(false);
       },
     });
   }

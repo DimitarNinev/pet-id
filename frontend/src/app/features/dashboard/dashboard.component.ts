@@ -1,8 +1,8 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, computed } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { forkJoin, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable, catchError, finalize, forkJoin, map, of, switchMap } from 'rxjs';
 import { AnimalsService } from '../../core/services/animals.service';
 import { RemindersService } from '../../core/services/reminders.service';
 import { Animal } from '../../models/animal.model';
@@ -31,6 +31,7 @@ interface DashboardPet extends Animal {
 })
 
 export class DashboardComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly animalsService = inject(AnimalsService);
@@ -61,6 +62,10 @@ export class DashboardComponent implements OnInit {
     })),
   );
 
+  get reminderCounts(): number {
+    return this.remindersData().length
+  }
+
   get vaccineCount(): number {
     return this.remindersData().filter(
       (reminder) => reminder.type === 'VACCINATION',
@@ -80,13 +85,9 @@ export class DashboardComponent implements OnInit {
   }
 
   private loadCurrentUser(): void {
-    this.authService.getCurrentUser().subscribe({
-      next: (user) => {
-        this.userName.set(user.firstName);
-      },
-      error: (error) => {
-        console.error('Неуспешно зареждане на профила:', error);
-      },
+    this.authService.getCurrentUser().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (user) => this.userName.set(user.firstName),
+      error: (error: unknown) => console.error('Неуспешно зареждане на профила:', error),
     });
   }
 
@@ -94,76 +95,44 @@ export class DashboardComponent implements OnInit {
     this.isLoadingPets.set(true);
     this.petsError.set('');
 
-    this.animalsService.getAll().subscribe({
-      next: (animals) => {
-        if (animals.length === 0) {
-          this.pets.set([]);
-          this.isLoadingPets.set(false);
-          return;
-        }
+    this.animalsService.getAll().pipe(
+      switchMap((animals) => {
+        if (animals.length === 0) return of([] as DashboardPet[]);
 
-        const photoRequests = animals.map((animal) => {
-          if (!animal.photoPath) {
-            return of({
-              ...animal,
-              photoUrl: null,
-            });
-          }
+        const photoRequests: Observable<DashboardPet>[] = animals.map((animal) => {
+          if (!animal.photoPath) return of({ ...animal, photoUrl: null });
 
           return this.animalsService.getPhotoUrl(animal.id).pipe(
-            map((response) => ({
-              ...animal,
-              photoUrl: response.photoUrl,
-            })),
-            catchError(() =>
-              of({
-                ...animal,
-                photoUrl: null,
-              }),
-            ),
+            map((response) => ({ ...animal, photoUrl: response.photoUrl })),
+            catchError(() => of({ ...animal, photoUrl: null })),
           );
         });
 
-        forkJoin(photoRequests).subscribe({
-          next: (pets) => {
-            this.pets.set(pets);
-            this.isLoadingPets.set(false);
-          },
-          error: (error) => {
-            console.error('Неуспешно зареждане на снимките:', error);
-            this.pets.set(
-              animals.map((animal) => ({
-                ...animal,
-                photoUrl: null,
-              })),
-            );
-            this.isLoadingPets.set(false);
-          },
-        });
-      },
-      error: (error) => {
+        return forkJoin(photoRequests);
+      }),
+      catchError((error: unknown) => {
         console.error('Неуспешно зареждане на животните:', error);
         this.petsError.set('Животните не могат да бъдат заредени.');
-        this.isLoadingPets.set(false);
-      },
-    });
+        return of([] as DashboardPet[]);
+      }),
+      finalize(() => this.isLoadingPets.set(false)),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe((pets) => this.pets.set(pets));
   }
 
   private loadReminders(): void {
     this.isLoadingReminders.set(true);
     this.remindersError.set('');
 
-    this.remindersService.getAll().subscribe({
-      next: (reminders) => {
-        this.remindersData.set(reminders);
-        this.isLoadingReminders.set(false);
-      },
-      error: (error) => {
+    this.remindersService.getAll().pipe(
+      catchError((error: unknown) => {
         console.error('Неуспешно зареждане на напомнянията:', error);
-        this.remindersError.set('Напомнянията не могат да бъдат заредени.');
-        this.isLoadingReminders.set(false);
-      },
-    });
+        this.remindersError.set('Животните не могат да бъдат заредени.');
+        return of([] as Reminder[]);
+      }),
+      finalize(() => this.isLoadingReminders.set(false)),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe((reminders) => this.remindersData.set(reminders));
   }
 
   private getDaysDifference(date: string): number {

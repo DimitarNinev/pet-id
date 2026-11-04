@@ -1,5 +1,5 @@
 
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -7,16 +7,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
-} from '@angular/common/http';
-import { timer } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize, timer } from 'rxjs';
 import { AppInputComponent } from '../../../components/app-input/app-input';
 import { AppCalendarComponent } from '../../../components/app-calendar/app-calendar';
 import { AppButtonComponent } from '../../../components/app-button/app-button';
 import { HeaderComponent } from '../../../components/header/header.component';
+import { MedicalRecordsService } from '../../../core/services/medical-records.service';
+import type { CreateVeterinaryMedicalRecord } from '../../../core/services/medical-records.service';
 
 interface Patient {
   id: string;
@@ -27,10 +26,6 @@ interface Patient {
   sex: string | null;
   dateOfBirth: string | null;
   microchipId: string | null;
-}
-
-interface CreateExaminationResponse {
-  id: string;
 }
 
 @Component({
@@ -49,11 +44,10 @@ interface CreateExaminationResponse {
 })
 export class ExaminationFormComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly http = inject(HttpClient);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly medicalRecordsService = inject(MedicalRecordsService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-
-  private readonly apiUrl = 'http://localhost:3000/api/v1/animals';
 
   readonly animalId = this.route.snapshot.paramMap.get('animalId');
 
@@ -108,16 +102,14 @@ export class ExaminationFormComponent {
       return;
     }
 
-    if (this.examinationForm.invalid) {
-      this.examinationForm.markAllAsTouched();
-      this.errorMessage.set('Провери задължителните полета.');
+    if (!this.patient() || this.patient()?.id !== this.animalId) {
+      this.errorMessage.set('Информацията за пациента липсва. Върни се към търсенето и отвори пациента отново.');
       return;
     }
 
-    const token = localStorage.getItem('pet-id-access-token');
-
-    if (!token) {
-      this.errorMessage.set('Сесията ти е изтекла. Моля, влез отново.');
+    if (this.examinationForm.invalid) {
+      this.examinationForm.markAllAsTouched();
+      this.errorMessage.set('Провери задължителните полета.');
       return;
     }
 
@@ -135,7 +127,7 @@ export class ExaminationFormComponent {
       return;
     }
 
-    const payload = {
+    const payload: CreateVeterinaryMedicalRecord = {
       type: 'EXAMINATION',
       title: 'Ветеринарен преглед',
       occurredAt: `${form.occurredAt}T12:00:00.000Z`,
@@ -154,19 +146,11 @@ export class ExaminationFormComponent {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    this.http
-      .post<CreateExaminationResponse>(
-        `${this.apiUrl}/${this.animalId}/medical-records`,
-        payload,
-        {
-          headers: new HttpHeaders({
-            Authorization: `Bearer ${token}`,
-          }),
-        },
-      )
+    this.medicalRecordsService
+      .createVeterinaryRecord(this.animalId, payload)
+      .pipe(finalize(() => this.isSubmitting.set(false)), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.isSubmitting.set(false);
           this.successMessage.set('✓ Прегледът е записан успешно.');
           this.examinationForm.reset({
             occurredAt: this.today,
@@ -179,13 +163,11 @@ export class ExaminationFormComponent {
             temperatureC: '',
           });
 
-          timer(2500).subscribe(() => {
+          timer(2500).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
             this.cancel();
           });
         },
         error: (error: HttpErrorResponse) => {
-          this.isSubmitting.set(false);
-
           if (error.status === 401) {
             this.errorMessage.set('! Сесията ти е изтекла. Влез отново.');
           } else if (error.status === 403) {

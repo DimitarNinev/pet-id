@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Animal, CreateAnimalDto } from '../../models/animal.model';
+import { API_BASE_URL } from '../config/api.config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnimalsService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/api/v1/animals';
+  private readonly apiUrl = `${API_BASE_URL}/animals`;
 
   getAll(): Observable<Animal[]> {
     return this.http.get<Animal[]>(this.apiUrl);
@@ -54,5 +55,9 @@ export class AnimalsService {
     return this.http.get<{ photoUrl: string }>(
       `${this.apiUrl}/${animalId}/vet-photo-url`
     );
+  }
+
+  search(query: string): Observable<Animal> {
+    return this.http.get<Animal>(`${this.apiUrl}/search`, { params: { q: query } });
   }
 }

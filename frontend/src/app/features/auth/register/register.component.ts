@@ -1,9 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { finalize } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   FormBuilder,
   ReactiveFormsModule,
-  FormsModule,
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -16,7 +16,7 @@ import { AppButtonComponent } from "../../../components/app-button/app-button";
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, RouterLink, AppInputComponent, AppDropdownComponent, AppButtonComponent],
+  imports: [ReactiveFormsModule, RouterLink, AppInputComponent, AppDropdownComponent, AppButtonComponent],
   templateUrl: './register.component.html',
   styleUrl: '../auth-page.scss',
 })
@@ -45,12 +45,6 @@ export class RegisterComponent {
     role: ['OWNER' as 'OWNER' | 'VET', Validators.required],
   });
 
-  roles = [
-    { value: 'admin', label: 'Администратор' },
-    { value: 'user', label: 'Потребител' },
-    { value: 'guest', label: 'Гост' }
-  ];
-
   submit(): void {
     if (this.loading()) return;
 
@@ -63,17 +57,14 @@ export class RegisterComponent {
 
     this.loading.set(true);
 
-    this.auth.login(this.form.getRawValue())
+    this.auth.register(this.form.getRawValue())
       .pipe(finalize(() => this.loading.set(false))).subscribe({
         next: ({ user }) => {
           this.loading.set(false);
 
-          if (user.role === 'VET' && !user.vetApproved) {
-            void this.router.navigate(['/pending-approval']);
-            return;
-          }
-
-          void this.router.navigate(['/dashboard']);
+          void this.router.navigate([user.role === 'VET'
+            ? (user.vetApproved ? '/vet/dashboard' : '/pending-approval')
+            : '/dashboard']);
         },
         error: (error) => {
           this.loading.set(false);
@@ -83,7 +74,8 @@ export class RegisterComponent {
       });
   }
 
-  getLoginErrorMessage(error: any): string {
+  getLoginErrorMessage(error: unknown): string {
+    if (!(error instanceof HttpErrorResponse)) return 'Възникна неочаквана грешка.';
     return error.status === 0
       ? 'Няма връзка със сървъра. Опитай отново.'
       : Array.isArray(error.error?.message)

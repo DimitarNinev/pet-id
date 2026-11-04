@@ -41,6 +41,7 @@ export class AnimalDetailsComponent implements OnInit {
   private readonly animalsService = inject(AnimalsService);
   private readonly router = inject(Router);
   private readonly reloadAnimal$ = new Subject<void>();
+  private usedNavigationState = false;
 
   readonly animalId = signal('');
   readonly animal = signal<Animal | null>(null);
@@ -64,6 +65,7 @@ export class AnimalDetailsComponent implements OnInit {
           this.deleteError.set('');
           this.showDeleteConfirmation.set(false);
           this.photoUrl.set(null);
+          this.usedNavigationState = false;
         }),
         switchMap((id) => {
           if (!id) {
@@ -86,7 +88,8 @@ export class AnimalDetailsComponent implements OnInit {
 
               const stateAnimal = navigationState.animal;
 
-              if (stateAnimal && stateAnimal.id === id) {
+              if (stateAnimal && stateAnimal.id === id && !this.usedNavigationState) {
+                this.usedNavigationState = true;
                 this.setAnimalData(
                   stateAnimal,
                   navigationState.photoUrl ?? null,

@@ -1,5 +1,6 @@
 
-import { Component, inject, signal, OnDestroy } from '@angular/core';
+import { Component, DestroyRef, inject, signal, OnDestroy } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -16,6 +17,7 @@ import { AppDropdownComponent } from "../../../components/app-dropdown/app-dropd
 import { AppButtonComponent } from "../../../components/app-button/app-button";
 import { AppCalendarComponent } from "../../../components/app-calendar/app-calendar";
 import { HeaderComponent } from "../../../components/header/header.component";
+import { toDateInputValue } from '../../../core/utils/date.utils';
 
 @Component({
   selector: 'app-animal-form',
@@ -25,10 +27,11 @@ import { HeaderComponent } from "../../../components/header/header.component";
   styleUrl: './animal-form.component.scss',
 })
 export class AnimalFormComponent implements OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
   private readonly animalsService = inject(AnimalsService);
   private readonly router = inject(Router);
-  readonly today = new Date().toISOString().slice(0, 10);
+  readonly today = toDateInputValue(new Date());
 
   readonly isSubmitting = signal(false);
   readonly errorMessage = signal('');
@@ -115,7 +118,7 @@ export class AnimalFormComponent implements OnDestroy {
     this.isSubmitting.set(true);
     this.errorMessage.set('');
 
-    this.animalsService.create(data).subscribe({
+    this.animalsService.create(data).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (animal) => {
         this.createdAnimalId.set(animal.id);
 
@@ -187,7 +190,7 @@ export class AnimalFormComponent implements OnDestroy {
   }
 
   private uploadPhoto(animalId: string, photo: File): void {
-    this.animalsService.uploadPhoto(animalId, photo).subscribe({
+    this.animalsService.uploadPhoto(animalId, photo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.isSubmitting.set(false);
         void this.router.navigate(['/dashboard']);

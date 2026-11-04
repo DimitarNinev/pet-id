@@ -21,19 +21,7 @@
                     <img [src]="imageUrl" [alt]="'Снимка на ' + pet.name" (error)="photoUrl.set(null)"
                         class="animal-photo">
                     } @else {
-                    @if (
-                    pet.species.toLowerCase().includes('куче') ||
-                    pet.species.toLowerCase().includes('dog')
-                    ) {
-                    🐕
-                    } @else if (
-                    pet.species.toLowerCase().includes('котка') ||
-                    pet.species.toLowerCase().includes('cat')
-                    ) {
-                    🐈
-                    } @else {
                     🐾
-                    }
                     }
                 </div>
 

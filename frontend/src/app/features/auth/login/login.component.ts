@@ -1,11 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { finalize } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   FormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
 import { AppInputComponent } from "../../../components/app-input/app-input";
@@ -22,6 +23,7 @@ export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   showPassword = false;
   readonly loading = signal(false);
@@ -50,18 +52,15 @@ export class LoginComponent {
           this.loading.set(false);
 
           if (user.role === 'VET') {
-            if (!user.vetApproved) {
-              void this.router.navigate(['/pending-approval']);
-              return;
-            }
-
-            void this.router.navigate(['/vet/dashboard']);
+            void this.router.navigate([user.vetApproved ? '/vet/dashboard' : '/pending-approval']);
             return;
           }
 
-          localStorage.setItem('user-role', user.role);
-
-          void this.router.navigate(['/dashboard']);
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+          const safeReturnUrl = returnUrl?.startsWith('/') && !returnUrl.startsWith('//')
+            ? returnUrl
+            : '/dashboard';
+          void this.router.navigateByUrl(safeReturnUrl);
         },
         error: (error) => {
           this.loading.set(false);
@@ -71,7 +70,8 @@ export class LoginComponent {
       });
   }
 
-  getLoginErrorMessage(error: any): string {
+  getLoginErrorMessage(error: unknown): string {
+    if (!(error instanceof HttpErrorResponse)) return 'Възникна неочаквана грешка.';
     return error.status === 0
       ? 'Няма връзка със сървъра. Опитай отново.'
       : typeof error.error?.message === 'string'

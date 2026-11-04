@@ -1,10 +1,9 @@
 import { Component, Input, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './app-input.html',
   styleUrl: './app-input.scss',
   providers: [
@@ -21,13 +20,13 @@ export class AppInputComponent implements ControlValueAccessor {
   @Input() type: string = 'text';
   @Input() required: boolean = false;
 
-  value: string = '';
+  value = '';
   disabled: boolean = false;
 
   @Input() max: string | number | null = '';
 
-  onChange: any = () => { };
-  onTouch: any = () => { };
+  private onChange: (value: string) => void = () => {};
+  onTouch: () => void = () => {};
 
   onInputChange(event: Event): void {
     const target = event.target as HTMLInputElement;
@@ -35,8 +34,8 @@ export class AppInputComponent implements ControlValueAccessor {
     this.onChange(this.value);
   }
 
-  writeValue(val: any): void {
-    this.value = val || '';
+  writeValue(val: unknown): void {
+    this.value = val == null ? '' : String(val);
   }
 
   registerOnChange(fn: any): void {
@@ -47,7 +46,7 @@ export class AppInputComponent implements ControlValueAccessor {
     this.onTouch = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {
+  setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
 }
