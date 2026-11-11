@@ -1,13 +1,11 @@
-<section class="examination-page">
+<div class="examination-page">
     <header-component></header-component>
 
-    <div class="page-wrapper">
-        <header class="page-header">
-            <div>
-                <h1>Нов ветеринарен преглед</h1>
-                <p>Попълни данните от прегледа на пациента.</p>
-            </div>
-        </header>
+    <main>
+        <div class="header">
+            <h1>Нов ветеринарен преглед</h1>
+            <p>Попълни данните от прегледа на пациента.</p>
+        </div>
 
         @if (patient(); as animal) {
         <section class="patient-card">
@@ -15,7 +13,6 @@
                 <span>Пациент</span>
                 <h2>{{ animal.name }}</h2>
             </div>
-
             <div>
                 <span>Pet ID</span>
                 <strong>{{ animal.petId }}</strong>
@@ -93,9 +90,9 @@
                             placeholder="Назначения, терапия и последващи действия..."></app-input>
                     </div>
                 </div>
-            </section>
 
-            <section class="form-section">
+                <div class="devider"></div>
+
                 <h2>Измервания</h2>
 
                 <div class="form-grid">
@@ -109,26 +106,26 @@
                             placeholder="Напр. 38.5"></app-input>
                     </div>
                 </div>
+
+                @if (errorMessage()) {
+                <p class="error-message">{{ errorMessage() }}</p>
+                }
+
+                @if (successMessage()) {
+                <p class="success-message">{{ successMessage() }}</p>
+                }
+
+                <div class="form-actions">
+                    <app-button class="button" type="reset" (btnClick)="cancel()" [disabled]="isSubmitting()">
+                        Отказ
+                    </app-button>
+
+                    <app-button class="button" type="submit" [disabled]="isSubmitting() || !patient()"
+                        [isLoading]="isSubmitting()">
+                        {{ isSubmitting() ? 'Запазване...' : 'Запази прегледа' }}
+                    </app-button>
+                </div>
             </section>
-
-            @if (errorMessage()) {
-            <p class="error-message">{{ errorMessage() }}</p>
-            }
-
-            @if (successMessage()) {
-            <p class="success-message">{{ successMessage() }}</p>
-            }
-
-            <div class="form-actions">
-                <app-button class="button" type="reset" (btnClick)="cancel()" [disabled]="isSubmitting()">
-                    Отказ
-                </app-button>
-
-                <app-button class="button" type="submit" [disabled]="isSubmitting() || !patient()"
-                    [isLoading]="isSubmitting()">
-                    {{ isSubmitting() ? 'Запазване...' : 'Запази прегледа' }}
-                </app-button>
-            </div>
         </form>
-    </div>
-</section>
+    </main>
+</div>

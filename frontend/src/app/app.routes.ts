@@ -11,32 +11,65 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     canActivate: [ownerGuard],
-    loadComponent: () => import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    loadComponent: () =>
+      import('./features/dashboard/dashboard.component')
+        .then((m) => m.DashboardComponent),
   },
   {
     path: 'animals/new',
     canActivate: [ownerGuard],
-    loadComponent: () => import('./features/animals/animal-form/animal-form.component').then((m) => m.AnimalFormComponent),
+    loadComponent: () =>
+      import('./features/animals/animal-form/animal-form.component')
+        .then((m) => m.AnimalFormComponent),
   },
   {
     path: 'animals/:id/edit',
     canActivate: [ownerGuard],
-    loadComponent: () => import('./features/animals/animal-edit/animal-edit.component').then((m) => m.AnimalEditComponent),
+    loadComponent: () =>
+      import('./features/animals/animal-edit/animal-edit.component')
+        .then((m) => m.AnimalEditComponent),
   },
   {
     path: 'animals/:id',
     canActivate: [ownerGuard],
-    loadComponent: () => import('./features/animals/animal-details/animal-details.component').then((m) => m.AnimalDetailsComponent),
+    loadComponent: () =>
+      import('./features/animals/animal-details/animal-details.component').
+        then((m) => m.AnimalDetailsComponent),
+  },
+  {
+    path: 'medical-records/new',
+    canActivate: [authenticatedGuard, ownerGuard],
+    loadComponent: () =>
+      import('./features/medical-records/new-records/new-records.component')
+        .then((m) => m.NewRecordsComponent),
+  },
+  {
+    path: 'animals/:animalId/medical-records/new',
+    canActivate: [authenticatedGuard, ownerGuard],
+    loadComponent: () =>
+      import('./features/medical-records/new-records/new-records.component')
+        .then((m) => m.NewRecordsComponent),
   },
   {
     path: 'animals/:animalId/medical-records',
     canActivate: [authenticatedGuard],
-    loadComponent: () => import('./features/medical-records/medical-records/medical-records.component').then((m) => m.MedicalRecordsComponent),
+    loadComponent: () =>
+      import('./features/medical-records/medical-records/medical-records.component')
+        .then((m) => m.MedicalRecordsComponent),
+  },
+  {
+    path: 'reminders/new',
+    canActivate: [ownerGuard],
+    loadComponent: () =>
+      import('./features/reminders/new-reminder/new-reminder.component')
+        .then((m) => m.NewReminderComponent),
   },
   {
     path: 'reminders',
     canActivate: [ownerGuard],
-    loadComponent: () => import('./features/reminders/reminders/reminders.component').then((m) => m.RemindersComponent),
+    loadComponent: () =>
+      import('./features/reminders/reminders/reminders.component')
+        .then((m) => m.RemindersComponent),
   },
 
   // Ветеринарна зона — компонентите ще добавим в следващите стъпки

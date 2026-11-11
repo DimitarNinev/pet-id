@@ -1,38 +1,38 @@
-<section class="deworming-page">
+<div class="deworming-page">
   <header-component></header-component>
 
-  <div class="page-wrapper">
-    <header class="page-header">
+  <main>
+    <div class="header">
       <h1>Ново обезпаразитяване</h1>
       <p>Регистрирай извършено обезпаразитяване в медицинското досие.</p>
-    </header>
+    </div>
 
     @if (patient(); as animal) {
-      <section class="patient-card">
-        <div>
-          <span>Пациент</span>
-          <h2>{{ animal.name }}</h2>
-        </div>
+    <section class="patient-card">
+      <div>
+        <span>Пациент</span>
+        <h2>{{ animal.name }}</h2>
+      </div>
 
-        <div>
-          <span>Pet ID</span>
-          <strong>{{ animal.petId }}</strong>
-        </div>
+      <div>
+        <span>Pet ID</span>
+        <strong>{{ animal.petId }}</strong>
+      </div>
 
-        <div>
-          <span>Вид</span>
-          <strong>{{ animal.species }}</strong>
-        </div>
+      <div>
+        <span>Вид</span>
+        <strong>{{ animal.species }}</strong>
+      </div>
 
-        <div>
-          <span>Порода</span>
-          <strong>{{ animal.breed || 'Не е посочена' }}</strong>
-        </div>
-      </section>
+      <div>
+        <span>Порода</span>
+        <strong>{{ animal.breed || 'Не е посочена' }}</strong>
+      </div>
+    </section>
     } @else {
-      <p class="error-message">
-        Информацията за пациента не е налична. Върни се към търсенето.
-      </p>
+    <p class="error-message">
+      Информацията за пациента не е налична. Върни се към търсенето.
+    </p>
     }
 
     <form [formGroup]="dewormingForm" (ngSubmit)="onSubmit()" class="deworming-form">
@@ -41,116 +41,82 @@
 
         <div class="form-grid">
           <div class="row-field">
-            <app-input
-              label="Име на продукта"
-              formControlName="productName"
-              [required]="true"
+            <app-input label="Име на продукта" formControlName="productName" [required]="true"
               placeholder="Напр. Bravecto, Drontal...">
             </app-input>
 
             @if (
-              dewormingForm.controls.productName.touched &&
-              dewormingForm.controls.productName.invalid
+            dewormingForm.controls.productName.touched &&
+            dewormingForm.controls.productName.invalid
             ) {
-              <small>Въведи името на продукта.</small>
+            <small>Въведи името на продукта.</small>
             }
           </div>
 
           <div class="row-field">
-            <app-dropdown
-              label="Вид обезпаразитяване"
-              formControlName="dewormingType"
-              [options]="dewormingTypes"
-              [required]="true"
-              placeholder="Избери вид">
+            <app-dropdown label="Вид обезпаразитяване" formControlName="dewormingType" [options]="dewormingTypes"
+              [required]="true" placeholder="Избери вид">
             </app-dropdown>
           </div>
 
           <div class="row-field">
-            <app-input
-              label="Производител"
-              formControlName="manufacturer"
-              placeholder="Име на производителя">
+            <app-input label="Производител" formControlName="manufacturer" placeholder="Име на производителя">
             </app-input>
           </div>
 
           <div class="row-field">
-            <app-input
-              label="Номер на партида"
-              formControlName="batchNumber"
-              placeholder="Номер от опаковката">
+            <app-input label="Номер на партида" formControlName="batchNumber" placeholder="Номер от опаковката">
             </app-input>
           </div>
 
           <div class="row-field">
-            <app-input
-              label="Доза"
-              formControlName="dose"
-              placeholder="Напр. 1 таблетка">
+            <app-input label="Доза" formControlName="dose" placeholder="Напр. 1 таблетка">
             </app-input>
           </div>
 
           <div class="row-field">
-            <app-input
-              label="Начин на приложение"
-              formControlName="administrationMethod"
+            <app-input label="Начин на приложение" formControlName="administrationMethod"
               placeholder="Напр. перорално, spot-on...">
             </app-input>
           </div>
 
           <div class="row-field">
-            <app-calendar
-              label="Дата на приложение"
-              formControlName="administeredAt"
-              [max]="today"
-              [required]="true">
+            <app-calendar label="Дата на приложение" formControlName="administeredAt" [max]="today" [required]="true">
             </app-calendar>
           </div>
 
           <div class="row-field">
-            <app-calendar
-              label="Следващо обезпаразитяване"
-              formControlName="nextDueAt"
+            <app-calendar label="Следващо обезпаразитяване" formControlName="nextDueAt"
               [min]="dewormingForm.controls.administeredAt.value || null">
             </app-calendar>
           </div>
 
           <div class="row-field full-width">
-            <app-input
-              label="Бележки"
-              type="textarea"
-              formControlName="notes"
+            <app-input label="Бележки" type="textarea" formControlName="notes"
               placeholder="Допълнителна информация за обезпаразитяването...">
             </app-input>
           </div>
         </div>
-      </section>
 
-      @if (errorMessage()) {
+        @if (errorMessage()) {
         <p class="error-message">{{ errorMessage() }}</p>
-      }
+        }
 
-      @if (successMessage()) {
+        @if (successMessage()) {
         <p class="success-message">{{ successMessage() }}</p>
-      }
+        }
 
-      <div class="form-actions">
-        <app-button
-          class="button"
-          type="reset"
-          (btnClick)="cancel()"
-          [disabled]="isSubmitting()">
-          Отказ
-        </app-button>
+        <div class="form-actions">
+          <app-button class="button" type="reset" (btnClick)="cancel()" [disabled]="isSubmitting()">
+            Отказ
+          </app-button>
 
-        <app-button
-          class="button"
-          type="submit"
-          [disabled]="isSubmitting() || !patient()"
-          [isLoading]="isSubmitting()">
-          {{ isSubmitting() ? 'Запазване...' : 'Запази обезпаразитяването' }}
-        </app-button>
-      </div>
+          <app-button class="button" type="submit" [disabled]="isSubmitting() || !patient()"
+            [isLoading]="isSubmitting()">
+            {{ isSubmitting() ? 'Запазване...' : 'Запази обезпаразитяването' }}
+          </app-button>
+        </div>
+      </section>
     </form>
-  </div>
-</section>
+  </main>
+</div>

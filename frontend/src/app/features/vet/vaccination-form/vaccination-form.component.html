@@ -1,11 +1,11 @@
-<section class="vaccination-page">
+<div class="vaccination-page">
   <header-component></header-component>
 
-  <div class="page-wrapper">
-    <header class="page-header">
+  <main>
+    <div class="header">
       <h1>Нова ваксинация</h1>
       <p>Регистрирай поставена ваксина в медицинското досие.</p>
-    </header>
+    </div>
 
     @if (patient(); as animal) {
     <section class="patient-card">
@@ -80,25 +80,26 @@
               placeholder="Допълнителна информация за ваксинацията..."></app-input>
           </div>
         </div>
+
+        @if (errorMessage()) {
+        <p class="error-message">{{ errorMessage() }}</p>
+        }
+
+        @if (successMessage()) {
+        <p class="success-message">{{ successMessage() }}</p>
+        }
+
+        <div class="form-actions">
+          <app-button class="button" type="reset" (btnClick)="cancel()" [disabled]="isSubmitting()">
+            Отказ
+          </app-button>
+
+          <app-button class="button" type="submit" [disabled]="isSubmitting() || !patient()"
+            [isLoading]="isSubmitting()">
+            {{ isSubmitting() ? 'Запазване...' : 'Запази ваксинацията' }}
+          </app-button>
+        </div>
       </section>
-
-      @if (errorMessage()) {
-      <p class="error-message">{{ errorMessage() }}</p>
-      }
-
-      @if (successMessage()) {
-      <p class="success-message">{{ successMessage() }}</p>
-      }
-
-      <div class="form-actions">
-        <app-button class="button" type="reset" (btnClick)="cancel()" [disabled]="isSubmitting()">
-          Отказ
-        </app-button>
-
-        <app-button class="button" type="submit" [disabled]="isSubmitting() || !patient()" [isLoading]="isSubmitting()">
-          {{ isSubmitting() ? 'Запазване...' : 'Запази ваксинацията' }}
-        </app-button>
-      </div>
     </form>
-  </div>
-</section>
+  </main>
+</div>

@@ -1,0 +1,103 @@
+<div class="new-records-page">
+    <header-component></header-component>
+
+    <main>
+        <div class="header">
+            <h1>Нова лична бележка</h1>
+            <p>
+                Добави лична информация за здравето, поведението или грижите за любимеца.
+            </p>
+        </div>
+
+        @if (!animalId) {
+        <section class="panel form-panel">
+            <div class="panel-heading">
+                <h2>Избери животно</h2>
+                <p>За кое животно искаш да добавиш лична бележка?</p>
+            </div>
+
+            @if (isLoadingAnimals()) {
+            <div class="state-message">
+                <span class="loader"></span>
+                <p>Зареждане на животните...</p>
+            </div>
+            } @else if (animalLoadError()) {
+            <div class="form-message error" role="alert">
+                {{ animalLoadError() }}
+            </div>
+            } @else if (animals().length === 0) {
+            <div class="empty-state">
+                <h3>Все още нямаш добавени животни</h3>
+                <p>Първо добави животно, за да можеш да създаваш лични бележки.</p>
+
+                <app-button type="button" [small]="true" (btnClick)="addAnimal()">
+                    + Добави животно
+                </app-button>
+            </div>
+            } @else {
+            <div class="animal-selection">
+                @for (animal of animals(); track animal.id) {
+                <button type="button" class="animal-card" (click)="selectAnimal(animal.id)">
+
+                    <span class="animal-info">
+                        <strong>{{ animal.name }}</strong>
+                        <small>Pet ID: {{ animal.petId }}</small>
+                    </span>
+
+                    <span class="selection-indicator">
+                        <span>›</span>
+                    </span>
+                </button>
+                }
+            </div>
+            }
+
+            <div class="form-actions">
+                <app-button type="reset" (btnClick)="cancel()">
+                    Отказ
+                </app-button>
+            </div>
+        </section>
+        } @else {
+        <section class="panel form-panel">
+            <div class="panel-heading">
+                <h2>Информация за бележката</h2>
+            </div>
+
+            <form [formGroup]="recordForm" (ngSubmit)="createRecord()" novalidate>
+                <div class="form-grid">
+                    <div class="row-field">
+                        <app-input label="Заглавие" placeholder="Напр. Промяна в апетита" formControlName="title"></app-input>
+                    </div>
+
+                    <div class="row-field">
+                        <app-calendar label="Дата" placeholder="Избери дата" formControlName="occurredAt"></app-calendar>
+                    </div>
+                </div>
+
+                <div class="form-description">
+                    <div class="row-field">
+                        <app-input type="textarea" label="Описание" placeholder="Добави подробности (незадължително)" formControlName="notes"></app-input>
+                    </div>
+                </div>
+
+                @if (saveError) {
+                <p class="form-message error" role="alert">
+                    {{ saveError }}
+                </p>
+                }
+
+                <div class="form-actions">
+                    <app-button type="reset" [disabled]="isSaving" (btnClick)="cancel()">
+                        Отказ
+                    </app-button>
+
+                    <app-button type="submit" [disabled]="recordForm.invalid || isSaving">
+                        {{ isSaving ? 'Запазване...' : 'Запази бележката' }}
+                    </app-button>
+                </div>
+            </form>
+        </section>
+        }
+    </main>
+</div>

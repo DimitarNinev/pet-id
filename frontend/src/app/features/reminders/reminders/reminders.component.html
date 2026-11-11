@@ -12,8 +12,7 @@
         <span class="stat-icon">📅</span>
         <div>
           <p>Всички напомняния</p>
-          <strong>{{ totalCount() }}</strong>
-          <small>Общо събития</small>
+          <strong>{{ totalCount() }} <small>Общо събития</small></strong>
         </div>
       </article>
 
@@ -21,8 +20,7 @@
         <span class="stat-icon">✓</span>
         <div>
           <p>Предстоящи</p>
-          <strong>{{ upcomingCount() }}</strong>
-          <small>Предстоящи процедури</small>
+          <strong>{{ upcomingCount() }} <small>Предстоящи процедури</small></strong>
         </div>
       </article>
 
@@ -30,13 +28,16 @@
         <span class="stat-icon">!</span>
         <div>
           <p>Просрочени</p>
-          <strong>{{ overdueCount() }}</strong>
-          <small>Изискват внимание</small>
+          <strong>{{ overdueCount() }} <small>Изискват внимание</small></strong>
         </div>
       </article>
     </section>
 
     <section class="panel reminders-panel">
+      <app-button class="button" [small]="true" (click)="newReminderForm()">
+        + Добави напомняне
+      </app-button>
+
       <div class="panel-heading">
         <div>
           <h2>Всички напомняния</h2>
@@ -50,11 +51,15 @@
         </button>
 
         <button type="button" [class.active]="activeFilter() === 'VACCINATION'" (click)="setFilter('VACCINATION')">
-          💉 Ваксинации
+          Ваксинации
         </button>
 
         <button type="button" [class.active]="activeFilter() === 'DEWORMING'" (click)="setFilter('DEWORMING')">
-          ❤️ Обезпаразитявания
+          Обезпаразитявания
+        </button>
+
+        <button type="button" [class.active]="activeFilter() === 'PERSONAL'" (click)="setFilter('PERSONAL')">
+          Лични
         </button>
       </div>
 
@@ -85,13 +90,21 @@
       </div>
       } @else {
       <div class="reminder-list">
+        @if (successMessage()) {
+        <div class="success-message">
+          {{ successMessage() }}
+        </div>
+        }
+
         @for (reminder of filteredReminders(); track reminder.id) {
         <article class="reminder-item" [class.overdue]="reminder.status === 'OVERDUE'">
           <div class="reminder-icon">
             @if (reminder.type === 'VACCINATION') {
             💉
-            } @else {
+            } @else if (reminder.type === 'DEWORMING') {
             ❤️
+            } @else {
+            ❕
             }
           </div>
 
@@ -123,6 +136,17 @@
               Дата: {{ reminder.dueAt | date: 'dd.MM.yyyy' }}
             </div>
           </div>
+
+          @if (reminder.source === 'PERSONAL') {
+          <app-button type="reset" class="button no-margin" [small]="true" [disabled]="removingId() === reminder.id"
+            (click)="removeReminder(reminder)">
+            @if (removingId() === reminder.id) {
+            Изтриване...
+            } @else {
+            Изтрий
+            }
+          </app-button>
+          }
 
           <div class="reminder-status">
             <span class="status-label" [class.overdue]="reminder.status === 'OVERDUE'">

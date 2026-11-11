@@ -10,8 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Controller, Get, Req, UseGuards, } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, UseGuards, Delete, Param, } from '@nestjs/common';
 import { RemindersService } from './reminders.service.js';
+import { CreateReminderDto } from './dto/create-reminder.dto.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 let RemindersController = class RemindersController {
     remindersService;
@@ -21,6 +22,12 @@ let RemindersController = class RemindersController {
     findAll(request) {
         return this.remindersService.findAll(request.user.sub);
     }
+    create(dto, request) {
+        return this.remindersService.create(request.user.sub, dto);
+    }
+    remove(request, id) {
+        return this.remindersService.remove(request.user.sub, id);
+    }
 };
 __decorate([
     Get(),
@@ -29,6 +36,22 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], RemindersController.prototype, "findAll", null);
+__decorate([
+    Post(),
+    __param(0, Body()),
+    __param(1, Req()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [CreateReminderDto, Object]),
+    __metadata("design:returntype", void 0)
+], RemindersController.prototype, "create", null);
+__decorate([
+    Delete(':id'),
+    __param(0, Req()),
+    __param(1, Param('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", void 0)
+], RemindersController.prototype, "remove", null);
 RemindersController = __decorate([
     Controller('api/v1/reminders'),
     UseGuards(JwtAuthGuard),

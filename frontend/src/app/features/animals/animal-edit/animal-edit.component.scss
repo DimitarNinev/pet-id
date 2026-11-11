@@ -2,212 +2,193 @@
     min-height: 100vh;
 
     main {
-        width: 900px;
-        margin: 0 auto;
-    }
-}
 
-.header {
-    margin: 24px 0;
+        form {
+            padding: var(--spacing-2xl);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
 
-    h1 {
-        margin-bottom: 8px;
-        font-size: 30px;
-    }
-
-    p {
-        color: #718078;
-    }
-}
-
-form {
-    padding: 28px;
-    background: #fff;
-    border: 1px solid #e4ebe6;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 5px 0 rgba(0, 0, 0, 0.1);
-
-    .photo-section {
-        margin-bottom: 32px;
-        padding-bottom: 24px;
-        border-bottom: 1px solid #e5e7eb;
-
-        .photo-heading {
-            margin-bottom: 18px;
-
-            h2 {
-                margin: 0 0 6px;
+            .form-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: var(--spacing-xl);
             }
 
-            p {
-                margin: 0;
-                color: #888;
-            }
-        }
-
-        .photo-content {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            margin-bottom: 16px;
-
-            .animal-photo,
-            .photo-placeholder {
-                width: 140px;
-                height: 140px;
-                border-radius: 14px;
-                flex-shrink: 0;
+            .full-width {
+                grid-column: 1 / -1;
             }
 
-            .animal-photo {
-                object-fit: cover;
-            }
+            .photo-section {
+                margin-bottom: var(--spacing-2xl);
+                padding-bottom: var(--spacing-xl);
+                border-bottom: 1px solid var(--color-border);
 
-            .photo-placeholder {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                background: #f3f4f6;
-                color: #888;
-                padding: 10px;
-                text-align: center;
+                .photo-heading {
+                    margin-bottom: var(--spacing-lg);
 
-                span {
-                    font-size: 36px;
-                }
-
-                &.photo-loading {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 10px;
-
-                    .photo-spinner {
-                        width: 28px;
-                        height: 28px;
-                        border: 3px solid #e5e7eb;
-                        border-top-color: #6366f1;
-                        border-radius: 50%;
-                        animation: photo-spin 0.8s linear infinite;
+                    h2 {
+                        margin: 0 0 var(--spacing-xs);
                     }
 
-                    @keyframes photo-spin {
-                        to {
-                            transform: rotate(360deg);
+                    p {
+                        margin: 0;
+                        color: var(--color-text-secondary);
+                    }
+                }
+
+                .photo-content {
+                    display: flex;
+                    align-items: center;
+                    gap: var(--spacing-xl);
+                    margin-bottom: var(--spacing-lg);
+
+                    .animal-photo,
+                    .photo-placeholder {
+                        width: 140px;
+                        height: 140px;
+                        border-radius: var(--radius-lg);
+                        flex-shrink: 0;
+                    }
+
+                    .animal-photo {
+                        object-fit: cover;
+                    }
+
+                    .photo-placeholder {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: var(--spacing-sm);
+                        background: var(--color-surface-secondary);
+                        color: var(--color-text-secondary);
+                        padding: var(--spacing-md);
+                        text-align: center;
+
+                        span {
+                            font-size: var(--spacing-2xl);
+                        }
+
+                        &.photo-loading {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            gap: var(--spacing-sm);
+
+                            .photo-spinner {
+                                width: 28px;
+                                height: 28px;
+                                border: 3px solid var(--color-text-secondary);
+                                border-top-color: var(--color-info);
+                                border-radius: 50%;
+                                animation: photo-spin 0.8s linear infinite;
+                            }
+
+                            @keyframes photo-spin {
+                                to {
+                                    transform: rotate(360deg);
+                                }
+                            }
+                        }
+                    }
+
+                    .photo-controls {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: var(--spacing-md);
+
+                        .photo-select-button {
+                            display: inline-block;
+                            padding: var(--spacing-sm) var(--spacing-lg);
+                            border: 1px solid var(--color-border);
+                            border-radius: var(--radius-md);
+                            cursor: pointer;
+
+                            input {
+                                display: none;
+                            }
+                        }
+
+                        .photo-remove-button {
+                            padding: 0;
+                            border: 0;
+                            background: none;
+                            color: var(--color-danger);
+                            cursor: pointer;
+                            font: inherit;
+                        }
+
+                        .photo-hint {
+                            color: var(--color-text-secondary);
+                        }
+
+                        .photo-error {
+                            color: var(--color-danger);
                         }
                     }
                 }
             }
 
-            .photo-controls {
+            .form-actions {
                 display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-
-                .photo-select-button {
-                    display: inline-block;
-                    padding: 10px 16px;
-                    border: 1px solid #d1d5db;
-                    border-radius: 8px;
-                    cursor: pointer;
-
-                    input {
-                        display: none;
-                    }
-                }
-
-                .photo-remove-button {
-                    padding: 0;
-                    border: 0;
-                    background: none;
-                    color: #dc2626;
-                    cursor: pointer;
-                    font: inherit;
-                }
-
-                .photo-hint {
-                    color: #888;
-                }
-
-                .photo-error {
-                    color: #dc2626;
-                }
+                justify-content: flex-end;
+                gap: var(--spacing-md);
+                margin-top: var(--spacing-xl);
             }
         }
     }
 }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 22px;
-}
-
-.full-width {
-    grid-column: 1 / -1;
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 28px;
-}
-
 .error-box,
 .error-message {
-    color: #b42318;
+    color: var(--color-danger);
 }
 
 .error-box {
-    margin-top: 20px;
-    padding: 16px;
-    background: #fff0ef;
-    border-radius: 10px;
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: var(--color-surface-secondary);
+    border-radius: var(--radius-md);
 }
 
 .state-message {
-    padding: 24px;
-    color: #718078;
+    padding: var(--spacing-xl);
+    color: var(--color-text-secondary);
 }
 
 @media (max-width: 600px) {
     .edit-page {
         main {
-            padding: 0 18px 18px;
-            width: 100%;
-        }
-    }
+            form {
+                padding: var(--spacing-lg);
 
-    form {
-        padding: 20px;
+                .form-grid {
+                    grid-template-columns: 1fr;
+                }
 
-        .photo-section {
-            .photo-content {
-                .animal-photo {
-                    width: 110px;
-                    height: 90px;
+                .full-width {
+                    grid-column: auto;
+                }
+
+                .photo-section {
+                    .photo-content {
+                        .animal-photo {
+                            width: 110px;
+                            height: 90px;
+                        }
+                    }
+                }
+
+                .form-actions {
+                    flex-direction: column-reverse;
+                    gap: 0;
+                    margin-top: 0;
                 }
             }
         }
-
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .full-width {
-        grid-column: auto;
-    }
-
-    .form-actions {
-        flex-direction: column-reverse;
-        gap: 0;
-        margin-top: 0;
     }
 }

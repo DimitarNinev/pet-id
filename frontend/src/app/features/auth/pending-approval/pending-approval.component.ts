@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-pending-approval',
-  imports: [],
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './pending-approval.component.html',
-  styleUrl: './pending-approval.component.scss',
+  styleUrl: '../auth-page.scss',
 })
-export class PendingApprovalComponent {
-
-}
+export class PendingApprovalComponent {}

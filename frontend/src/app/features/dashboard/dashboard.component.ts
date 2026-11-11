@@ -14,7 +14,7 @@ interface DashboardReminder {
   title: string;
   petName: string;
   date: string;
-  type: 'vaccine' | 'medicine';
+  type: 'vaccine' | 'medicine' | 'person';
   daysLeft: number;
 }
 
@@ -57,13 +57,15 @@ export class DashboardComponent implements OnInit {
         month: 'long',
         year: 'numeric',
       }).format(new Date(reminder.dueAt)),
-      type: reminder.type === 'VACCINATION' ? 'vaccine' : 'medicine',
+      type: reminder.type === 'VACCINATION' ? 'vaccine' : reminder.type === 'DEWORMING' ? 'medicine' : 'person',
       daysLeft: this.getDaysDifference(reminder.dueAt),
     })),
   );
 
-  get reminderCounts(): number {
-    return this.remindersData().length
+  get reminderCount(): number {
+    return this.remindersData().filter(
+      (reminder) => reminder.type === 'PERSONAL',
+    ).length;
   }
 
   get vaccineCount(): number {

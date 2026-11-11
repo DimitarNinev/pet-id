@@ -39,6 +39,13 @@ enum DewormingType {
   EXTERNAL
 }
 
+enum ReminderStatus {
+  UPCOMING
+  OVERDUE
+  COMPLETED
+  CANCELLED
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -51,9 +58,10 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  ownedAnimals AnimalOwner[]
-  memberships OrganizationMember[]
-  createdMedicalRecords MedicalRecord[] @relation("MedicalRecordAuthor")
+  ownedAnimals          AnimalOwner[]
+  memberships           OrganizationMember[]
+  createdMedicalRecords MedicalRecord[]      @relation("MedicalRecordAuthor")
+  personalReminders     Reminder[]
 }
 
 model Organization {
@@ -66,7 +74,7 @@ model Organization {
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 
-  members OrganizationMember[]
+  members        OrganizationMember[]
   medicalRecords MedicalRecord[]
 }
 
@@ -84,23 +92,24 @@ model OrganizationMember {
 }
 
 model Animal {
-  id          String   @id @default(cuid())
-  petId       String   @unique
+  id          String    @id @default(cuid())
+  petId       String    @unique
   name        String
   species     String
   breed       String?
   sex         String?
   dateOfBirth DateTime?
-  microchipId String?  @unique
+  microchipId String?   @unique
   notes       String?
 
-  photoPath   String?
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  photoPath String?
 
-  owners AnimalOwner[]
-  medicalRecords MedicalRecord[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owners            AnimalOwner[]
+  medicalRecords    MedicalRecord[]
+  personalReminders Reminder[]
 }
 
 model AnimalOwner {
@@ -116,7 +125,6 @@ model AnimalOwner {
   @@unique([userId, animalId])
 }
 
-
 model MedicalRecord {
   id             String            @id @default(cuid())
   animalId       String
@@ -129,13 +137,13 @@ model MedicalRecord {
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
 
-  animal       Animal       @relation(fields: [animalId], references: [id], onDelete: Restrict)
-  createdBy    User         @relation("MedicalRecordAuthor", fields: [createdById], references: [id], onDelete: Restrict)
+  animal       Animal        @relation(fields: [animalId], references: [id], onDelete: Restrict)
+  createdBy    User          @relation("MedicalRecordAuthor", fields: [createdById], references: [id], onDelete: Restrict)
   organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
 
   examination Examination?
   vaccination Vaccination?
-  deworming Deworming?
+  deworming   Deworming?
   labResult   LabResult?
 
   @@index([animalId, occurredAt])
@@ -144,26 +152,25 @@ model MedicalRecord {
   @@index([type])
 }
 
-
 model Examination {
-  id                 String   @id @default(cuid())
-  medicalRecordId    String   @unique
-  reason             String?
-  symptoms           String?
-  clinicalFindings   String?
-  diagnosis          String?
-  recommendations    String?
-  weightKg           Float?
-  temperatureC       Float?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id               String   @id @default(cuid())
+  medicalRecordId  String   @unique
+  reason           String?
+  symptoms         String?
+  clinicalFindings String?
+  diagnosis        String?
+  recommendations  String?
+  weightKg         Float?
+  temperatureC     Float?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id], onDelete: Restrict)
 }
 
 model Vaccination {
-  id              String   @id @default(cuid())
-  medicalRecordId String   @unique
+  id              String    @id @default(cuid())
+  medicalRecordId String    @unique
   vaccineName     String
   manufacturer    String?
   batchNumber     String?
@@ -171,43 +178,60 @@ model Vaccination {
   nextDueAt       DateTime?
   validUntil      DateTime?
   notes           String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id], onDelete: Restrict)
 }
 
 model Deworming {
-  id                 String   @id @default(cuid())
-  medicalRecordId    String   @unique
-  productName        String
-  manufacturer       String?
-  batchNumber        String?
-  dewormingType      DewormingType
-  administeredAt     DateTime
-  dose               String?
+  id                   String        @id @default(cuid())
+  medicalRecordId      String        @unique
+  productName          String
+  manufacturer         String?
+  batchNumber          String?
+  dewormingType        DewormingType
+  administeredAt       DateTime
+  dose                 String?
   administrationMethod String?
-  nextDueAt          DateTime?
-  notes              String?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  nextDueAt            DateTime?
+  notes                String?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
 
   medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id], onDelete: Restrict)
 }
 
 model LabResult {
-  id              String   @id @default(cuid())
-  medicalRecordId String   @unique
+  id              String    @id @default(cuid())
+  medicalRecordId String    @unique
   testName        String
   result          String?
   conclusion      String?
   performedAt     DateTime?
   laboratory      String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   medicalRecord MedicalRecord @relation(fields: [medicalRecordId], references: [id], onDelete: Restrict)
 }
 
+model Reminder {
+  id          String         @id @default(cuid())
+  userId      String
+  animalId    String
+  title       String
+  description String?
+  dueAt       DateTime
+  status      ReminderStatus @default(UPCOMING)
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  animal Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  @@index([userId, dueAt])
+  @@index([animalId, dueAt])
+  @@index([status])
+}

@@ -1,0 +1,130 @@
+.new-records-page {
+    min-height: 100vh;
+
+    main {
+
+        .form-panel {
+            padding: var(--spacing-2xl);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+
+            .panel-heading {
+                h2 {
+                    margin: 0;
+                }
+
+                p {
+                    margin: 0;
+                    color: var(--color-text-secondary);
+                }
+            }
+
+            .animal-selection {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: var(--spacing-lg);
+                margin-top: var(--spacing-xl);
+
+                .animal-card {
+                    display: flex;
+                    align-items: center;
+                    gap: var(--spacing-md);
+                    width: 100%;
+                    padding: var(--spacing-lg);
+                    text-align: left;
+                    background: var(--color-surface);
+                    border: 1px solid var(--color-border);
+                    border-radius: var(--radius-lg);
+                    cursor: pointer;
+
+                    .animal-info {
+                        display: flex;
+                        flex-direction: column;
+                        gap: var(--spacing-xs);
+
+                        strong {
+                            font-size: var(--font-size-sm);
+                        }
+
+                        small {
+                            color: var(--color-text-secondary);
+                            font-size: var(--font-size-xs);
+                        }
+                    }
+
+                    .selection-indicator {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: var(--spacing-xl);
+                        height: var(--spacing-xl);
+                        margin-left: auto;
+                        flex-shrink: 0;
+                        border: 1px solid var(--color-border);
+                        border-radius: 50%;
+                        color: var(--color-primary);
+                        font-size: var(--font-size-2xl);
+                    }
+                }
+            }
+
+            .form-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: var(--spacing-xl);
+                margin-top: var(--spacing-xl);
+            }
+
+            .form-description {
+                margin-top: var(--spacing-lg);
+            }
+
+            .form-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: var(--spacing-md);
+            }
+
+            .form-message {
+                margin-top: var(--spacing-xl);
+                padding: var(--spacing-md) var(--spacing-lg);
+                border-radius: var(--radius-md);
+
+                &.error {
+                    color: var(--color-danger);
+                    background: var(--bg-red);
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .new-records-page main {
+
+        .form-panel {
+            padding: var(--spacing-lg);
+
+            .panel-heading {
+                h2 {
+                    font-size: var(--font-size-xl);
+                }
+            }
+
+            .animal-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-sm);
+            }
+
+            .form-actions {
+                display: block;
+            }
+        }
+    }
+}

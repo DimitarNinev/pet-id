@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { ForbiddenException, Injectable, } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException, } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 let RemindersService = class RemindersService {
     prisma;
@@ -22,7 +22,7 @@ let RemindersService = class RemindersService {
         if (!user || user.role !== 'OWNER') {
             throw new ForbiddenException('Напомнянията са достъпни само за собственици на животни.');
         }
-        const [vaccinations, dewormings] = await Promise.all([
+        const [vaccinations, dewormings, personalReminders] = await Promise.all([
             this.prisma.vaccination.findMany({
                 where: {
                     nextDueAt: { not: null },
@@ -88,6 +88,25 @@ let RemindersService = class RemindersService {
                     },
                 },
             }),
+            this.prisma.reminder.findMany({
+                where: {
+                    userId,
+                },
+                select: {
+                    id: true,
+                    title: true,
+                    description: true,
+                    dueAt: true,
+                    status: true,
+                    animal: {
+                        select: {
+                            id: true,
+                            name: true,
+                            petId: true,
+                        },
+                    },
+                },
+            }),
         ]);
         const today = new Intl.DateTimeFormat('en-CA', {
             timeZone: 'Europe/Sofia',
@@ -106,6 +125,7 @@ let RemindersService = class RemindersService {
                 title: item.vaccineName,
                 dueAt: dueAt.toISOString(),
                 status: this.getStatus(dueAt, today),
+                source: 'MEDICAL',
             };
         });
         const dewormingReminders = dewormings.map((item) => {
@@ -120,11 +140,91 @@ let RemindersService = class RemindersService {
                 dewormingType: item.dewormingType,
                 dueAt: dueAt.toISOString(),
                 status: this.getStatus(dueAt, today),
+                source: 'MEDICAL',
             };
         });
-        return [...vaccinationReminders, ...dewormingReminders]
+        const personalReminderItems = personalReminders.map((item) => {
+            const status = item.status === 'UPCOMING'
+                ? this.getStatus(item.dueAt, today)
+                : item.status;
+            return {
+                id: item.id,
+                animalId: item.animal.id,
+                animalName: item.animal.name,
+                petId: item.animal.petId,
+                source: 'PERSONAL',
+                type: 'PERSONAL',
+                title: item.title,
+                description: item.description,
+                dueAt: item.dueAt.toISOString(),
+                status,
+            };
+        });
+        return [...vaccinationReminders, ...dewormingReminders, ...personalReminderItems,]
             .sort((a, b) => new Date(a.dueAt).getTime() -
             new Date(b.dueAt).getTime());
+    }
+    async create(userId, dto) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            select: { role: true },
+        });
+        if (!user || user.role !== 'OWNER') {
+            throw new ForbiddenException('Само собственици могат да създават лични напомняния.');
+        }
+        const animal = await this.prisma.animal.findFirst({
+            where: {
+                id: dto.animalId,
+                owners: {
+                    some: { userId },
+                },
+            },
+            select: {
+                id: true,
+            },
+        });
+        if (!animal) {
+            throw new NotFoundException('Животното не е намерено или нямате достъп до него.');
+        }
+        return this.prisma.reminder.create({
+            data: {
+                title: dto.title,
+                description: dto.description,
+                dueAt: new Date(dto.dueAt),
+                userId,
+                animalId: animal.id,
+            },
+            include: {
+                animal: {
+                    select: {
+                        id: true,
+                        name: true,
+                        petId: true,
+                    },
+                },
+            },
+        });
+    }
+    async remove(userId, reminderId) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            select: { role: true },
+        });
+        if (!user || user.role !== 'OWNER') {
+            throw new ForbiddenException('Нямаш право да изтриваш лични напомняния.');
+        }
+        const result = await this.prisma.reminder.deleteMany({
+            where: {
+                id: reminderId,
+                userId,
+            },
+        });
+        if (result.count === 0) {
+            throw new NotFoundException('Личното напомняне не е намерено.');
+        }
+        return {
+            message: 'Напомнянето беше изтрито успешно.',
+        };
     }
     getStatus(dueAt, today) {
         const dueDate = dueAt.toISOString().slice(0, 10);

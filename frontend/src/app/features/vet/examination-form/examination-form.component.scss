@@ -1,134 +1,116 @@
 .examination-page {
-  padding: 0 0 30px;
+  min-height: 100vh;
 
-  .page-wrapper {
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
+  main {
 
-  .page-header {
-    margin-bottom: 24px;
+    .patient-card {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+      padding: var(--font-size-2xl);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      background: var(--color-surface);
+      box-shadow: var(--shadow-xl);
 
-    h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
-    }
-
-    p {
-      margin: 0;
-      opacity: 0.7;
-    }
-  }
-
-  .patient-card {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 20px;
-    padding: 24px;
-    margin-bottom: 28px;
-    border: 1px solid var(--border-color, #e2e8f0);
-    border-radius: 16px;
-    background: var(--card-background, #fff);
-
-    span {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 13px;
-      opacity: 0.7;
-    }
-
-    h2 {
-      margin: 0;
-      font-size: 20px;
-    }
-
-    strong {
-      overflow-wrap: anywhere;
-    }
-  }
-
-  .examination-form {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-
-    .form-section {
-      padding: 24px;
-      border: 1px solid var(--border-color, #e2e8f0);
-      border-radius: 16px;
-      background: var(--card-background, #fff);
+      span {
+        display: block;
+        margin-bottom: var(--spacing-sm);
+        font-size: var(--font-size-sm);
+        color: var(--color-text-secondary);
+      }
 
       h2 {
-        margin: 0 0 24px;
-        font-size: 19px;
+        margin: 0;
+        font-size: var(--font-size-xl);
       }
     }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 24px;
+    .examination-form {
+      display: flex;
+      flex-direction: column;
 
-      .row-field {
-        min-width: 0;
+      .form-section {
+        padding: var(--font-size-2xl);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        background: var(--color-surface);
+        box-shadow: var(--shadow-xl);
 
-        small {
-          display: block;
-          margin-top: 6px;
-          color: #dc2626;
-          font-size: 12px;
+        h2 {
+          margin: 0 0 var(--spacing-xl);
+          font-size: var(--font-size-lg);
         }
       }
 
-      .full-width {
-        grid-column: 1 / -1;
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--spacing-lg);
+
+        .row-field {
+
+          small {
+            position: absolute;
+            color: var(--color-danger);
+            font-size: var(--font-size-xs);
+            bottom: 0;
+          }
+        }
+
+        .full-width {
+          grid-column: 1 / -1;
+        }
       }
-    }
 
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-    }
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--spacing-md);
+      }
 
-    .error-message,
-    .success-message {
-      margin: 0;
-      padding: 12px 16px;
-      border-radius: 8px;
-    }
+      .error-message,
+      .success-message {
+        margin: 0;
+        border: 1px solid;
+        padding: var(--spacing-md) var(--spacing-lg);
+        border-radius: var(--radius-md);
+      }
 
-    .error-message {
-      border-color: #f0d5d2;
-      background: #fff7f6;
-      color: #a63f38;
-    }
+      .error-message {
+        border-color: #f0d5d2;
+        background: #fff7f6;
+        color: var(--color-danger);
+      }
 
-    .success-message {
-      border-color: #d5eade;
-      background: #f3faf5;
-      color: #28734f;
+      .success-message {
+        border-color: #d5eade;
+        background: #f3faf5;
+        color: var(--color-primary);
+      }
+
+      .devider {
+        border-top: 1px solid var(--color-border);
+        margin: var(--spacing-xl) 0;
+      }
     }
   }
 }
 
-@media (max-width: 700px) {
-  .examination-page {
-    padding: 24px 16px;
-
-    .patient-card,
-    .form-grid {
-      grid-template-columns: 1fr;
-    }
+@media (max-width: 600px) {
+  .examination-page main {
 
     .patient-card,
     .form-section {
-      padding: 18px;
+      grid-template-columns: 1fr;
+      padding: var(--spacing-lg);
     }
 
     .examination-form {
       .form-grid {
+        grid-template-columns: 1fr;
+
         .full-width {
           grid-column: auto;
         }
@@ -136,10 +118,7 @@
 
       .form-actions {
         flex-direction: column-reverse;
-
-        app-button {
-          width: 100%;
-        }
+        gap: 0;
       }
     }
   }

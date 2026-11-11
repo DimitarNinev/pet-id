@@ -2,27 +2,32 @@ import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angula
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
 import { CommonModule, DatePipe } from '@angular/common';
-
+import { Router } from '@angular/router';
 import { RemindersService } from '../../../core/services/reminders.service';
 import { Reminder, ReminderType } from '../../../models/reminder.model';
 import { HeaderComponent } from '../../../components/header/header.component';
+import { AppButtonComponent } from '../../../components/app-button/app-button';
 
 type ReminderFilter = 'ALL' | ReminderType;
 
 @Component({
   selector: 'app-reminders',
   standalone: true,
-  imports: [CommonModule, DatePipe, HeaderComponent],
+  imports: [CommonModule, DatePipe, HeaderComponent, AppButtonComponent],
   templateUrl: './reminders.component.html',
   styleUrl: './reminders.component.scss',
 })
 export class RemindersComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly remindersService = inject(RemindersService);
+  private readonly router = inject(Router);
 
   readonly reminders = signal<Reminder[]>([]);
   readonly isLoading = signal(true);
   readonly errorMessage = signal('');
+
+  readonly removingId = signal<string | null>(null);
+  readonly successMessage = signal('');
 
   readonly activeFilter = signal<ReminderFilter>('ALL');
 
@@ -109,5 +114,41 @@ export class RemindersComponent implements OnInit {
     }
 
     return `След ${days} дни`;
+  }
+
+  newReminderForm() {
+    this.router.navigate(['/reminders/new']);
+  }
+
+  removeReminder(reminder: Reminder): void {
+    if (reminder.source !== 'PERSONAL') {
+      return;
+    }
+
+    this.errorMessage.set('');
+    this.successMessage.set('');
+    this.removingId.set(reminder.id);
+
+    this.remindersService
+      .remove(reminder.id)
+      .pipe(
+        finalize(() => this.removingId.set(null)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: () => {
+          this.reminders.update(items =>
+            items.filter(item => item.id !== reminder.id),
+          );
+
+          this.successMessage.set('Напомнянето беше изтрито успешно.');
+        },
+        error: error => {
+          this.errorMessage.set(
+            error?.error?.message ||
+            'Възникна грешка при изтриването на напомнянето.',
+          );
+        },
+      });
   }
 }

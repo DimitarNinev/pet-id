@@ -1,258 +1,200 @@
 .medical-history {
   min-height: 100vh;
-  padding-bottom: 40px;
 
-  .header {
-    width: min(900px, calc(100% - 32px));
-    margin: 32px auto 24px;
+  main {
 
-    h1 {
-      margin-bottom: 8px;
-      font-size: 30px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
+    .create-record-section {
+      padding: var(--spacing-2xl);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
 
-    p {
-      margin: 0;
-      color: #64748b;
-      line-height: 1.6;
-    }
-  }
+      .records-list {
+        display: grid;
+        gap: var(--spacing-lg);
+        margin-top: var(--spacing-md);
+        padding-left: var(--spacing-xl);
+        border-left: 2px solid var(--color-border);
 
-  .create-record-section {
-    width: min(900px, calc(100% - 32px));
-    box-sizing: border-box;
-    margin: 0 auto;
-    padding: 30px;
-    background: #fff;
-    border: 1px solid #e8eee9;
-    border-radius: 16px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+        .record-card,
+        .empty-state {
+          position: relative;
+          padding: var(--spacing-xl);
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-lg);
+          transition:
+            border-color 180ms ease,
+            box-shadow 180ms ease,
+            transform 180ms ease;
 
-    form {
-      display: grid;
-      gap: 16px;
-      margin-top: 20px;
-      padding: 24px;
-      background: #f8faf9;
-      border: 1px solid #e8eee9;
-      border-radius: 16px;
-
-      .calendar-field {
-        width: 50%;
-      }
-    }
-
-    .records-list {
-      display: grid;
-      gap: 16px;
-      margin-top: 24px;
-      padding-left: 22px;
-      border-left: 2px solid #e8eee9;
-
-      .record-card,
-      .empty-state {
-        position: relative;
-        padding: 24px;
-        border: 1px solid #e8eee9;
-        border-radius: 16px;
-        background: #fff;
-        transition:
-          border-color 180ms ease,
-          box-shadow 180ms ease,
-          transform 180ms ease;
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: 28px;
-          left: -34px;
-          width: 14px;
-          height: 14px;
-          border: 3px solid #fff;
-          border-radius: 50%;
-          background: #0f766e;
-          box-shadow: 0 0 0 2px #b7dfd2;
-        }
-
-        &:hover {
-          border-color: #b7dfd2;
-          box-shadow: 0 8px 20px rgba(15, 118, 110, 0.08);
-          transform: translateY(-2px);
-        }
-
-        h2 {
-          margin: 16px 0 8px;
-          color: #1e293b;
-          font-size: 20px;
-          font-weight: 650;
-          line-height: 1.4;
-        }
-
-        p {
-          margin: 0;
-          color: #475569;
-          line-height: 1.7;
-          overflow-wrap: anywhere;
-        }
-
-        small {
-          display: block;
-          margin-top: 18px;
-          padding-top: 14px;
-          border-top: 1px solid #f1f5f9;
-          color: #64748b;
-          font-size: 12px;
-        }
-
-        .record-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          flex-wrap: wrap;
-          gap: 12px;
-          color: #64748b;
-          font-size: 13px;
-
-          .record-type {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 14px;
-            border-radius: 20px;
-            border: 1px solid #b7dfd2;
-            background: #e6f5ef;
-            color: #0f766e;
-            font-size: 12px;
-            font-weight: 700;
+          &::before {
+            content: '';
+            position: absolute;
+            top: var(--spacing-xl);
+            left: -36px;
+            width: 14px;
+            height: 14px;
+            border: 3px solid var(--color-surface);
+            border-radius: 50%;
+            background: var(--color-primary);
+            box-shadow: 0 0 0 2px #b7dfd2;
           }
 
-          time {
-            font-variant-numeric: tabular-nums;
-          }
-        }
-
-        .examination-details,
-        .vaccination-details,
-        .deworming-details {
-          display: flex;
-          flex-direction: column;
-          gap: 14px;
-          margin-top: 20px;
-          padding-top: 18px;
-          border-top: 1px solid var(--border-color, #e2e8f0);
-
-          h4 {
-            margin: 8px 0;
+          &:hover {
+            box-shadow: var(--shadow-md);
+            ;
+            transform: translateY(-2px);
           }
 
-          .detail-row {
-            strong {
-              display: block;
-              margin-bottom: 6px;
-              font-size: 14px;
-            }
-
-            p {
-              margin: 0;
-              line-height: 1.2;
-              white-space: pre-line;
-            }
+          h2 {
+            margin: var(--spacing-lg) 0 0;
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            line-height: var(--line-height-normal);
           }
 
-          .measurements {
+          p {
+            margin: 0;
+            line-height: var(--line-height-normal);
+          }
+
+          small {
+            display: block;
+            margin-top: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-xs);
+          }
+
+          .record-header {
             display: flex;
+            align-items: center;
+            justify-content: space-between;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: var(--spacing-md);
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-xs);
 
-            .measurement {
-              display: flex;
-              flex-direction: column;
-              gap: 6px;
-              padding: 12px 16px;
-              border-radius: 10px;
-              background: var(--card-background, #f8fafc);
+            .record-type {
+              display: inline-flex;
+              align-items: center;
+              padding: var(--spacing-xs) var(--spacing-md);
+              border-radius: var(--radius-xl);
+              border: 1px solid var(--color-primary);
+              background: var(--color-surface-secondary);
+              color: var(--color-primary);
+              font-size: var(--font-size-xs);
+              font-weight: var(--font-weight-bold);
+            }
+          }
 
-              span {
-                font-size: 12px;
-                opacity: 0.7;
+          .examination-details,
+          .vaccination-details,
+          .deworming-details {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            border-top: 1px solid var(--color-border);
+
+            h4 {
+              margin: var(--spacing-sm) 0;
+            }
+
+            .detail-row {
+              strong {
+                display: block;
+                margin-bottom: var(--spacing-xs);
+                font-size: var(--font-size-sm);
               }
 
-              strong {
-                font-size: 16px;
+              p {
+                margin: 0;
+                line-height: var(--line-height-tight);
+                white-space: pre-line;
+              }
+            }
+
+            .measurements {
+              display: flex;
+              flex-wrap: wrap;
+              gap: var(--spacing-md);
+
+              .measurement {
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-sm);
+                padding: var(--spacing-md) var(--spacing-lg);
+                border-radius: var(--radius-md);
+                background: var(--color-surface-secondary);
+
+                span {
+                  font-size: var(--font-size-xs);
+                  color: var(--color-text-secondary);
+                }
+
+                strong {
+                  font-size: var(--font-size-base);
+                }
               }
             }
           }
         }
+
+        .empty-state {
+          &::before {
+            display: none;
+          }
+
+          h2 {
+            margin-top: 0;
+          }
+
+          p {
+            color: var(--color-text-secondary);
+          }
+        }
       }
 
-      .empty-state {
-        &::before {
-          display: none;
-        }
-
-        h2 {
-          margin-top: 0;
-        }
-
-        p {
-          color: #64748b;
-        }
+      .status-message {
+        margin-top: var(--spacing-xl);
+        color: var(--color-text-secondary);
       }
-    }
 
-    .status-message {
-      margin-top: 24px;
-      color: #64748b;
-    }
+      .success-message {
+        margin-top: var(--spacing-lg);
+        color: var(--color-success);
+        font-size: var(--font-size-sm);
+      }
 
-    .success-message {
-      margin-top: 16px;
-      color: #15803d;
-      font-size: 14px;
-    }
+      .error-message {
+        margin-top: var(--spacing-lg);
+        color: var(--color-danger);
+        font-size: var(--font-size-sm);
+      }
 
-    .error-message {
-      margin-top: 12px;
-      color: #dc2626;
-      font-size: 14px;
-    }
-
-    .btn-row {
-      display: flex;
-      justify-content: flex-end;
+      .btn-row {
+        display: flex;
+        justify-content: flex-end;
+      }
     }
   }
 }
 
-@media (max-width: 640px) {
-  .medical-history {
-    .header {
-      margin-top: 24px;
-
-      h1 {
-        font-size: 26px;
-      }
-    }
+@media (max-width: 600px) {
+  .medical-history main {
 
     .create-record-section {
-      padding: 18px;
-      border-radius: 16px;
-
-      form {
-        padding: 16px;
-
-        .calendar-field {
-          width: 100%;
-        }
-      }
+      padding: var(--spacing-lg);
 
       .records-list {
         padding-left: 18px;
 
         .record-card,
         .empty-state {
-          padding: 18px;
+          padding: var(--spacing-lg);
 
           &::before {
             left: -27px;
@@ -261,7 +203,7 @@
           }
 
           h2 {
-            font-size: 18px;
+            font-size: var(--font-size-lg);
           }
         }
       }
@@ -269,16 +211,6 @@
       .btn-row {
         display: block;
       }
-    }
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .medical-history .create-record-section .records-list .record-card {
-    transition: none;
-
-    &:hover {
-      transform: none;
     }
   }
 }

@@ -1,0 +1,110 @@
+<div class="new-reminder-page">
+    <header-component></header-component>
+
+    <main>
+        <div class="header">
+            <h1>Ново лично напомняне</h1>
+            <p>
+                Създай напомняне, за да не пропускаш важни задачи,
+                свързани с твоите любимци.
+            </p>
+        </div>
+
+        <section class="panel form-panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Информация за напомнянето</h2>
+                </div>
+            </div>
+
+            @if (isLoadingAnimals()) {
+            <div class="state-message">
+                <span class="loader"></span>
+                <p>Зареждане на животните...</p>
+            </div>
+            } @else if (animals().length === 0) {
+            <div class="empty-state">
+                <span class="empty-icon">🐾</span>
+                <h3>Все още нямаш добавени животни</h3>
+                <p>Първо добави животно, за да можеш да създаваш напомняния.</p>
+
+                <app-button type="button" (btnClick)="cancel()">
+                    Назад
+                </app-button>
+            </div>
+            } @else {
+            <form [formGroup]="reminderForm" (ngSubmit)="createReminder()">
+                <div class="row-field animal-field">
+                    <label class="field-label">Избери животно <span>*</span></label>
+
+                    <div class="animal-selection">
+                        @for (animal of animals(); track animal.id) {
+                        <button type="button" class="animal-card"
+                            [class.selected]="reminderForm.controls.animalId.value === animal.id"
+                            [attr.aria-pressed]="reminderForm.controls.animalId.value === animal.id"
+                            (click)="selectAnimal(animal.id)">
+
+                            <span class="animal-info">
+                                <strong>{{ animal.name }}</strong>
+                                <small>Pet ID: {{ animal.petId }}</small>
+                            </span>
+
+                            <span class="selection-indicator">
+                                @if (reminderForm.controls.animalId.value === animal.id) {
+                                ✓
+                                }
+                            </span>
+                        </button>
+                        }
+                    </div>
+
+                    @if (reminderForm.controls.animalId.invalid && reminderForm.controls.animalId.touched) {
+                    <p class="field-error">Моля, избери животно.</p>
+                    }
+                </div>
+
+                <div class="form-grid">
+                    <div class="row-field">
+                        <app-input label="Заглавие" placeholder="Например: Запиши Бъди на ветеринар"
+                            formControlName="title" [required]="true" [max]="120"></app-input>
+                    </div>
+
+                    <div class="row-field">
+                        <app-calendar label="Дата" placeholder="Избери дата" formControlName="dueDate"
+                            [required]="true"></app-calendar>
+                    </div>
+
+                    <div class="row-field">
+                        <app-dropdown label="Час" [options]="timeSlots" [required]="true" formControlName="dueTime">
+                        </app-dropdown>
+                    </div>
+                </div>
+
+                <div class="form-description">
+                    <div class="row-field">
+                        <app-input label="Описание" type="textarea"
+                            placeholder="Допълнителна информация (незадължително)" formControlName="description"
+                            [max]="1000"></app-input>
+                    </div>
+                </div>
+
+                @if (errorMessage()) {
+                <div class="form-message error">
+                    {{ errorMessage() }}
+                </div>
+                }
+
+                <div class="form-actions">
+                    <app-button type="reset" [disabled]="isSaving()" (btnClick)="cancel()">
+                        Отказ
+                    </app-button>
+
+                    <app-button type="submit" [disabled]="reminderForm.invalid || isSaving()" [isLoading]="isSaving()">
+                        Запази напомнянето
+                    </app-button>
+                </div>
+            </form>
+            }
+        </section>
+    </main>
+</div>

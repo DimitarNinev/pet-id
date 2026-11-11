@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
-import { finalize } from 'rxjs';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { startWith, finalize } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   FormBuilder,
@@ -10,13 +11,12 @@ import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
 import { AppInputComponent } from "../../../components/app-input/app-input";
-import { AppDropdownComponent } from "../../../components/app-dropdown/app-dropdown";
 import { AppButtonComponent } from "../../../components/app-button/app-button";
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, AppInputComponent, AppDropdownComponent, AppButtonComponent],
+  imports: [ReactiveFormsModule, RouterLink, AppInputComponent, AppButtonComponent],
   templateUrl: './register.component.html',
   styleUrl: '../auth-page.scss',
 })
@@ -24,26 +24,39 @@ export class RegisterComponent {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   showPassword = false;
   readonly loading = signal(false);
   readonly errorMessage = signal('');
 
-  type = [
-    { value: 'OWNER', label: 'Собственик на домашен любимец' },
-    { value: 'VET', label: 'Ветеринарен лекар' },
-  ];
+  readonly role = signal('');
 
   readonly form = this.fb.nonNullable.group({
     firstName: ['', [Validators.required, Validators.maxLength(80)]],
     lastName: ['', [Validators.required, Validators.maxLength(80)]],
     email: ['', [Validators.required, Validators.email]],
+    phone: [''],
     password: [
       '',
       [Validators.required, Validators.minLength(8), Validators.maxLength(72)],
     ],
-    role: ['OWNER' as 'OWNER' | 'VET', Validators.required],
+    role: ['' as 'OWNER' | 'VET', Validators.required],
   });
+
+  constructor() {
+    this.setupPhoneValidation();
+  }
+
+  selectRole(value: any, label: string): void {
+    this.form.controls.role.setValue(value);
+    this.role.set(label);
+  }
+
+  back() {
+    this.form.reset();
+    this.role.set('');
+  }
 
   submit(): void {
     if (this.loading()) return;
@@ -55,16 +68,28 @@ export class RegisterComponent {
       return;
     }
 
+    const formValue = this.form.getRawValue();
+
+    const payload = {
+      ...formValue,
+      phone: formValue.role === 'VET'
+        ? formValue.phone.trim()
+        : undefined,
+    };
+
     this.loading.set(true);
 
-    this.auth.register(this.form.getRawValue())
-      .pipe(finalize(() => this.loading.set(false))).subscribe({
+    this.auth.register(payload)
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({
         next: ({ user }) => {
           this.loading.set(false);
 
-          void this.router.navigate([user.role === 'VET'
-            ? (user.vetApproved ? '/vet/dashboard' : '/pending-approval')
-            : '/dashboard']);
+          void this.router.navigate([
+            user.role === 'VET'
+              ? (user.vetApproved ? '/vet/dashboard' : '/pending-approval')
+              : '/dashboard'
+          ]);
         },
         error: (error) => {
           this.loading.set(false);
@@ -82,5 +107,28 @@ export class RegisterComponent {
         ? error.error.message.join(' ')
         : error.error?.message ||
         'Регистрацията не беше успешна.';
+  }
+
+  private setupPhoneValidation(): void {
+    this.form.controls.role.valueChanges
+      .pipe(
+        startWith(this.form.controls.role.value),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((role) => {
+        const phoneControl = this.form.controls.phone;
+
+        if (role === 'VET') {
+          phoneControl.setValidators([
+            Validators.required,
+            Validators.pattern(/^(?=(?:\D*\d){7,15}\D*$)\+?[0-9\s()-]+$/),
+            Validators.maxLength(30),
+          ]);
+        } else {
+          phoneControl.clearValidators();
+        }
+
+        phoneControl.updateValueAndValidity();
+      });
   }
 }
