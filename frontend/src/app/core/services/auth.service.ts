@@ -22,9 +22,14 @@ export class AuthService {
   private readonly tokenKey = 'pet-id-access-token';
   private readonly userKey = 'pet-id-user';
   private readonly legacyRoleKey = 'user-role';
+  private sessionExpiryTimer?: ReturnType<typeof setTimeout>;
 
   readonly currentUser = signal<AuthUser | null>(this.readStoredUser());
   readonly currentRole = computed(() => this.currentUser()?.role ?? null);
+
+  constructor() {
+    this.scheduleSessionExpiry();
+  }
 
   /**
    * Вход в съществуващ профил.
@@ -72,6 +77,10 @@ export class AuthService {
    * Изчиства локалната сесия и пренасочва към Login.
    */
   logout(): void {
+    if (this.sessionExpiryTimer) {
+      clearTimeout(this.sessionExpiryTimer);
+      this.sessionExpiryTimer = undefined;
+    }
     this.removeStorage(this.tokenKey);
     this.removeStorage(this.userKey);
     this.removeStorage(this.legacyRoleKey);
@@ -85,6 +94,44 @@ export class AuthService {
   private saveSession(response: AuthResponse): void {
     this.writeStorage(this.tokenKey, response.accessToken);
     this.saveUser(response.user);
+    this.scheduleSessionExpiry();
+  }
+
+  private scheduleSessionExpiry(): void {
+    if (this.sessionExpiryTimer) {
+      clearTimeout(this.sessionExpiryTimer);
+      this.sessionExpiryTimer = undefined;
+    }
+
+    const token = this.getToken();
+    if (!token) return;
+
+    try {
+      const payload = token.split('.')[1];
+      if (!payload) throw new Error('Invalid access token');
+
+      const encodedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const paddedPayload = encodedPayload.padEnd(Math.ceil(encodedPayload.length / 4) * 4, '=');
+      const claims: unknown = JSON.parse(atob(paddedPayload));
+      if (
+        typeof claims !== 'object' ||
+        claims === null ||
+        !('exp' in claims) ||
+        typeof claims.exp !== 'number'
+      ) {
+        throw new Error('Access token has no expiration');
+      }
+
+      const delay = claims.exp * 1000 - Date.now();
+      if (delay <= 0) {
+        this.logout();
+        return;
+      }
+
+      this.sessionExpiryTimer = setTimeout(() => this.logout(), delay);
+    } catch {
+      this.logout();
+    }
   }
 
   private saveUser(user: AuthUser): void {

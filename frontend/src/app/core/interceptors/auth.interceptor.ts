@@ -1,5 +1,6 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { API_BASE_URL } from '../config/api.config';
 
@@ -16,7 +17,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         return next(req);
     }
 
-    const token = inject(AuthService).getToken();
+    const auth = inject(AuthService);
+    const token = auth.getToken();
 
     if (!token) {
         return next(req);
@@ -28,5 +30,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         },
     });
 
-    return next(authReq);
+    return next(authReq).pipe(
+        catchError((error: unknown) => {
+            if (error instanceof HttpErrorResponse && error.status === 401) {
+                auth.logout();
+            }
+            return throwError(() => error);
+        }),
+    );
 };
