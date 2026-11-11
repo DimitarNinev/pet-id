@@ -43,6 +43,9 @@
     .back-link {
         color: var(--color-primary);
         font-weight: var(--font-weight-semibold);
+        white-space: nowrap;
+        display: flex;
+        gap: var(--spacing-sm);
     }
 }
 
@@ -64,6 +67,12 @@
 
         .back-link {
             font-size: var(--font-size-sm);
+            padding: var(--spacing-xs);
+            gap: 0;
+
+            span:first-of-type {
+                display: none;
+            }
         }
     }
 }

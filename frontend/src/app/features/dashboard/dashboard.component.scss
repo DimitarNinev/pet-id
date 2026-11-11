@@ -282,7 +282,8 @@
               }
 
               .pet-species {
-                color: var(--color-primary);;
+                color: var(--color-primary);
+                ;
                 font-size: var(--font-size-xs);
                 font-weight: var(--font-weight-bold);
                 text-transform: uppercase;
@@ -512,12 +513,6 @@
         justify-content: space-between;
         min-height: 65px;
 
-        .mobile-logout {
-          font-size: var(--font-size-2xl);
-          padding: var(--spacing-xs) var(--spacing-md);
-          cursor: pointer;
-        }
-
         .mobile-brand {
           display: flex;
           gap: var(--spacing-sm);
@@ -610,6 +605,7 @@
 
       .dashboard-footer {
         flex-direction: column;
+        gap: var(--spacing-xs);
       }
     }
   }
