@@ -56,6 +56,8 @@ export class NewReminderComponent implements OnInit {
 
   readonly today = toDateInputValue(new Date());
 
+  readonly isSelected = signal(false);
+
   readonly animalOptions = () =>
     this.animals().map((animal) => ({
       value: animal.id,
@@ -146,6 +148,7 @@ export class NewReminderComponent implements OnInit {
   selectAnimal(animalId: string): void {
     this.reminderForm.controls.animalId.setValue(animalId);
     this.reminderForm.controls.animalId.markAsTouched();
+    this.isSelected.set(true);
   }
 
   generateTimeSlots(stepMinutes: number): TimeSlot[] {

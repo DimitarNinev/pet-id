@@ -71,6 +71,13 @@ export const routes: Routes = [
       import('./features/reminders/reminders/reminders.component')
         .then((m) => m.RemindersComponent),
   },
+  {
+    path: 'clinics',
+    canActivate: [ownerGuard],
+    loadComponent: () =>
+      import('./features/clinics/clinics/clinics.component')
+        .then((m) => m.ClinicsComponent),
+  },
 
   // Ветеринарна зона — компонентите ще добавим в следващите стъпки
   {

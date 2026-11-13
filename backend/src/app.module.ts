@@ -7,6 +7,7 @@ import { AnimalsModule } from './animals/animals.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { MedicalRecordsModule } from './medical-records/medical-records.module.js';
 import { RemindersModule } from './reminders/reminders.module.js';
+import { VetsModule } from './vets/vets.module.js';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RemindersModule } from './reminders/reminders.module.js';
     AuthModule,
     MedicalRecordsModule,
     RemindersModule,
+    VetsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

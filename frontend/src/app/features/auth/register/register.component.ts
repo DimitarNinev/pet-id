@@ -37,6 +37,9 @@ export class RegisterComponent {
     lastName: ['', [Validators.required, Validators.maxLength(80)]],
     email: ['', [Validators.required, Validators.email]],
     phone: [''],
+    clinicName: ['', Validators.maxLength(120)],
+    clinicAddress: ['', Validators.maxLength(200)],
+    city: ['', Validators.maxLength(80)],
     password: [
       '',
       [Validators.required, Validators.minLength(8), Validators.maxLength(72)],
@@ -74,6 +77,15 @@ export class RegisterComponent {
       ...formValue,
       phone: formValue.role === 'VET'
         ? formValue.phone.trim()
+        : undefined,
+      clinicName: formValue.role === 'VET'
+        ? formValue.clinicName.trim() || undefined
+        : undefined,
+      clinicAddress: formValue.role === 'VET'
+        ? formValue.clinicAddress.trim() || undefined
+        : undefined,
+      city: formValue.role === 'VET'
+        ? formValue.city.trim() || undefined
         : undefined,
     };
 

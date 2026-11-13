@@ -31,6 +31,21 @@ export class RegisterDto {
   @MaxLength(30)
   phone?: string;
 
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  clinicName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  clinicAddress?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(80)
+  city?: string;
+
   @IsIn(['OWNER', 'VET'])
   role!: 'OWNER' | 'VET';
 }

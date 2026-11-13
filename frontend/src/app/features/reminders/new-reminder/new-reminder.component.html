@@ -34,35 +34,25 @@
             </div>
             } @else {
             <form [formGroup]="reminderForm" (ngSubmit)="createReminder()">
+                @if (!isSelected()) {
                 <div class="row-field animal-field">
                     <label class="field-label">Избери животно <span>*</span></label>
 
                     <div class="animal-selection">
                         @for (animal of animals(); track animal.id) {
-                        <button type="button" class="animal-card"
-                            [class.selected]="reminderForm.controls.animalId.value === animal.id"
-                            [attr.aria-pressed]="reminderForm.controls.animalId.value === animal.id"
-                            (click)="selectAnimal(animal.id)">
+                        <button type="button" class="animal-card" (click)="selectAnimal(animal.id)">
 
                             <span class="animal-info">
                                 <strong>{{ animal.name }}</strong>
                                 <small>Pet ID: {{ animal.petId }}</small>
                             </span>
 
-                            <span class="selection-indicator">
-                                @if (reminderForm.controls.animalId.value === animal.id) {
-                                ✓
-                                }
-                            </span>
+                            <span class="selection-indicator">›</span>
                         </button>
                         }
                     </div>
-
-                    @if (reminderForm.controls.animalId.invalid && reminderForm.controls.animalId.touched) {
-                    <p class="field-error">Моля, избери животно.</p>
-                    }
                 </div>
-
+                } @else {
                 <div class="form-grid">
                     <div class="row-field">
                         <app-input label="Заглавие" placeholder="Например: Запиши Бъди на ветеринар"
@@ -103,6 +93,7 @@
                         Запази напомнянето
                     </app-button>
                 </div>
+                }
             </form>
             }
         </section>

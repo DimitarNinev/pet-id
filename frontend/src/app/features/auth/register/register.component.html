@@ -99,6 +99,44 @@
         </div>
         }
 
+        @if (form.controls.role.value === 'VET') {
+        <div class="professional-info">
+          <p class="section-label">Професионална информация</p>
+
+          <div class="row-field">
+            <app-input label="Име на клиника / практика" type="text" formControlName="clinicName"
+              placeholder="Напр. Ветеринарна клиника..."></app-input>
+
+            @if (form.controls.clinicName.touched && form.controls.clinicName.hasError('maxlength')) {
+            <small class="field-err">
+              Максималната дължина е 120 символа.
+            </small>
+            }
+          </div>
+
+          <div class="row-field">
+            <app-input label="Адрес на клиниката" type="text" formControlName="clinicAddress"
+              placeholder="Улица, номер..."></app-input>
+
+            @if (form.controls.clinicAddress.touched && form.controls.clinicAddress.hasError('maxlength')) {
+            <small class="field-err">
+              Максималната дължина е 200 символа.
+            </small>
+            }
+          </div>
+
+          <div class="row-field">
+            <app-input label="Град" type="text" formControlName="city" placeholder="София"></app-input>
+
+            @if (form.controls.city.touched && form.controls.city.hasError('maxlength')) {
+            <small class="field-err">
+              Максималната дължина е 80 символа.
+            </small>
+            }
+          </div>
+        </div>
+        }
+
         <div class="row-field">
           <app-input label="Парола" [type]="showPassword ? 'text' : 'password'" formControlName="password"
             placeholder="Минимум 8 символа" autocomplete="new-password">

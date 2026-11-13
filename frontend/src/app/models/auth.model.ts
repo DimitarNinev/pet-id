@@ -21,6 +21,9 @@ export interface RegisterRequest {
   password: string;
   role: UserRole;
   phone?: string;
+  clinicName?: string;
+  clinicAddress?: string;
+  city?: string;
 }
 
 export interface LoginRequest {

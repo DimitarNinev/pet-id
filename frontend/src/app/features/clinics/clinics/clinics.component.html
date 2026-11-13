@@ -1,0 +1,136 @@
+<div class="clinics-page">
+  <header-component></header-component>
+
+  <main>
+    <div class="header">
+      <h1>Ветеринарни клиники</h1>
+      <p>Открий ветеринарен специалист и намери подходяща грижа за своя любимец.</p>
+    </div>
+
+    <section class="panel clinics-panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Ветеринарни специалисти</h2>
+          <p>
+            Разгледай одобрените ветеринарни лекари в Pet ID.
+          </p>
+        </div>
+      </div>
+
+      <div class="row-field">
+        <app-input type="search" placeholder="Търси по име, клиника или град..." [ngModel]="searchQuery()"
+          (ngModelChange)="onSearch($event)">
+        </app-input>
+      </div>
+
+      <div class="filters">
+        <button type="button" [class.active]="selectedCity() === ''" (click)="selectCity('')">
+          Всички
+        </button>
+
+        @for (city of cities; track city) {
+        <button type="button" [class.active]="selectedCity() === city" (click)="selectCity(city)">
+          {{ city }}
+        </button>
+        }
+      </div>
+
+      @if (isLoading()) {
+      <div class="state-message">
+        <span class="loader"></span>
+        <p>Зареждане на ветеринарните специалисти...</p>
+      </div>
+      } @else if (errorMessage()) {
+      <div class="state-message error">
+        <p>{{ errorMessage() }}</p>
+        <button type="button" (click)="loadVets()">Опитай отново</button>
+      </div>
+      } @else if (!hasResults()) {
+      <div class="empty-state">
+        @if (searchQuery()) {
+        <h3>Няма намерени специалисти</h3>
+        <p>
+          Не открихме ветеринарни лекари, отговарящи на твоето търсене.
+          Опитай с друго име, клиника или град.
+        </p>
+        } @else {
+        <h3>Все още няма регистрирани специалисти</h3>
+        <p>
+          Одобрените ветеринарни лекари ще се появяват тук.
+        </p>
+        }
+      </div>
+      } @else {
+      <div class="results-info">
+        Намерени специалисти: <strong>{{ total() }}</strong>
+      </div>
+
+      <div class="vet-list">
+        @for (vet of vets(); track vet.id) {
+        <article class="vet-item">
+          <div class="vet-avatar">
+            <span>{{ vet.firstName.charAt(0) }}{{ vet.lastName.charAt(0) }}</span>
+          </div>
+
+          <div class="vet-info">
+            <div class="vet-heading">
+              <h3>{{ vet.firstName }} {{ vet.lastName }}</h3>
+              <span class="type-label">Ветеринарен лекар</span>
+            </div>
+
+            @if (vet.clinicName) {
+            <div class="info-row">
+              <span class="info-label">клиника:</span>
+              <span>{{ vet.clinicName }}</span>
+            </div>
+            }
+
+            @if (vet.city || vet.clinicAddress) {
+            <div class="info-row">
+              <span class="info-label">адрес:</span>
+              <span>
+                @if (vet.city) {
+                гр. {{ vet.city }}
+                }
+
+                @if (vet.city && vet.clinicAddress) {
+                ,
+                }
+
+                @if (vet.clinicAddress) {
+                ул. {{ vet.clinicAddress }}
+                }
+              </span>
+            </div>
+            }
+
+            @if (vet.phone) {
+            <div class="info-row">
+              <span class="info-label">тел:</span>
+              <a [href]="'tel:' + vet.phone">{{ vet.phone }}</a>
+            </div>
+            }
+          </div>
+        </article>
+        }
+      </div>
+
+      @if (totalPages() > 1) {
+      <div class="pagination">
+        <button type="button" [disabled]="currentPage() === 1" (click)="changePage(currentPage() - 1)">
+          Назад
+        </button>
+
+        <span>
+          Страница {{ currentPage() }} от {{ totalPages() }}
+        </span>
+
+        <button type="button" [disabled]="currentPage() === totalPages()" (click)="changePage(currentPage() + 1)">
+          Напред
+        </button>
+      </div>
+      }
+      }
+    </section>
+  </main>
+</div>

@@ -24,7 +24,7 @@
           flex-shrink: 0;
           width: 40px;
           height: 40px;
-          border-radius: var(--radius-lg);
+          border-radius: var(--radius-md);
           background: var(--color-surface);
           font-size: var(--font-size-base);
         }
@@ -45,6 +45,7 @@
             display: block;
             font-size: var(--font-size-sm);
             font-weight: var(--font-weight-regular);
+            color: var(--color-text-secondary);
           }
         }
 

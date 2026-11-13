@@ -59,7 +59,16 @@ export class AuthService {
         lastName: dto.lastName.trim(),
         email,
         passwordHash,
-        phone: dto.phone?.trim(),
+        phone: dto.phone?.trim() || null,
+        clinicName: dto.role === 'VET'
+          ? dto.clinicName?.trim() || null
+          : null,
+        clinicAddress: dto.role === 'VET'
+          ? dto.clinicAddress?.trim() || null
+          : null,
+        city: dto.role === 'VET'
+          ? dto.city?.trim() || null
+          : null,
         role: dto.role,
         vetApproved: false,
       },
