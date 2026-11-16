@@ -137,23 +137,23 @@
             </div>
           </div>
 
-          @if (reminder.source === 'PERSONAL') {
-          <app-button type="reset" class="button no-margin" [small]="true" [disabled]="removingId() === reminder.id"
-            (click)="removeReminder(reminder)">
-            @if (removingId() === reminder.id) {
-            Изтриване...
-            } @else {
-            Изтрий
-            }
-          </app-button>
-          }
-
           <div class="reminder-status">
             <span class="status-label" [class.overdue]="reminder.status === 'OVERDUE'">
               {{ getStatusLabel(reminder.status) }}
             </span>
 
             <small>{{ getDaysLabel(reminder) }}</small>
+
+            @if (reminder.source === 'PERSONAL') {
+            <app-button type="reset" class="button no-margin" [small]="true" [disabled]="removingId() === reminder.id"
+              (click)="removeReminder(reminder)">
+              @if (removingId() === reminder.id) {
+              Изтриване...
+              } @else {
+              Изтрий
+              }
+            </app-button>
+            }
           </div>
         </article>
         }

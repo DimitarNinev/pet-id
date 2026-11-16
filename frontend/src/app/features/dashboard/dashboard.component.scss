@@ -301,6 +301,10 @@
                 font-size: var(--font-size-xs);
                 font-weight: var(--font-weight-semibold);
                 cursor: pointer;
+
+                span {
+                  font-weight: normal;
+                }
               }
             }
 
@@ -410,11 +414,20 @@
               .days-left {
                 flex-shrink: 0;
                 padding: 6px 8px;
-                border-radius: 20px;
+                border-radius: var(--radius-lg);
                 background: var(--color-surface-secondary);
                 color: var(--color-text-secondary);
                 font-size: 10px;
                 font-weight: var(--font-weight-bold);
+              }
+
+              &.overdue {
+                border-left-color: var(--color-danger);
+
+                .days-left {
+                  background: var(--bg-red);
+                  color: var(--color-danger);
+                }
               }
             }
           }
@@ -426,6 +439,7 @@
 
             .quick-action {
               display: flex;
+              justify-content: space-between;
               align-items: center;
               gap: var(--spacing-sm);
               padding: var(--spacing-md);
@@ -442,6 +456,10 @@
               strong {
                 font-size: var(--font-size-xs);
                 line-height: var(--line-height-normal);
+              }
+
+              span {
+                font-size: var(--font-size-xs);
               }
             }
           }
@@ -599,6 +617,10 @@
 
           .panel {
             padding: var(--spacing-lg);
+
+            .quick-actions {
+              grid-template-columns: minmax(0, 1fr);
+            }
           }
         }
       }

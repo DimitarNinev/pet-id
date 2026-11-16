@@ -115,6 +115,10 @@ body {
   font-family: var(--font-family);
   color: var(--color-text-primary);
   background: var(--color-background);
+
+  #nl-badge-frame {
+    display: none !important;
+  }
 }
 
 a {

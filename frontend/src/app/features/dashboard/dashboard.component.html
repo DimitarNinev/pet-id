@@ -170,7 +170,7 @@
             </div>
             } @else {
             @for (reminder of reminders(); track reminder.id) {
-            <article class="reminder">
+            <article class="reminder" [class.overdue]="reminder.daysLeft < 0">
               <span class="reminder-icon">
                 @if (reminder.type === 'vaccine') {
                   💉
@@ -179,7 +179,6 @@
                 } @else {
                   ❕
                 }
-                <!-- {{ reminder.type === 'vaccine' ? '💉' : '❤️' }} -->
               </span>
 
               <div class="reminder-info">
@@ -206,19 +205,19 @@
 
           <div class="quick-actions">
             <a routerLink="/animals/new" class="quick-action">
-              <strong>Добави животно</strong>
+              <strong>Добави животно</strong><span>➔</span>
             </a>
 
             <a routerLink="/reminders/new" class="quick-action">
-              <strong>Добави напомняне</strong>
+              <strong>Добави напомняне</strong><span>➔</span>
             </a>
 
             <a routerLink="/medical-records/new" class="quick-action">
-              <strong>Добави бележка</strong>
+              <strong>Добави бележка</strong><span>➔</span>
             </a>
 
             <a routerLink="/clinics" class="quick-action">
-              <strong>Ветеринарни клиники</strong>
+              <strong>Ветеринарни клиники</strong><span>➔</span>
             </a>
           </div>
         </article>
