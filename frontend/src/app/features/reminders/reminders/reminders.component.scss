@@ -26,7 +26,6 @@
           height: 40px;
           border-radius: var(--radius-md);
           background: var(--color-surface);
-          font-size: var(--font-size-base);
         }
 
         p {
@@ -156,7 +155,6 @@
             height: 45px;
             border-radius: var(--radius-md);
             background: var(--color-surface-secondary);
-            font-size: var(--font-size-base);
           }
 
           .reminder-info {
@@ -224,6 +222,14 @@
                 background: var(--bg-red);
                 color: var(--color-danger);
               }
+            }
+
+            .btn-text {
+              display: block;
+            }
+
+            .btn-icon {
+              display: none;
             }
           }
         }
@@ -293,11 +299,6 @@
         gap: var(--spacing-md);
         padding: var(--spacing-md);
 
-        .stat-icon {
-          width: 34px;
-          height: 34px;
-        }
-
         p {
           font-size: var(--font-size-xs);
         }
@@ -342,9 +343,25 @@
             .status-label {
               padding: var(--spacing-xs) var(--spacing-md);
             }
+
+            .btn-text {
+              display: none;
+            }
+
+            .btn-icon {
+              display: block;
+            }
           }
         }
       }
+    }
+  }
+
+  :host ::ng-deep .button-icon {
+    margin-left: auto;
+
+    .button.btn--small {
+      padding: 6px 12px !important;
     }
   }
 }

@@ -11,6 +11,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { AppInputComponent } from "../../../components/app-input/app-input";
 import { AppButtonComponent } from "../../../components/app-button/app-button";
+import { PwaInstallService } from "../../../core/services/pwa-install.service"
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ import { AppButtonComponent } from "../../../components/app-button/app-button";
   templateUrl: './login.component.html',
   styleUrl: '../auth-page.scss',
 })
+
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
@@ -33,6 +35,8 @@ export class LoginComponent {
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
+
+  pwaService = inject(PwaInstallService);
 
   submit(): void {
     if (this.loading()) return;

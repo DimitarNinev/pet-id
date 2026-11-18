@@ -1,7 +1,19 @@
 <div class="dashboard">
   <aside class="sidebar">
     <a class="brand" routerLink="/dashboard">
-      <span class="brand-icon">✦</span>
+      <svg width="50" height="50" viewBox="0 0 200 200" xmlns="http://w3.org">
+        <rect x="14" y="14" width="172" height="172" rx="40" ry="40" fill="#178b78" />
+        <path d="M 100 48 Q 108 87 147 95 Q 108 103 100 142 Q 92 103 53 95 Q 92 87 100 48 Z" fill="#FFFFFF" />
+        <g fill="#FFFFFF" transform="translate(4, 10)">
+          <ellipse cx="115.5" cy="121.5" rx="5.8" ry="7.6" transform="rotate(-24 115.5 121.5)" />
+          <ellipse cx="126" cy="109.5" rx="6" ry="8" transform="rotate(-10 126 109.5)" />
+          <ellipse cx="140.5" cy="108.5" rx="6" ry="8" transform="rotate(8 140.5 108.5)" />
+          <ellipse cx="152.5" cy="117.5" rx="5.8" ry="7.6" transform="rotate(24 152.5 117.5)" />
+          <path
+            d="M 134.5 119.5 C 127.5 119.8 120.5 129.5 119.3 136.5 C 118.2 142.8 123.5 145.5 129 142.8 C 133.5 140.5 138.5 139.8 143.5 141.2 C 149.2 142.8 153.8 139 152.2 133.2 C 150.2 126.2 141.5 119.2 134.5 119.5 Z" />
+        </g>
+      </svg>
+
       <span class="text">
         <strong>Pet ID</strong>
         <small>Здрави животни. Спокойни стопани.</small>
@@ -39,194 +51,393 @@
     </button>
   </aside>
 
-  <main class="main-content">
+  <main class="main">
     <header class="topbar-mobile">
-      <span class="mobile-brand"><span>✦</span>Pet ID</span>
+      <span class="mobile-brand">
+        <svg width="50" height="50" viewBox="0 0 200 200" xmlns="http://w3.org">
+          <rect x="14" y="14" width="172" height="172" rx="40" ry="40" fill="#178b78" />
+          <path d="M 100 48 Q 108 87 147 95 Q 108 103 100 142 Q 92 103 53 95 Q 92 87 100 48 Z" fill="#FFFFFF" />
+          <g fill="#FFFFFF" transform="translate(4, 10)">
+            <ellipse cx="115.5" cy="121.5" rx="5.8" ry="7.6" transform="rotate(-24 115.5 121.5)" />
+            <ellipse cx="126" cy="109.5" rx="6" ry="8" transform="rotate(-10 126 109.5)" />
+            <ellipse cx="140.5" cy="108.5" rx="6" ry="8" transform="rotate(8 140.5 108.5)" />
+            <ellipse cx="152.5" cy="117.5" rx="5.8" ry="7.6" transform="rotate(24 152.5 117.5)" />
+            <path
+              d="M 134.5 119.5 C 127.5 119.8 120.5 129.5 119.3 136.5 C 118.2 142.8 123.5 145.5 129 142.8 C 133.5 140.5 138.5 139.8 143.5 141.2 C 149.2 142.8 153.8 139 152.2 133.2 C 150.2 126.2 141.5 119.2 134.5 119.5 Z" />
+          </g>
+        </svg>
+        Pet ID
+      </span>
+
+      <a>
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g id="SVGRepo_iconCarrier">
+            <path opacity="0.5"
+              d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+              fill="#eaf5ee" stroke="#D5EFEA" stroke-width="1"></path>
+            <path
+              d="M16.807 19.0112C15.4398 19.9504 13.7841 20.5 12 20.5C10.2159 20.5 8.56023 19.9503 7.193 19.0111C6.58915 18.5963 6.33109 17.8062 6.68219 17.1632C7.41001 15.8302 8.90973 15 12 15C15.0903 15 16.59 15.8303 17.3178 17.1632C17.6689 17.8062 17.4108 18.5964 16.807 19.0112Z"
+              fill="#178b78"></path>
+            <path
+              d="M12 12C13.6569 12 15 10.6569 15 9C15 7.34315 13.6569 6 12 6C10.3432 6 9.00004 7.34315 9.00004 9C9.00004 10.6569 10.3432 12 12 12Z"
+              fill="#178b78"></path>
+          </g>
+        </svg>
+      </a>
     </header>
 
-    <section class="topbar">
-      <div>
-        <h1>Добре дошъл, {{ userName() }}!</h1>
-        <p>Ето какво се случва с твоите любимци.</p>
-      </div>
-    </section>
-
-    <section class="stats">
-      <article class="stat-card blue">
-        <span class="stat-icon">🐾</span>
+    <div class="main-content">
+      <section class="topbar">
         <div>
-          <p>Моите животни</p>
-          <strong>{{ pets().length }}</strong>
-          <small>Регистрирани любимци</small>
+          <h1>Добре дошъл, {{ userName() }}!</h1>
+          <p>Ето какво се случва с твоите любимци.</p>
         </div>
-      </article>
+      </section>
 
-      <article class="stat-card green">
-        <span class="stat-icon">💉</span>
-        <div>
-          <p>Ваксинации</p>
-          <strong>{{ vaccineCount }}</strong>
-          <small>Предстоящи ваксинации</small>
-        </div>
-      </article>
-
-      <article class="stat-card purple">
-        <span class="stat-icon">❤️</span>
-        <div>
-          <p>Обезпаразитявания</p>
-          <strong>{{ dewormingCount }}</strong>
-          <small>Предстоящи обезпаразитявания</small>
-        </div>
-      </article>
-
-      <article class="stat-card orange">
-        <span class="stat-icon">❕</span>
-        <div>
-          <p>Напомняне</p>
-          <strong>{{ reminderCount }}</strong>
-          <small>Лични напомняния</small>
-        </div>
-      </article>
-    </section>
-
-    <section class="content-grid">
-      <article class="panel pets-panel">
-        <div class="panel-heading">
+      <section class="stats">
+        <article class="stat-card blue">
+          <span class="stat-icon">
+            <svg width="27" height="27" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione"
+              preserveAspectRatio="xMidYMid meet" fill="#152223" stroke="#152223" stroke-width="0.64"
+              color="rgb(21, 34, 35)">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <g fill="#a24b11">
+                  <path d="M18.1 22.1C12.5 23.6 9 29 10 32.8s4.8-.5 10.4-2c5.6-1.5 11 .3 10-3.4s-6.6-6.8-12.3-5.3">
+                  </path>
+                  <path d="M13.8 20.3c1.7-.6 1.9-4.3 1-6.8c-.9-2.5-3-4-4.7-3.4s-2.3 3.1-1.4 5.6s3.4 5.3 5.1 4.6">
+                  </path>
+                  <path
+                    d="M20.7 18.4c1.8-.2 3-3.7 2.7-6.3c-.2-2.6-1.9-4.6-3.7-4.5c-1.8.2-3.1 2.4-2.8 5.1c.2 2.6 2 5.9 3.8 5.7">
+                  </path>
+                  <path d="M28.7 10.7c-1.8 0-3.3 2.1-3.3 4.8s1.5 6 3.3 6s3.3-3.4 3.3-6c0-2.7-1.5-4.8-3.3-4.8"> </path>
+                  <path
+                    d="M3.3 17.5c-1.6.9-1.8 3.5-.4 5.8c1.3 2.3 4.3 4.5 5.9 3.6c1.6-.9 1.1-4.6-.2-6.9s-3.7-3.4-5.3-2.5">
+                  </path>
+                  <path d="M45.9 44.2c-5.6-1.5-11.4 1.5-12.3 5.2s4.4 1.9 10 3.4s9.4 5.8 10.4 2s-2.5-9.1-8.1-10.6">
+                  </path>
+                  <path d="M50.2 42.5c1.7.6 4.2-2.1 5.1-4.6s.3-5-1.4-5.6c-1.7-.6-3.8.9-4.7 3.4s-.7 6.2 1 6.8"> </path>
+                  <path
+                    d="M43.3 40.6c1.8.2 3.6-3.1 3.8-5.7c.2-2.6-1-4.9-2.8-5.1c-1.8-.2-3.5 1.9-3.7 4.5c-.3 2.6.9 6.1 2.7 6.3">
+                  </path>
+                  <path d="M35.3 43.7c1.8 0 3.3-3.4 3.3-6s-1.5-4.8-3.3-4.8c-1.8 0-3.3 2.1-3.3 4.8c0 2.6 1.5 6 3.3 6">
+                  </path>
+                  <path d="M60.7 39.6c-1.6-.9-3.9.2-5.2 2.5c-1.3 2.3-1.8 6-.2 6.9c1.6.9 4.5-1.3 5.9-3.6s1-4.9-.5-5.8">
+                  </path>
+                </g>
+              </g>
+            </svg>
+          </span>
           <div>
-            <h2>Моите животни</h2>
-            <p>Всички твои любимци на едно място.</p>
+            <p>Моите животни</p>
+            <strong>{{ pets().length }}</strong>
+            <small>Регистрирани любимци</small>
           </div>
-        </div>
+        </article>
 
-        <div class="pet-grid">
-          @if (isLoadingPets()) {
-          <p class="pets-message">Зареждане на любимците...</p>
-          } @else if (petsError()) {
-          <p class="pets-message error">{{ petsError() }}</p>
-          } @else if (pets().length === 0) {
-          <div class="pets-empty">
-            <h3>Все още нямаш регистрирани любимци</h3>
-            <p>Добави първото си животно и съхранявай медицинската му история на едно място.</p>
-            <a routerLink="/animals/new" class="add-pet-button">
-              <span>＋</span> Добави животно
-            </a>
+        <article class="stat-card green">
+          <span class="stat-icon">
+            <svg width="18" height="18" viewBox="0 0 64.005 64.005" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <g id="XMLID_14_" transform="translate(-180.642 -305.836)">
+                  <g id="Group_142" data-name="Group 142">
+                    <path id="Path_132" data-name="Path 132"
+                      d="M244.055,316.645a2,2,0,0,1-2.82,2.83l-3.7-3.7-6.27,6.27.02.01,7.92,7.93a1.992,1.992,0,0,1,0,2.82,1.992,1.992,0,0,1-2.83,0l-1.75-1.75-28.74,28.74a2.039,2.039,0,0,1-1.42.58,2,2,0,0,1-1.41-.58l-2.94-2.94a1.935,1.935,0,0,1-.57,1.3,1.992,1.992,0,0,1-2.83,0l-.78-.78-11.88,11.87a1.994,1.994,0,1,1-2.82-2.82l11.87-11.88-.78-.78a2,2,0,0,1,0-2.83,1.935,1.935,0,0,1,1.3-.57l-2.94-2.94a2,2,0,0,1,0-2.83l28.74-28.74-1.75-1.75a2,2,0,0,1,2.82-2.83l7.94,7.94,6.27-6.27-3.7-3.7a2,2,0,1,1,2.83-2.82Zm-29.47,28.79,17.21-17.21-9.54-9.54-5.91,5.91,2.11,2.12a2,2,0,1,1-2.83,2.82l-2.11-2.11-2.18,2.18,2.11,2.11a2,2,0,1,1-2.83,2.83l-2.11-2.11-2.18,2.18,2.11,2.11a2.009,2.009,0,0,1,.12,2.69c-.04.04-.07.09-.12.14a1.993,1.993,0,0,1-1.41.59,2.016,2.016,0,0,1-1.42-.59l-2.11-2.11-2.18,2.18,2.11,2.11a2,2,0,0,1,0,2.83,2,2,0,0,1-2.82,0l-2.12-2.11-3.56,3.56,9.54,9.54Z"
+                      fill="#152223"></path>
+                    <path id="Path_133" data-name="Path 133"
+                      d="M231.795,328.225l-17.21,17.21-6.03-6.02a2.009,2.009,0,0,0-.12-2.69l-2.11-2.11,2.18-2.18,2.11,2.11a2.016,2.016,0,0,0,1.42.59,2.005,2.005,0,0,0,1.41-3.42l-2.11-2.11,2.18-2.18,2.11,2.11a2,2,0,0,0,2.83-2.82l-2.11-2.12,5.91-5.91Z"
+                      fill="#f2f2f2"></path>
+                    <path id="Path_134" data-name="Path 134"
+                      d="M214.585,345.435l-10.12,10.12-9.54-9.54,3.56-3.56,2.12,2.11a2,2,0,0,0,2.82,0,2,2,0,0,0,0-2.83l-2.11-2.11,2.18-2.18,2.11,2.11a2.016,2.016,0,0,0,1.42.59,1.993,1.993,0,0,0,1.41-.59c.05-.05.08-.1.12-.14Z"
+                      fill="#d5260b"></path>
+                  </g>
+                </g>
+              </g>
+            </svg>
+          </span>
+          <div>
+            <p>Ваксинации</p>
+            <strong>{{ vaccineCount }}</strong>
+            <small>Предстоящи ваксинации</small>
           </div>
-          } @else {
-          @for (pet of pets(); track pet.id) {
-          <article class="pet-card">
-            <div class="pet-image-placeholder">
-              @if (pet.photoUrl) {
-              <img [src]="pet.photoUrl" [alt]="'Снимка на ' + pet.name" class="pet-photo">
-              } @else {
-              🐾
-              }
-            </div>
+        </article>
 
-            <div class="pet-info">
-              <h3>{{pet.petId}}</h3>
-              <span class="pet-species">{{ pet.species }}</span>
-              <h3>{{ pet.name }}</h3>
-              <p>{{ pet.breed || 'Породата не е посочена' }}</p>
+        <article class="stat-card purple">
+          <span class="stat-icon">
+            <svg width="18" height="18" version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64"
+              xml:space="preserve" fill="#000000">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <g>
+                  <path fill="#d5260b"
+                    d="M58.714,29.977c0,0-0.612,0.75-1.823,1.961S33.414,55.414,33.414,55.414C33.023,55.805,32.512,56,32,56 s-1.023-0.195-1.414-0.586c0,0-22.266-22.266-23.477-23.477s-1.823-1.961-1.823-1.961C3.245,27.545,2,24.424,2,21 C2,13.268,8.268,7,16,7c3.866,0,7.366,1.566,9.899,4.101l0.009-0.009l4.678,4.677c0.781,0.781,2.047,0.781,2.828,0l4.678-4.677 l0.009,0.009C40.634,8.566,44.134,7,48,7c7.732,0,14,6.268,14,14C62,24.424,60.755,27.545,58.714,29.977z">
+                  </path>
+                  <path fill="#d5260b"
+                    d="M58.714,29.977c0,0-0.612,0.75-1.823,1.961S33.414,55.414,33.414,55.414C33.023,55.805,32.512,56,32,56 s-1.023-0.195-1.414-0.586c0,0-22.266-22.266-23.477-23.477s-1.823-1.961-1.823-1.961C3.245,27.545,2,24.424,2,21 C2,13.268,8.268,7,16,7c3.866,0,7.366,1.566,9.899,4.101l0.009-0.009l4.678,4.677c0.781,0.781,2.047,0.781,2.828,0l4.678-4.677 l0.009,0.009C40.634,8.566,44.134,7,48,7c7.732,0,14,6.268,14,14C62,24.424,60.755,27.545,58.714,29.977z">
+                  </path>
+                  <g>
+                    <path fill="#152223"
+                      d="M48,5c-4.418,0-8.418,1.791-11.313,4.687l-3.979,3.961c-0.391,0.391-1.023,0.391-1.414,0 c0,0-3.971-3.97-3.979-3.961C24.418,6.791,20.418,5,16,5C7.163,5,0,12.163,0,21c0,3.338,1.024,6.436,2.773,9 c0,0,0.734,1.164,1.602,2.031s24.797,24.797,24.797,24.797C29.953,57.609,30.977,58,32,58s2.047-0.391,2.828-1.172 c0,0,23.93-23.93,24.797-24.797S61.227,30,61.227,30C62.976,27.436,64,24.338,64,21C64,12.163,56.837,5,48,5z M58.714,29.977 c0,0-0.612,0.75-1.823,1.961S33.414,55.414,33.414,55.414C33.023,55.805,32.512,56,32,56s-1.023-0.195-1.414-0.586 c0,0-22.266-22.266-23.477-23.477s-1.823-1.961-1.823-1.961C3.245,27.545,2,24.424,2,21C2,13.268,8.268,7,16,7 c3.866,0,7.366,1.566,9.899,4.101l0.009-0.009l4.678,4.677c0.781,0.781,2.047,0.781,2.828,0l4.678-4.677l0.009,0.009 C40.634,8.566,44.134,7,48,7c7.732,0,14,6.268,14,14C62,24.424,60.755,27.545,58.714,29.977z">
+                    </path>
+                    <path fill="#152223"
+                      d="M48,11c-0.553,0-1,0.447-1,1s0.447,1,1,1c4.418,0,8,3.582,8,8c0,0.553,0.447,1,1,1s1-0.447,1-1 C58,15.478,53.522,11,48,11z">
+                    </path>
+                  </g>
+                </g>
+              </g>
+            </svg>
+          </span>
+          <div>
+            <p>Обезпаразитявания</p>
+            <strong>{{ dewormingCount }}</strong>
+            <small>Предстоящи обезпаразитявания</small>
+          </div>
+        </article>
 
-              @if (pet.dateOfBirth) {
-              <p>Роден/а: {{ pet.dateOfBirth | date:'dd.MM.yyyy' }}</p>
-              } @else {
-              <p>Няма въведена дата на раждане</p>
-              }
+        <article class="stat-card orange">
+          <span class="stat-icon">
+            <svg width="22" height="22" viewBox="-11 0 34 34" clip-rule="evenodd" fill-rule="evenodd"
+              stroke-linejoin="round" stroke-miterlimit="2" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <g fill="#424242" transform="matrix(.413892 .0862234 -.0862234 .413892 -1135.3273 -1495.8263)">
+                  <path d="m3377.19 2978.61 11.48-3.06 3.92 10.44-10.15 4.85z"></path>
+                  <path d="m3372.83 2968.55 11.64-4.6-16.08-51.62-17.48 5.55z"></path>
+                </g>
+              </g>
+            </svg>
+          </span>
+          <div>
+            <p>Напомняне</p>
+            <strong>{{ reminderCount }}</strong>
+            <small>Лични напомняния</small>
+          </div>
+        </article>
+      </section>
 
-              @if (pet.microchipId) {
-              <p class="microchip">Микрочип: {{ pet.microchipId }}</p>
-              }
-
-              <a class="details-button" (click)="openAnimalDetails(pet)">
-                Виж профила <span>➔</span>
-              </a>
-            </div>
-          </article>
-          }
-          }
-        </div>
-      </article>
-
-      <div class="right-column">
-        <article class="panel reminders-panel">
+      <section class="content-grid">
+        <article class="panel pets-panel">
           <div class="panel-heading">
             <div>
-              <h2>Предстоящи събития</h2>
-              <p>Не пропускай важните дати.</p>
+              <h2>Моите животни</h2>
+              <p>Всички твои любимци на едно място.</p>
             </div>
-            <a routerLink="/reminders" class="text-link">Всички ➔</a>
           </div>
 
-          <div class="reminder-list">
-            @if (isLoadingReminders()) {
-            <p class="pets-message">Зареждане на напомнянията...</p>
-            } @else if (remindersError()) {
-            <p class="pets-message error">{{ remindersError() }}</p>
-            } @else if (reminders().length === 0) {
+          <div class="pet-grid">
+            @if (isLoadingPets()) {
+            <p class="pets-message">Зареждане на любимците...</p>
+            } @else if (petsError()) {
+            <p class="pets-message error">{{ petsError() }}</p>
+            } @else if (pets().length === 0) {
             <div class="pets-empty">
-              <h3>Няма предстоящи събития</h3>
-              <p>Тук ще виждаш следващите ваксинации и обезпаразитявания.</p>
+              <h3>Все още нямаш регистрирани любимци</h3>
+              <p>Добави първото си животно и съхранявай медицинската му история на едно място.</p>
+              <a routerLink="/animals/new" class="add-pet-button">
+                <span>＋</span> Добави животно
+              </a>
             </div>
             } @else {
-            @for (reminder of reminders(); track reminder.id) {
-            <article class="reminder" [class.overdue]="reminder.daysLeft < 0">
-              <span class="reminder-icon">
-                @if (reminder.type === 'vaccine') {
-                  💉
-                } @else if (reminder.type === 'medicine') {
-                  ❤️
+            @for (pet of pets(); track pet.id) {
+            <article class="pet-card">
+              <div class="pet-image-placeholder">
+                @if (pet.photoUrl) {
+                <img [src]="pet.photoUrl" [alt]="'Снимка на ' + pet.name" class="pet-photo">
                 } @else {
-                  ❕
+                <svg width="80" height="80" fill="#000000" viewBox="0 0 32 32" id="icon"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                    <defs>
+                      <style>
+                        .cls-1 {
+                          fill: none;
+                        }
+                      </style>
+                    </defs>
+                    <title>no-image</title>
+                    <path
+                      d="M30,3.4141,28.5859,2,2,28.5859,3.4141,30l2-2H26a2.0027,2.0027,0,0,0,2-2V5.4141ZM26,26H7.4141l7.7929-7.793,2.3788,2.3787a2,2,0,0,0,2.8284,0L22,19l4,3.9973Zm0-5.8318-2.5858-2.5859a2,2,0,0,0-2.8284,0L19,19.1682l-2.377-2.3771L26,7.4141Z">
+                    </path>
+                    <path
+                      d="M6,22V19l5-4.9966,1.3733,1.3733,1.4159-1.416-1.375-1.375a2,2,0,0,0-2.8284,0L6,16.1716V6H22V4H6A2.002,2.002,0,0,0,4,6V22Z">
+                    </path>
+                    <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1"
+                      width="32" height="32"></rect>
+                  </g>
+                </svg>
                 }
-              </span>
-
-              <div class="reminder-info">
-                <strong>{{ reminder.title }} — {{ reminder.petName }}</strong>
-                <small>{{ reminder.date }}</small>
               </div>
 
-              <span class="days-left">
-                @if (reminder.daysLeft < 0) { Просрочено } @else if (reminder.daysLeft===0) { Днес } @else if
-                  (reminder.daysLeft===1) { 1 ден } @else { {{ reminder.daysLeft }} дни } </span>
+              <div class="pet-info">
+                <h3>{{pet.petId}}</h3>
+                <span class="pet-species">{{ pet.species }}</span>
+                <h3>{{ pet.name }}</h3>
+                <p>{{ pet.breed || 'Породата не е посочена' }}</p>
+
+                @if (pet.dateOfBirth) {
+                <p>Роден/а: {{ pet.dateOfBirth | date:'dd.MM.yyyy' }}</p>
+                } @else {
+                <p>Няма въведена дата на раждане</p>
+                }
+
+                @if (pet.microchipId) {
+                <p class="microchip">Микрочип: {{ pet.microchipId }}</p>
+                }
+
+                <a class="details-button" (click)="openAnimalDetails(pet)">
+                  Виж профила <span>➔</span>
+                </a>
+              </div>
             </article>
             }
             }
           </div>
         </article>
 
-        <article class="panel quick-panel">
-          <div class="panel-heading">
-            <div>
-              <h2>Бързи действия</h2>
-              <p>Какво искаш да направиш?</p>
+        <div class="right-column">
+          <article class="panel reminders-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Предстоящи събития</h2>
+                <p>Не пропускай важните дати.</p>
+              </div>
+              <a routerLink="/reminders" class="text-link">Всички ➔</a>
             </div>
-          </div>
 
-          <div class="quick-actions">
-            <a routerLink="/animals/new" class="quick-action">
-              <strong>Добави животно</strong><span>➔</span>
-            </a>
+            <div class="reminder-list">
+              @if (isLoadingReminders()) {
+              <p class="pets-message">Зареждане на напомнянията...</p>
+              } @else if (remindersError()) {
+              <p class="pets-message error">{{ remindersError() }}</p>
+              } @else if (reminders().length === 0) {
+              <div class="pets-empty">
+                <h3>Няма предстоящи събития</h3>
+                <p>Тук ще виждаш следващите ваксинации и обезпаразитявания.</p>
+              </div>
+              } @else {
+              @for (reminder of reminders(); track reminder.id) {
+              <article class="reminder" [class.overdue]="reminder.daysLeft < 0">
+                <span class="reminder-icon">
+                  @if (reminder.type === 'vaccine') {
+                  <svg width="18" height="18" viewBox="0 0 64.005 64.005" xmlns="http://www.w3.org/2000/svg"
+                    fill="#000000">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <g id="XMLID_14_" transform="translate(-180.642 -305.836)">
+                        <g id="Group_142" data-name="Group 142">
+                          <path id="Path_132" data-name="Path 132"
+                            d="M244.055,316.645a2,2,0,0,1-2.82,2.83l-3.7-3.7-6.27,6.27.02.01,7.92,7.93a1.992,1.992,0,0,1,0,2.82,1.992,1.992,0,0,1-2.83,0l-1.75-1.75-28.74,28.74a2.039,2.039,0,0,1-1.42.58,2,2,0,0,1-1.41-.58l-2.94-2.94a1.935,1.935,0,0,1-.57,1.3,1.992,1.992,0,0,1-2.83,0l-.78-.78-11.88,11.87a1.994,1.994,0,1,1-2.82-2.82l11.87-11.88-.78-.78a2,2,0,0,1,0-2.83,1.935,1.935,0,0,1,1.3-.57l-2.94-2.94a2,2,0,0,1,0-2.83l28.74-28.74-1.75-1.75a2,2,0,0,1,2.82-2.83l7.94,7.94,6.27-6.27-3.7-3.7a2,2,0,1,1,2.83-2.82Zm-29.47,28.79,17.21-17.21-9.54-9.54-5.91,5.91,2.11,2.12a2,2,0,1,1-2.83,2.82l-2.11-2.11-2.18,2.18,2.11,2.11a2,2,0,1,1-2.83,2.83l-2.11-2.11-2.18,2.18,2.11,2.11a2.009,2.009,0,0,1,.12,2.69c-.04.04-.07.09-.12.14a1.993,1.993,0,0,1-1.41.59,2.016,2.016,0,0,1-1.42-.59l-2.11-2.11-2.18,2.18,2.11,2.11a2,2,0,0,1,0,2.83,2,2,0,0,1-2.82,0l-2.12-2.11-3.56,3.56,9.54,9.54Z"
+                            fill="#152223"></path>
+                          <path id="Path_133" data-name="Path 133"
+                            d="M231.795,328.225l-17.21,17.21-6.03-6.02a2.009,2.009,0,0,0-.12-2.69l-2.11-2.11,2.18-2.18,2.11,2.11a2.016,2.016,0,0,0,1.42.59,2.005,2.005,0,0,0,1.41-3.42l-2.11-2.11,2.18-2.18,2.11,2.11a2,2,0,0,0,2.83-2.82l-2.11-2.12,5.91-5.91Z"
+                            fill="#f2f2f2"></path>
+                          <path id="Path_134" data-name="Path 134"
+                            d="M214.585,345.435l-10.12,10.12-9.54-9.54,3.56-3.56,2.12,2.11a2,2,0,0,0,2.82,0,2,2,0,0,0,0-2.83l-2.11-2.11,2.18-2.18,2.11,2.11a2.016,2.016,0,0,0,1.42.59,1.993,1.993,0,0,0,1.41-.59c.05-.05.08-.1.12-.14Z"
+                            fill="#d5260b"></path>
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                  } @else if (reminder.type === 'medicine') {
+                  <svg width="18" height="18" version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64"
+                    xml:space="preserve" fill="#000000">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <g>
+                        <path fill="#d5260b"
+                          d="M58.714,29.977c0,0-0.612,0.75-1.823,1.961S33.414,55.414,33.414,55.414C33.023,55.805,32.512,56,32,56 s-1.023-0.195-1.414-0.586c0,0-22.266-22.266-23.477-23.477s-1.823-1.961-1.823-1.961C3.245,27.545,2,24.424,2,21 C2,13.268,8.268,7,16,7c3.866,0,7.366,1.566,9.899,4.101l0.009-0.009l4.678,4.677c0.781,0.781,2.047,0.781,2.828,0l4.678-4.677 l0.009,0.009C40.634,8.566,44.134,7,48,7c7.732,0,14,6.268,14,14C62,24.424,60.755,27.545,58.714,29.977z">
+                        </path>
+                        <path fill="#d5260b"
+                          d="M58.714,29.977c0,0-0.612,0.75-1.823,1.961S33.414,55.414,33.414,55.414C33.023,55.805,32.512,56,32,56 s-1.023-0.195-1.414-0.586c0,0-22.266-22.266-23.477-23.477s-1.823-1.961-1.823-1.961C3.245,27.545,2,24.424,2,21 C2,13.268,8.268,7,16,7c3.866,0,7.366,1.566,9.899,4.101l0.009-0.009l4.678,4.677c0.781,0.781,2.047,0.781,2.828,0l4.678-4.677 l0.009,0.009C40.634,8.566,44.134,7,48,7c7.732,0,14,6.268,14,14C62,24.424,60.755,27.545,58.714,29.977z">
+                        </path>
+                        <g>
+                          <path fill="#152223"
+                            d="M48,5c-4.418,0-8.418,1.791-11.313,4.687l-3.979,3.961c-0.391,0.391-1.023,0.391-1.414,0 c0,0-3.971-3.97-3.979-3.961C24.418,6.791,20.418,5,16,5C7.163,5,0,12.163,0,21c0,3.338,1.024,6.436,2.773,9 c0,0,0.734,1.164,1.602,2.031s24.797,24.797,24.797,24.797C29.953,57.609,30.977,58,32,58s2.047-0.391,2.828-1.172 c0,0,23.93-23.93,24.797-24.797S61.227,30,61.227,30C62.976,27.436,64,24.338,64,21C64,12.163,56.837,5,48,5z M58.714,29.977 c0,0-0.612,0.75-1.823,1.961S33.414,55.414,33.414,55.414C33.023,55.805,32.512,56,32,56s-1.023-0.195-1.414-0.586 c0,0-22.266-22.266-23.477-23.477s-1.823-1.961-1.823-1.961C3.245,27.545,2,24.424,2,21C2,13.268,8.268,7,16,7 c3.866,0,7.366,1.566,9.899,4.101l0.009-0.009l4.678,4.677c0.781,0.781,2.047,0.781,2.828,0l4.678-4.677l0.009,0.009 C40.634,8.566,44.134,7,48,7c7.732,0,14,6.268,14,14C62,24.424,60.755,27.545,58.714,29.977z">
+                          </path>
+                          <path fill="#152223"
+                            d="M48,11c-0.553,0-1,0.447-1,1s0.447,1,1,1c4.418,0,8,3.582,8,8c0,0.553,0.447,1,1,1s1-0.447,1-1 C58,15.478,53.522,11,48,11z">
+                          </path>
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                  } @else {
+                  <svg width="22" height="22" viewBox="-11 0 34 34" clip-rule="evenodd" fill-rule="evenodd"
+                    stroke-linejoin="round" stroke-miterlimit="2" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <g fill="#424242" transform="matrix(.413892 .0862234 -.0862234 .413892 -1135.3273 -1495.8263)">
+                        <path d="m3377.19 2978.61 11.48-3.06 3.92 10.44-10.15 4.85z"></path>
+                        <path d="m3372.83 2968.55 11.64-4.6-16.08-51.62-17.48 5.55z"></path>
+                      </g>
+                    </g>
+                  </svg>
+                  }
+                </span>
 
-            <a routerLink="/reminders/new" class="quick-action">
-              <strong>Добави напомняне</strong><span>➔</span>
-            </a>
+                <div class="reminder-info">
+                  <strong>{{ reminder.title }} — {{ reminder.petName }}</strong>
+                  <small>{{ reminder.date }}</small>
+                </div>
 
-            <a routerLink="/medical-records/new" class="quick-action">
-              <strong>Добави бележка</strong><span>➔</span>
-            </a>
+                <span class="days-left">
+                  @if (reminder.daysLeft < 0) { Просрочено } @else if (reminder.daysLeft===0) { Днес } @else if
+                    (reminder.daysLeft===1) { 1 ден } @else { {{ reminder.daysLeft }} дни } </span>
+              </article>
+              }
+              }
+            </div>
+          </article>
 
-            <a routerLink="/clinics" class="quick-action">
-              <strong>Ветеринарни клиники</strong><span>➔</span>
-            </a>
-          </div>
-        </article>
-      </div>
-    </section>
+          <article class="panel quick-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Бързи действия</h2>
+                <p>Какво искаш да направиш?</p>
+              </div>
+            </div>
 
-    <footer class="dashboard-footer">
-      <span>Pet ID · v0.1.0</span>
-      <span>С грижа за твоите любимци</span>
-    </footer>
+            <div class="quick-actions">
+              <a routerLink="/animals/new" class="quick-action">
+                <strong>Добави животно</strong><span>➔</span>
+              </a>
+
+              <a routerLink="/reminders/new" class="quick-action">
+                <strong>Добави напомняне</strong><span>➔</span>
+              </a>
+
+              <a routerLink="/medical-records/new" class="quick-action">
+                <strong>Добави бележка</strong><span>➔</span>
+              </a>
+
+              <a routerLink="/clinics" class="quick-action">
+                <strong>Ветеринарни клиники</strong><span>➔</span>
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer class="dashboard-footer">
+        <span>Pet ID · v0.1.0</span>
+        <span>С грижа за твоите любимци</span>
+      </footer>
+    </div>
   </main>
 </div>

@@ -1,141 +1,205 @@
 <div class="vet-dashboard">
-    <aside class="sidebar">
-        <a class="brand" routerLink="/vet/dashboard">
-            <span class="brand-icon">✦</span>
-            <span class="text">
-                <strong>Pet ID</strong>
-                <small>Ветеринарен портал</small>
-            </span>
+  <aside class="sidebar">
+    <a class="brand" routerLink="/vet/dashboard">
+      <svg width="50" height="50" viewBox="0 0 200 200" xmlns="http://w3.org">
+        <rect x="14" y="14" width="172" height="172" rx="40" ry="40" fill="#178b78" />
+        <path d="M 100 48 Q 108 87 147 95 Q 108 103 100 142 Q 92 103 53 95 Q 92 87 100 48 Z" fill="#FFFFFF" />
+        <g fill="#FFFFFF" transform="translate(4, 10)">
+          <ellipse cx="115.5" cy="121.5" rx="5.8" ry="7.6" transform="rotate(-24 115.5 121.5)" />
+          <ellipse cx="126" cy="109.5" rx="6" ry="8" transform="rotate(-10 126 109.5)" />
+          <ellipse cx="140.5" cy="108.5" rx="6" ry="8" transform="rotate(8 140.5 108.5)" />
+          <ellipse cx="152.5" cy="117.5" rx="5.8" ry="7.6" transform="rotate(24 152.5 117.5)" />
+          <path
+            d="M 134.5 119.5 C 127.5 119.8 120.5 129.5 119.3 136.5 C 118.2 142.8 123.5 145.5 129 142.8 C 133.5 140.5 138.5 139.8 143.5 141.2 C 149.2 142.8 153.8 139 152.2 133.2 C 150.2 126.2 141.5 119.2 134.5 119.5 Z" />
+        </g>
+      </svg>
+
+      <span class="text">
+        <strong>Pet ID</strong>
+        <small>Ветеринарен портал</small>
+      </span>
+    </a>
+
+    <nav class="navigation">
+      <a class="nav-item active" routerLink="/vet/dashboard">
+        <span class="nav-icon">⌂</span>
+        <span>Начало</span>
+      </a>
+
+      <a class="nav-item" routerLink="/vet/search">
+        <span>Търсене на пациент</span>
+      </a>
+
+      <a class="nav-item" routerLink="/profile">
+        Настройки на профила
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="help-card">
+        <strong>Нужда от помощ?</strong>
+        <p>Информацията за пациентите е достъпна чрез техния идентификатор.</p>
+      </div>
+
+      <button class="logout-button" type="button" routerLink="/login">
+        <span>↪</span> Изход
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar-mobile">
+      <span class="mobile-brand">
+        <svg width="50" height="50" viewBox="0 0 200 200" xmlns="http://w3.org">
+          <rect x="14" y="14" width="172" height="172" rx="40" ry="40" fill="#178b78" />
+          <path d="M 100 48 Q 108 87 147 95 Q 108 103 100 142 Q 92 103 53 95 Q 92 87 100 48 Z" fill="#FFFFFF" />
+          <g fill="#FFFFFF" transform="translate(4, 10)">
+            <ellipse cx="115.5" cy="121.5" rx="5.8" ry="7.6" transform="rotate(-24 115.5 121.5)" />
+            <ellipse cx="126" cy="109.5" rx="6" ry="8" transform="rotate(-10 126 109.5)" />
+            <ellipse cx="140.5" cy="108.5" rx="6" ry="8" transform="rotate(8 140.5 108.5)" />
+            <ellipse cx="152.5" cy="117.5" rx="5.8" ry="7.6" transform="rotate(24 152.5 117.5)" />
+            <path
+              d="M 134.5 119.5 C 127.5 119.8 120.5 129.5 119.3 136.5 C 118.2 142.8 123.5 145.5 129 142.8 C 133.5 140.5 138.5 139.8 143.5 141.2 C 149.2 142.8 153.8 139 152.2 133.2 C 150.2 126.2 141.5 119.2 134.5 119.5 Z" />
+          </g>
+        </svg>
+        Pet ID
+      </span>
+
+      <div class="profile">
+        <div class="profile-avatar">{{userName().charAt(0)}}</div>
+        <a class="profile-info">
+          <strong>Д-р {{userName()}}</strong>
+          <span>Одобрен профил</span>
+        </a>
+      </div>
+    </header>
+
+    <header class="topbar">
+      <div>
+        <h1>Добре дошли в Pet ID</h1>
+        <p class="page-subtitle">
+          Всичко необходимо за грижата за вашите пациенти на едно място.
+        </p>
+      </div>
+
+      <div class="profile">
+        <div class="profile-avatar">{{userName().charAt(0)}}</div>
+        <div class="profile-info">
+          <strong>Д-р {{userName()}}</strong>
+          <span>Одобрен профил</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <section class="welcome-banner">
+        <div class="welcome-content">
+          <span class="eyebrow">ВЕТЕРИНАРНА ПРАКТИКА</span>
+          <h2>Всяко досие разказва история.</h2>
+          <p>
+            Намерете пациента по неговия микрочип или Pet ID и продължете
+            медицинската му история.
+          </p>
+
+          <a class="primary-button" routerLink="/vet/search">
+            Намери пациент
+            <span class="button-arrow">→</span>
+          </a>
+        </div>
+
+        <div class="banner-decoration" aria-hidden="true">
+          <div class="circle circle-one"></div>
+          <div class="circle circle-two"></div>
+          <div class="pet-symbol">✚</div>
+          <div class="floating-tag tag-one">PET ID</div>
+          <div class="floating-tag tag-two">Здраве и грижа</div>
+        </div>
+      </section>
+
+      <section class="section-heading">
+        <div>
+          <h2>Бързи действия</h2>
+          <p>Изберете какво искате да направите.</p>
+        </div>
+      </section>
+
+      <section class="action-grid">
+        <a class="action-card search-card" routerLink="/vet/search">
+          <span class="action-icon">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                <path
+                  d="M14.9536 14.9458L21 21M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                  stroke="#178b78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </svg>
+          </span>
+          <span class="action-card-content">
+            <strong>Намери пациент</strong>
+            <span>Търсене чрез микрочип или идентификатор на Pet ID.</span>
+          </span>
+          <span class="card-arrow">→</span>
         </a>
 
-        <nav class="navigation">
-            <a class="nav-item active" routerLink="/vet/dashboard">
-                <span class="nav-icon">⌂</span>
-                <span>Начало</span>
-            </a>
-
-            <a class="nav-item" routerLink="/vet/search">
-                <span class="nav-icon">⌕</span>
-                <span>Търсене на пациент</span>
-            </a>
-        </nav>
-
-        <div class="sidebar-bottom">
-            <div class="help-card">
-                <strong>Нужда от помощ?</strong>
-                <p>Информацията за пациентите е достъпна чрез техния идентификатор.</p>
-            </div>
-
-            <button class="logout-button" type="button" routerLink="/login">
-                <span>↪</span> Изход
-            </button>
+        <div class="action-card disabled-card">
+          <span class="action-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M16.0607 3H5.25V21H18.75V5.68934L16.0607 3ZM6.75 19.5V4.5H15.4393L17.25 6.31066V19.5H6.75ZM8.25 9.75H15.75V8.25H8.25V9.75ZM8.25 12.75H15.75V11.25H8.25V12.75ZM12 15.75H8.25V14.25H12V15.75Z"
+                  fill="#178b78"></path>
+              </g>
+            </svg>
+          </span>
+          <span class="action-card-content">
+            <strong>Медицински записи</strong>
+            <span>Добавяне на прегледи, ваксинации и лечения.</span>
+          </span>
+          <span class="card-arrow">→</span>
         </div>
-    </aside>
 
-    <main class="main-content">
-        <header class="topbar-mobile">
-            <span class="mobile-brand"><span>✦</span>Pet ID</span>
+        <div class="action-card disabled-card">
+          <span class="action-icon">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M22 12.2039V13.725C22 17.6258 22 19.5763 20.8284 20.7881C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.7881C2 19.5763 2 17.6258 2 13.725V12.2039C2 9.91549 2 8.77128 2.5192 7.82274C3.0384 6.87421 3.98695 6.28551 5.88403 5.10813L7.88403 3.86687C9.88939 2.62229 10.8921 2 12 2C13.1079 2 14.1106 2.62229 16.116 3.86687L18.116 5.10812C20.0131 6.28551 20.9616 6.87421 21.4808 7.82274"
+                  stroke="#178b78" stroke-width="1.5" stroke-linecap="round"></path>
+                <path d="M15 18H9" stroke="#178b78" stroke-width="1.5" stroke-linecap="round"></path>
+              </g>
+            </svg>
+          </span>
+          <span class="action-card-content">
+            <strong>Профил на клиниката</strong>
+            <span>Информация за практиката и екипа.</span>
+          </span>
+          <span class="card-arrow">→</span>
+        </div>
+      </section>
 
-            <div class="profile">
-                <div class="profile-avatar">{{userName().charAt(0)}}</div>
-                <div class="profile-info">
-                    <strong>Д-р {{userName()}}</strong>
-                    <span>Одобрен профил</span>
-                </div>
-            </div>
-        </header>
+      <section class="notice">
+        <span class="notice-icon">i</span>
+        <div>
+          <strong>Работа с медицински досиета</strong>
+          <p>
+            Търсете животно чрез неговия идентификатор. Професионалните записи
+            се свързват с автора и се съхраняват в медицинската история.
+          </p>
+        </div>
+      </section>
 
-        <header class="topbar">
-            <div>
-                <h1>Добре дошли в Pet ID</h1>
-                <p class="page-subtitle">
-                    Всичко необходимо за грижата за вашите пациенти на едно място.
-                </p>
-            </div>
-
-            <div class="profile">
-                <div class="profile-avatar">{{userName().charAt(0)}}</div>
-                <div class="profile-info">
-                    <strong>Д-р {{userName()}}</strong>
-                    <span>Одобрен профил</span>
-                </div>
-            </div>
-        </header>
-
-        <section class="welcome-banner">
-            <div class="welcome-content">
-                <span class="eyebrow">ВЕТЕРИНАРНА ПРАКТИКА</span>
-                <h2>Всяко досие разказва история.</h2>
-                <p>
-                    Намерете пациента по неговия микрочип или Pet ID и продължете
-                    медицинската му история.
-                </p>
-
-                <a class="primary-button" routerLink="/vet/search">
-                    Намери пациент
-                    <span class="button-arrow">→</span>
-                </a>
-            </div>
-
-            <div class="banner-decoration" aria-hidden="true">
-                <div class="circle circle-one"></div>
-                <div class="circle circle-two"></div>
-                <div class="pet-symbol">✚</div>
-                <div class="floating-tag tag-one">PET ID</div>
-                <div class="floating-tag tag-two">Здраве и грижа</div>
-            </div>
-        </section>
-
-        <section class="section-heading">
-            <div>
-                <h2>Бързи действия</h2>
-                <p>Изберете какво искате да направите.</p>
-            </div>
-        </section>
-
-        <section class="action-grid">
-            <a class="action-card search-card" routerLink="/vet/search">
-                <span class="action-icon">⌕</span>
-                <span class="action-card-content">
-                    <strong>Намери пациент</strong>
-                    <span>Търсене чрез микрочип или идентификатор на Pet ID.</span>
-                </span>
-                <span class="card-arrow">→</span>
-            </a>
-
-            <div class="action-card disabled-card">
-                <span class="action-icon">▤</span>
-                <span class="action-card-content">
-                    <strong>Медицински записи</strong>
-                    <span>Добавяне на прегледи, ваксинации и лечения.</span>
-                </span>
-                <span class="card-arrow">→</span>
-            </div>
-
-            <div class="action-card disabled-card">
-                <span class="action-icon">⌂</span>
-                <span class="action-card-content">
-                    <strong>Профил на клиниката</strong>
-                    <span>Информация за практиката и екипа.</span>
-                </span>
-                <span class="card-arrow">→</span>
-            </div>
-        </section>
-
-        <section class="notice">
-            <span class="notice-icon">i</span>
-            <div>
-                <strong>Работа с медицински досиета</strong>
-                <p>
-                    Търсете животно чрез неговия идентификатор. Професионалните записи
-                    се свързват с автора и се съхраняват в медицинската история.
-                </p>
-            </div>
-        </section>
-
-        <footer class="dashboard-footer">
-            <span>Pet ID · Ветеринарен портал</span>
-            <span>Здрави животни. Спокойни стопани.</span>
-        </footer>
-    </main>
+      <footer class="dashboard-footer">
+        <span>Pet ID · Ветеринарен портал</span>
+        <span>Здрави животни. Спокойни стопани.</span>
+      </footer>
+    </div>
+  </main>
 </div>

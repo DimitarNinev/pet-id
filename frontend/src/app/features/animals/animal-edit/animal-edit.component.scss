@@ -67,10 +67,6 @@
                         padding: var(--spacing-md);
                         text-align: center;
 
-                        span {
-                            font-size: var(--spacing-2xl);
-                        }
-
                         &.photo-loading {
                             display: flex;
                             flex-direction: column;

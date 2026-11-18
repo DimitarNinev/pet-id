@@ -15,9 +15,7 @@
     .search-card {
 
       .search-card-heading {
-        display: flex;
         align-items: center;
-        gap: var(--spacing-md);
         margin-bottom: var(--spacing-xl);
 
         h2 {
@@ -29,19 +27,6 @@
         p {
           margin: 0;
           color: var(--color-text-secondary);
-        }
-
-        .search-icon {
-          display: grid;
-          align-content: baseline;
-          width: 48px;
-          height: 48px;
-          flex-shrink: 0;
-          place-items: center;
-          border-radius: var(--radius-lg);
-          background: var(--color-surface-secondary);
-          color: var(--color-primary);
-          font-size: var(--font-size-3xl);
         }
       }
 
