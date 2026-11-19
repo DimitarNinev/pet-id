@@ -1,0 +1,108 @@
+.profile-page {
+    min-height: 100vh;
+
+    main {
+
+        .profile-section {
+            margin-bottom: var(--spacing-2xl);
+
+            .section-heading {
+                margin-bottom: var(--spacing-xl);
+
+                h2 {
+                    margin: 0 0 var(--spacing-xs);
+                    font-size: var(--font-size-xl);
+                }
+
+                p {
+                    margin: 0;
+                    color: var(--color-text-secondary);
+                }
+            }
+
+            form {
+                padding: var(--spacing-2xl);
+                background: var(--color-surface);
+                border: 1px solid var(--color-border);
+                border-radius: var(--radius-xl);
+                box-shadow: var(--shadow-xl);
+
+                .form-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: var(--spacing-xl);
+                }
+
+                .form-actions {
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-top: var(--spacing-xl);
+                }
+
+                .field-err {
+                    position: absolute;
+                    bottom: 0;
+                    color: var(--color-danger);
+                    font-size: var(--font-size-xs);
+                    line-height: var(--line-height-normal);
+                }
+            }
+        }
+
+        .security-section {
+            margin-bottom: var(--spacing-2xl);
+        }
+    }
+}
+
+.error-message {
+    color: var(--color-danger);
+    border: 1px solid;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    border-color: #f0d5d2;
+    background: #fff7f6;
+}
+
+.success-message {
+    color: var(--color-success);
+    border: 1px solid;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    border-color: #d5eade;
+    background: #f3faf5;
+}
+
+.state-message {
+    padding: var(--spacing-xl);
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 600px) {
+    .profile-page {
+        main {
+
+            .profile-section {
+                form {
+                    padding: var(--spacing-lg);
+
+                    .form-grid {
+                        grid-template-columns: 1fr;
+
+                        .no-mobile {
+                            display: none;
+                        }
+                    }
+
+                    .form-actions {
+                        margin-top: 0;
+
+                        app-button {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

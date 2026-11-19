@@ -1,190 +1,190 @@
 .edit-page {
-    min-height: 100vh;
+  min-height: 100vh;
 
-    main {
+  main {
 
-        form {
-            padding: var(--spacing-2xl);
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-xl);
+    form {
+      padding: var(--spacing-2xl);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
 
-            .form-grid {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: var(--spacing-xl);
-            }
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--spacing-xl);
+      }
 
-            .full-width {
-                grid-column: 1 / -1;
-            }
+      .full-width {
+        grid-column: 1 / -1;
+      }
 
-            .photo-section {
-                margin-bottom: var(--spacing-2xl);
-                padding-bottom: var(--spacing-xl);
-                border-bottom: 1px solid var(--color-border);
+      .photo-section {
+        margin-bottom: var(--spacing-2xl);
+        padding-bottom: var(--spacing-xl);
+        border-bottom: 1px solid var(--color-border);
 
-                .photo-heading {
-                    margin-bottom: var(--spacing-lg);
+        .photo-heading {
+          margin-bottom: var(--spacing-lg);
 
-                    h2 {
-                        margin: 0 0 var(--spacing-xs);
-                    }
+          h2 {
+            margin: 0 0 var(--spacing-xs);
+          }
 
-                    p {
-                        margin: 0;
-                        color: var(--color-text-secondary);
-                    }
-                }
-
-                .photo-content {
-                    display: flex;
-                    align-items: center;
-                    gap: var(--spacing-xl);
-                    margin-bottom: var(--spacing-lg);
-
-                    .animal-photo,
-                    .photo-placeholder {
-                        width: 140px;
-                        height: 140px;
-                        border-radius: var(--radius-lg);
-                        flex-shrink: 0;
-                    }
-
-                    .animal-photo {
-                        object-fit: cover;
-                    }
-
-                    .photo-placeholder {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        gap: var(--spacing-sm);
-                        background: var(--color-surface-secondary);
-                        color: var(--color-text-secondary);
-                        padding: var(--spacing-md);
-                        text-align: center;
-
-                        &.photo-loading {
-                            display: flex;
-                            flex-direction: column;
-                            align-items: center;
-                            justify-content: center;
-                            gap: var(--spacing-sm);
-
-                            .photo-spinner {
-                                width: 28px;
-                                height: 28px;
-                                border: 3px solid var(--color-text-secondary);
-                                border-top-color: var(--color-info);
-                                border-radius: 50%;
-                                animation: photo-spin 0.8s linear infinite;
-                            }
-
-                            @keyframes photo-spin {
-                                to {
-                                    transform: rotate(360deg);
-                                }
-                            }
-                        }
-                    }
-
-                    .photo-controls {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: flex-start;
-                        gap: var(--spacing-md);
-
-                        .photo-select-button {
-                            display: inline-block;
-                            padding: var(--spacing-sm) var(--spacing-lg);
-                            border: 1px solid var(--color-border);
-                            border-radius: var(--radius-md);
-                            cursor: pointer;
-
-                            input {
-                                display: none;
-                            }
-                        }
-
-                        .photo-remove-button {
-                            padding: 0;
-                            border: 0;
-                            background: none;
-                            color: var(--color-danger);
-                            cursor: pointer;
-                            font: inherit;
-                        }
-
-                        .photo-hint {
-                            color: var(--color-text-secondary);
-                        }
-
-                        .photo-error {
-                            color: var(--color-danger);
-                        }
-                    }
-                }
-            }
-
-            .form-actions {
-                display: flex;
-                justify-content: flex-end;
-                gap: var(--spacing-md);
-                margin-top: var(--spacing-xl);
-            }
+          p {
+            margin: 0;
+            color: var(--color-text-secondary);
+          }
         }
+
+        .photo-content {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-xl);
+          margin-bottom: var(--spacing-lg);
+
+          .animal-photo,
+          .photo-placeholder {
+            width: 140px;
+            height: 140px;
+            border-radius: var(--radius-lg);
+            flex-shrink: 0;
+          }
+
+          .animal-photo {
+            object-fit: cover;
+          }
+
+          .photo-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            background: var(--color-surface-secondary);
+            color: var(--color-text-secondary);
+            padding: var(--spacing-md);
+            text-align: center;
+
+            &.photo-loading {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              gap: var(--spacing-sm);
+
+              .photo-spinner {
+                width: 28px;
+                height: 28px;
+                border: 3px solid var(--color-text-secondary);
+                border-top-color: var(--color-info);
+                border-radius: 50%;
+                animation: photo-spin 0.8s linear infinite;
+              }
+
+              @keyframes photo-spin {
+                to {
+                  transform: rotate(360deg);
+                }
+              }
+            }
+          }
+
+          .photo-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+
+            .photo-select-button {
+              display: inline-block;
+              padding: var(--spacing-sm) var(--spacing-lg);
+              border: 1px solid var(--color-border);
+              border-radius: var(--radius-md);
+              cursor: pointer;
+
+              input {
+                display: none;
+              }
+            }
+
+            .photo-remove-button {
+              padding: 0;
+              border: 0;
+              background: none;
+              color: var(--color-danger);
+              cursor: pointer;
+              font: inherit;
+            }
+
+            .photo-hint {
+              color: var(--color-text-secondary);
+            }
+
+            .photo-error {
+              color: var(--color-danger);
+            }
+          }
+        }
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-xl);
+      }
     }
+  }
 }
 
 .error-box,
 .error-message {
-    color: var(--color-danger);
+  color: var(--color-danger);
 }
 
 .error-box {
-    margin-top: var(--spacing-xl);
-    padding: var(--spacing-lg);
-    background: var(--color-surface-secondary);
-    border-radius: var(--radius-md);
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: var(--color-surface-secondary);
+  border-radius: var(--radius-md);
 }
 
 .state-message {
-    padding: var(--spacing-xl);
-    color: var(--color-text-secondary);
+  padding: var(--spacing-xl);
+  color: var(--color-text-secondary);
 }
 
 @media (max-width: 600px) {
-    .edit-page {
-        main {
-            form {
-                padding: var(--spacing-lg);
+  .edit-page {
+    main {
+      form {
+        padding: var(--spacing-lg);
 
-                .form-grid {
-                    grid-template-columns: 1fr;
-                }
-
-                .full-width {
-                    grid-column: auto;
-                }
-
-                .photo-section {
-                    .photo-content {
-                        .animal-photo {
-                            width: 110px;
-                            height: 90px;
-                        }
-                    }
-                }
-
-                .form-actions {
-                    flex-direction: column-reverse;
-                    gap: 0;
-                    margin-top: 0;
-                }
-            }
+        .form-grid {
+          grid-template-columns: 1fr;
         }
+
+        .full-width {
+          grid-column: auto;
+        }
+
+        .photo-section {
+          .photo-content {
+            .animal-photo {
+              width: 110px;
+              height: 90px;
+            }
+          }
+        }
+
+        .form-actions {
+          flex-direction: column-reverse;
+          gap: 0;
+          margin-top: 0;
+        }
+      }
     }
+  }
 }

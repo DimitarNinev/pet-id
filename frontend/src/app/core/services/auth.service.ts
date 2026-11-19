@@ -8,6 +8,8 @@ import {
   LoginRequest,
   RegisterRequest,
   AuthUser,
+  UpdateProfileRequest,
+  ChangePasswordRequest,
 } from '../../models/auth.model';
 import { API_BASE_URL } from '../config/api.config';
 
@@ -147,13 +149,20 @@ export class AuthService {
         const user: unknown = JSON.parse(storedUser);
         if (
           typeof user === 'object' && user !== null &&
-          'role' in user && (user.role === 'OWNER' || user.role === 'VET') &&
+          'role' in user && (user.role === 'OWNER' || user.role === 'VET' || user.role === 'ADMIN') &&
           'vetApproved' in user && typeof user.vetApproved === 'boolean'
         ) {
           return {
-            id: '', email: '', firstName: '', lastName: '',
+            id: '',
+            email: '',
+            firstName: '',
+            lastName: '',
+            phone: null,
             role: user.role,
             vetApproved: user.vetApproved,
+            clinicName: null,
+            clinicAddress: null,
+            city: null,
           };
         }
         this.removeStorage(this.userKey);
@@ -164,8 +173,19 @@ export class AuthService {
 
     // Keep sessions created by earlier versions usable until the next login.
     const role = this.readStorage(this.legacyRoleKey);
-    return role === 'OWNER' || role === 'VET'
-      ? { id: '', email: '', firstName: '', lastName: '', role, vetApproved: role === 'OWNER' }
+    return role === 'OWNER' || role === 'VET' || role === 'ADMIN'
+      ? {
+        id: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        phone: null,
+        role,
+        vetApproved: role === 'OWNER',
+        clinicName: null,
+        clinicAddress: null,
+        city: null,
+      }
       : null;
   }
 
@@ -195,5 +215,17 @@ export class AuthService {
 
   getCurrentUser(): Observable<AuthUser> {
     return this.http.get<AuthUser>(`${this.apiUrl}/me`).pipe(tap((user) => this.saveUser(user)));
+  }
+
+  updateProfile(data: UpdateProfileRequest): Observable<AuthUser> {
+    return this.http
+      .patch<AuthUser>(`${this.apiUrl}/profile`, data)
+      .pipe(tap((user) => this.saveUser(user)));
+  }
+
+  changePassword(data: ChangePasswordRequest): Observable<AuthResponse> {
+    return this.http
+      .patch<AuthResponse>(`${this.apiUrl}/change-password`, data)
+      .pipe(tap((response) => this.saveSession(response)));
   }
 }

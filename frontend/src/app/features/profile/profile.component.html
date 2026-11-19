@@ -1,0 +1,125 @@
+<div class="profile-page">
+  <header-component></header-component>
+
+  <main>
+    <div class="header">
+      <h1>Моят профил</h1>
+      <p>Управлявай личните си данни и настройките за сигурност.</p>
+    </div>
+
+    @if (isLoading()) {
+    <p class="state-message">Зареждане на профила...</p>
+    } @else {
+    <section class="profile-section">
+      <form [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()">
+        <div class="section-heading">
+          <h2>Лични данни</h2>
+          <p>Актуализирай информацията в своя профил.</p>
+        </div>
+
+        <div class="form-grid">
+          <div class="row-field">
+            <app-input label="Име" type="text" formControlName="firstName" [required]="true">
+            </app-input>
+          </div>
+
+          <div class="row-field">
+            <app-input label="Фамилия" type="text" formControlName="lastName" [required]="true">
+            </app-input>
+          </div>
+
+          <div class="row-field">
+            <app-input label="Имейл" type="email" formControlName="email" [required]="true">
+            </app-input>
+          </div>
+
+          <div class="row-field">
+            <app-input label="Телефон" type="tel" formControlName="phone">
+            </app-input>
+          </div>
+
+          @if (isVet()) {
+          <div class="row-field">
+            <app-input label="Име на клиника" type="text" formControlName="clinicName">
+            </app-input>
+          </div>
+
+          <div class="row-field">
+            <app-input label="Град" type="text" formControlName="city">
+            </app-input>
+          </div>
+
+          <div class="row-field full-width">
+            <app-input label="Адрес на клиниката" type="text" formControlName="clinicAddress">
+            </app-input>
+          </div>
+          }
+        </div>
+
+        @if (profileError()) {
+        <p class="error-message">{{ profileError() }}</p>
+        }
+
+        @if (profileSuccess()) {
+        <p class="success-message">{{ profileSuccess() }}</p>
+        }
+
+        <div class="form-actions">
+          <app-button type="submit" [disabled]="isSubmittingProfile()">
+            {{ isSubmittingProfile() ? 'Запазване...' : 'Запази промените' }}
+          </app-button>
+        </div>
+      </form>
+    </section>
+
+    <section class="profile-section security-section">
+      <form [formGroup]="passwordForm" (ngSubmit)="onPasswordSubmit()">
+        <div class="section-heading">
+          <h2>Сигурност</h2>
+          <p>Използвай силна парола, за да защитиш профила си.</p>
+        </div>
+
+        <div class="form-grid">
+          <div class="row-field">
+            <app-input label="Текуща парола" type="password" formControlName="currentPassword" [required]="true">
+            </app-input>
+          </div>
+
+          <div class="row-field">
+            <app-input label="Нова парола" type="password" formControlName="newPassword" [required]="true">
+            </app-input>
+          </div>
+
+          <div class="row-field no-mobile"></div>
+
+          <div class="row-field">
+            <app-input label="Потвърди новата парола" type="password" formControlName="confirmPassword"
+              [required]="true">
+            </app-input>
+
+            @if (passwordMismatch) {
+            <small class="field-err">
+              Паролите не съвпадат.
+            </small>
+            }
+          </div>
+        </div>
+
+        @if (passwordError()) {
+        <p class="error-message">{{ passwordError() }}</p>
+        }
+
+        @if (passwordSuccess()) {
+        <p class="success-message">{{ passwordSuccess() }}</p>
+        }
+
+        <div class="form-actions">
+          <app-button type="submit" [disabled]="isChangingPassword()">
+            {{ isChangingPassword() ? 'Промяна...' : 'Смени паролата' }}
+          </app-button>
+        </div>
+      </form>
+    </section>
+    }
+  </main>
+</div>

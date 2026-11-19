@@ -78,6 +78,13 @@ export const routes: Routes = [
       import('./features/clinics/clinics/clinics.component')
         .then((m) => m.ClinicsComponent),
   },
+  {
+    path: 'profile',
+    canActivate: [authenticatedGuard],
+    loadComponent: () =>
+      import('./features/profile/profile.component')
+        .then((m) => m.ProfileComponent),
+  },
 
   // Ветеринарна зона — компонентите ще добавим в следващите стъпки
   {

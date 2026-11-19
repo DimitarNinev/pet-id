@@ -494,6 +494,9 @@
           align-items: center;
           gap: var(--font-size-xs);
           flex-shrink: 0;
+          border-radius: var(--radius-md);
+          background: var(--color-surface-secondary);
+          padding: var(--spacing-xs) var(--spacing-md);
 
           .profile-avatar {
             display: none;
