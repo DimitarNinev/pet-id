@@ -16,7 +16,7 @@
     background: #fff;
 
     &:focus {
-      border-color: #178b78;
+      border-color: var(--color-primary);
       box-shadow: 0 0 0 3px rgb(23 139 120 / 12%);
     }
 
@@ -55,7 +55,7 @@
     min-height: 110px;
 
     &:focus {
-      border-color: #178b78;
+      border-color: var(--color-primary);
       box-shadow: 0 0 0 3px rgba(23, 139, 120, 0.12);
     }
   }

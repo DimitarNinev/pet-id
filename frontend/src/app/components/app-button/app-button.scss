@@ -3,7 +3,7 @@
     padding: 10px 22px;
     border: 0;
     border-radius: 10px;
-    background: #178b78;
+    background: var(--color-primary);
     color: #fff;
     cursor: pointer;
     font: inherit;
@@ -15,7 +15,7 @@
         box-shadow 180ms ease;
 
     &:hover:not(:disabled) {
-        background: #116e60;
+        background: var(--color-primary);
         box-shadow: 0 6px 18px rgb(23 139 120 / 18%);
         transform: translateY(-1px);
     }
@@ -41,7 +41,7 @@
     &.reset {
         background: #fff;
         color: #183b32;
-        border: 1px solid #178b78;
+        border: 1px solid var(--color-primary);
 
         &:hover:not(:disabled) {
             background: #fff;
