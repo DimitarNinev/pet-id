@@ -110,6 +110,7 @@
     .examination-form {
       .form-grid {
         grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
 
         .full-width {
           grid-column: auto;
