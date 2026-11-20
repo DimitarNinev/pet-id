@@ -60,10 +60,14 @@
         </app-button>
       </form>
 
-      <p class="switch-auth">
+      <div class="switch-auth">
         Нямаш профил?
         <a routerLink="/register">Регистрирай се</a>
-      </p>
+      </div>
+
+      <div class="forgot-password">
+        <a routerLink="/forgot-password">Забравена парола?</a>
+      </div>
 
       @if (pwaService.canInstall()) {
       <div class="installation-row">

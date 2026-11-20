@@ -81,15 +81,15 @@
     }
 
     .error-message {
-      border-color: #f0d5d2;
-      background: #fff7f6;
+      border-color: var(--color-danger);
+      background: var(--bg-red);
       color: var(--color-danger);
     }
 
     .success-message {
-      border-color: #d5eade;
-      background: #f3faf5;
-      color: var(--color-primary);
+      border-color: var(--color-success);
+      background: var(--bg-green);
+      color: var(--color-success);
     }
   }
 }

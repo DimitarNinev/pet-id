@@ -5,11 +5,13 @@ import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 import { PrismaModule } from '../prisma/prisma.module.js';
+import { EmailModule } from '../email/email.module.js';
 
 @Module({
   imports: [
     ConfigModule,
     PrismaModule,
+    EmailModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

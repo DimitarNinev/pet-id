@@ -228,4 +228,21 @@ export class AuthService {
       .patch<AuthResponse>(`${this.apiUrl}/change-password`, data)
       .pipe(tap((response) => this.saveSession(response)));
   }
+
+  forgotPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/forgot-password`,
+      { email },
+    );
+  }
+
+  resetPassword(data: {
+    token: string;
+    password: string;
+  }): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/reset-password`,
+      data,
+    );
+  }
 }

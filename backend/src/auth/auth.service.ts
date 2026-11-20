@@ -11,12 +11,17 @@ import { RegisterDto } from './dto/register.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 import { UpdateProfileDto } from './dto/update-profile.dto.js';
 import { ChangePasswordDto } from './dto/change-password.dto.js';
+import { createHash, randomBytes } from 'node:crypto';
+import { EmailService } from '../email/email.service.js';
+import { ForgotPasswordDto } from './dto/forgot-password.dto.js';
+import { ResetPasswordDto } from './dto/reset-password.dto.js';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
+    private readonly emailService: EmailService,
   ) { }
 
   private async createSession(user: {
@@ -246,8 +251,131 @@ export class AuthService {
       },
     });
 
-    // Издаваме нов токен за текущото устройство.
-    // Всички предишни токени вече са невалидни.
     return this.createSession(updatedUser);
   }
+
+
+  async forgotPassword(dto: ForgotPasswordDto) {
+    const email = dto.email.trim().toLowerCase();
+
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      select: { id: true, email: true },
+    });
+
+    if (!user) {
+      return {
+        message:
+          'Ако съществува профил с този имейл, ще получиш инструкции за възстановяване на паролата.',
+      };
+    }
+
+    const rawToken = randomBytes(32).toString('hex');
+
+    const tokenHash = createHash('sha256')
+      .update(rawToken)
+      .digest('hex');
+
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 30 * 60 * 1000);
+
+    // Обезсилваме предишните неизползвани токени.
+    await this.prisma.passwordResetToken.updateMany({
+      where: {
+        userId: user.id,
+        usedAt: null,
+      },
+      data: {
+        usedAt: now,
+      },
+    });
+
+    await this.prisma.passwordResetToken.create({
+      data: {
+        userId: user.id,
+        tokenHash,
+        expiresAt,
+      },
+    });
+
+    try {
+      await this.emailService.sendPasswordResetEmail(
+        user.email,
+        rawToken,
+      );
+    } catch {
+      // Не разкриваме дали имейлът принадлежи на регистриран профил.
+    }
+
+    return {
+      message:
+        'Ако съществува профил с този имейл, ще получиш инструкции за възстановяване на паролата.',
+    };
+  }
+
+  async resetPassword(dto: ResetPasswordDto) {
+    const tokenHash = createHash('sha256')
+      .update(dto.token)
+      .digest('hex');
+
+    const now = new Date();
+
+    const resetToken = await this.prisma.passwordResetToken.findUnique({
+      where: { tokenHash },
+    });
+
+    if (
+      !resetToken ||
+      resetToken.usedAt ||
+      resetToken.expiresAt <= now
+    ) {
+      throw new BadRequestException(
+        'Линкът за възстановяване е невалиден или е изтекъл.',
+      );
+    }
+
+    const newPasswordHash = await hash(dto.password, 12);
+
+    await this.prisma.$transaction(async (tx) => {
+      const claimedToken = await tx.passwordResetToken.updateMany({
+        where: {
+          id: resetToken.id,
+          usedAt: null,
+          expiresAt: { gt: now },
+        },
+        data: {
+          usedAt: now,
+        },
+      });
+
+      if (claimedToken.count !== 1) {
+        throw new BadRequestException(
+          'Линкът за възстановяване е невалиден или е изтекъл.',
+        );
+      }
+
+      await tx.user.update({
+        where: { id: resetToken.userId },
+        data: {
+          passwordHash: newPasswordHash,
+          tokenVersion: { increment: 1 },
+        },
+      });
+
+      await tx.passwordResetToken.updateMany({
+        where: {
+          userId: resetToken.userId,
+          usedAt: null,
+        },
+        data: {
+          usedAt: now,
+        },
+      });
+    });
+
+    return {
+      message: 'Паролата е променена успешно. Можеш да влезеш в профила си.',
+    };
+  }
+
 }
