@@ -87,7 +87,7 @@ export const routes: Routes = [
     path: 'clinics',
     canActivate: [ownerGuard],
     loadComponent: () =>
-      import('./features/clinics/clinics/clinics.component')
+      import('./features/clinics/clinics.component')
         .then((m) => m.ClinicsComponent),
   },
   {

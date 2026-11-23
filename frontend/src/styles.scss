@@ -161,10 +161,22 @@ main {
   }
 }
 
+@media (max-width: 1200px) {
+  main {
+    width: 770px;
+  }
+}
+
+@media (max-width: 900px) {
+  main {
+    width: 100%;
+    padding: 100px var(--spacing-3xl) var(--spacing-xl);
+  }
+}
+
 @media (max-width: 600px) {
   main {
     padding: 90px var(--spacing-lg) var(--spacing-lg);
-    width: 100%;
 
     .header {
       margin-bottom: var(--spacing-lg);
@@ -181,6 +193,7 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

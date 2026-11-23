@@ -11,10 +11,10 @@ import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, debounceTime, finalize, switchMap } from 'rxjs';
 
-import { HeaderComponent } from '../../../components/header/header.component';
-import { VetsService } from '../../../core/services/vets.service';
-import { Vet } from '../../../models/vet.model';
-import { AppInputComponent } from "../../../components/app-input/app-input";
+import { HeaderComponent } from '../../components/header/header.component';
+import { VetsService } from '../../core/services/vets.service';
+import { Vet } from '../../models/vet.model';
+import { AppInputComponent } from "../../components/app-input/app-input";
 
 @Component({
     selector: 'app-clinics',
