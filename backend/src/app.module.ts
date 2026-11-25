@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module.js';
 import { MedicalRecordsModule } from './medical-records/medical-records.module.js';
 import { RemindersModule } from './reminders/reminders.module.js';
 import { VetsModule } from './vets/vets.module.js';
+import { AdminModule } from './admin/admin.module.js';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { VetsModule } from './vets/vets.module.js';
     MedicalRecordsModule,
     RemindersModule,
     VetsModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

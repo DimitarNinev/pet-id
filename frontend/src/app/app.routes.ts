@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { authenticatedGuard, ownerGuard, pendingApprovalGuard, vetGuard } from './core/guards/auth.guards';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -98,7 +99,7 @@ export const routes: Routes = [
         .then((m) => m.ProfileComponent),
   },
 
-  // Ветеринарна зона — компонентите ще добавим в следващите стъпки
+  // Ветеринарна зона
   {
     path: 'vet',
     canActivate: [vetGuard],
@@ -147,6 +148,41 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/auth/pending-approval/pending-approval.component')
         .then((m) => m.PendingApprovalComponent),
+  },
+
+  // Админ зона
+  {
+    path: 'admin',
+    canActivate: [adminGuard],
+    canActivateChild: [adminGuard],
+    loadComponent: () =>
+      import('./features/admin/layout/admin-layout.component')
+        .then(m => m.AdminLayoutComponent),
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/admin/dashboard/admin-dashboard.component')
+            .then(m => m.AdminDashboardComponent),
+      },
+      {
+        path: 'vets',
+        loadComponent: () =>
+          import('./features/admin/vets/admin-vets.component')
+            .then(m => m.AdminVetsComponent),
+      },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('./features/admin/users/admin-users.component')
+            .then(m => m.AdminUsersComponent),
+      },
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+    ],
   },
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },

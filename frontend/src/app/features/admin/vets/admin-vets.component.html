@@ -1,0 +1,159 @@
+<div class="vets-page">
+
+    @if (successMessage()) {
+    <div class="alert alert-success">
+        {{ successMessage() }}
+    </div>
+    }
+
+    @if (errorMessage()) {
+    <div class="alert alert-error">
+        {{ errorMessage() }}
+    </div>
+    }
+
+    @if (isLoading()) {
+    <div class="state-message">
+        <div class="loader"></div>
+        <p>Зареждане на ветеринарите...</p>
+    </div>
+    } @else {
+    <section class="stats-grid">
+        <article class="stat-card">
+            <div class="stat-icon pending">◷</div>
+            <div>
+                <span>Чакащи одобрение</span>
+                <strong>{{ pendingVets().length }}</strong>
+            </div>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-icon approved">✓</div>
+            <div>
+                <span>Одобрени ветеринари</span>
+                <strong>{{ approvedVets().length }}</strong>
+            </div>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-icon total">♙</div>
+            <div>
+                <span>Общо ветеринари</span>
+                <strong>{{ pendingVets().length + approvedVets().length }}</strong>
+            </div>
+        </article>
+    </section>
+
+    <section class="vets-section">
+        <div class="section-header">
+            <div>
+                <h2>Заявки за одобрение</h2>
+                <p>Ветеринари, които очакват потвърждение от администратор</p>
+            </div>
+            <span class="section-count">{{ pendingVets().length }}</span>
+        </div>
+
+        @if (pendingVets().length === 0) {
+        <div class="empty-state">
+            <span class="empty-icon">✓</span>
+            <h3>Няма чакащи заявки</h3>
+            <p>Всички постъпили заявки са обработени.</p>
+        </div>
+        } @else {
+        <div class="vet-list">
+            @for (vet of pendingVets(); track vet.id) {
+            <article class="vet-card">
+                <div class="vet-info">
+                    <div class="vet-avatar">
+                        {{ vet.firstName.charAt(0) }}{{ vet.lastName.charAt(0) }}
+                    </div>
+
+                    <div class="vet-details">
+                        <h3>{{ getFullName(vet) }}</h3>
+                        <span class="vet-email">{{ vet.email }}</span>
+                        <span class="status-badge pending-status">
+                            Чака одобрение
+                        </span>
+                    </div>
+                </div>
+
+                <div class="vet-contact">
+                    <div>
+                        <span>Телефон</span>
+                        <strong>{{ vet.phone || 'Не е посочен' }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Ветеринарна клиника</span>
+                        <strong>{{ vet.clinicName || 'Не е посочена' }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Адрес</span>
+                        <strong>{{ vet.clinicAddress || 'Не е посочен' }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Град</span>
+                        <strong>{{ vet.city || 'Не е посочен' }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Дата на регистрация</span>
+                        <strong>{{ vet.createdAt | date:'dd.MM.yyyy' }}</strong>
+                    </div>
+                </div>
+
+                <div class="vet-actions">
+                    <app-button type="button" class="no-margin" [disabled]="isApproving() !== null"
+                        (click)="approveVet(vet)">
+                        @if (isApproving() === vet.id) {
+                        Обработване...
+                        } @else {
+                        ✓ Одобри ветеринар
+                        }
+                    </app-button>
+                </div>
+            </article>
+            }
+        </div>
+        }
+    </section>
+
+    <section class="vets-section">
+        <div class="section-header">
+            <div>
+                <h2>Одобрени ветеринари</h2>
+                <p>Ветеринарни профили с активиран достъп до платформата</p>
+            </div>
+            <span class="section-count">{{ approvedVets().length }}</span>
+        </div>
+
+        @if (approvedVets().length === 0) {
+        <div class="empty-state">
+            <p>Все още няма одобрени ветеринари.</p>
+        </div>
+        } @else {
+        <div class="approved-list">
+            @for (vet of approvedVets(); track vet.id) {
+            <article class="approved-card">
+                <div class="vet-avatar approved-avatar">
+                    {{ vet.firstName.charAt(0) }}{{ vet.lastName.charAt(0) }}
+                </div>
+
+                <div class="approved-details">
+                    <h3>{{ getFullName(vet) }}</h3>
+                    <span>{{ vet.email }}</span>
+                    <span>{{ vet.city || 'Градът не е посочен' }}</span>
+                </div>
+
+                <span class="status-badge approved-status">
+                    ✓ Одобрен
+                </span>
+            </article>
+            }
+        </div>
+        }
+    </section>
+    }
+</div>

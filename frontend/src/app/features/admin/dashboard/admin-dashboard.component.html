@@ -1,0 +1,127 @@
+@if (isLoading()) {
+<div class="state-message">
+    <div class="loader"></div>
+    <p>Зареждане на статистиката...</p>
+</div>
+} @else if (errorMessage()) {
+<div class="error-message">
+    <p>{{ errorMessage() }}</p>
+    <button type="button" (click)="loadStatistics()">
+        Опитай отново
+    </button>
+</div>
+} @else if (statistics(); as stats) {
+
+<!-- Users -->
+<section class="dashboard-section">
+    <div class="section-heading">
+        <div>
+            <h2>Потребители</h2>
+            <p>Регистрирани потребители в платформата</p>
+        </div>
+
+        <a routerLink="/admin/users" class="section-link">
+            Всички потребители →
+        </a>
+    </div>
+
+    <div class="stats-grid">
+        <article class="stat-card primary-card">
+            <div class="stat-card-top">
+                <span>Общо потребители</span>
+                <span class="stat-icon">♙</span>
+            </div>
+            <strong>{{ stats.users.total }}</strong>
+            <span class="stat-description">Всички регистрации</span>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-card-top">
+                <span>Собственици</span>
+                <span class="stat-icon owner-icon">♡</span>
+            </div>
+            <strong>{{ stats.users.owners }}</strong>
+            <span class="stat-description">Регистрирани стопани</span>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-card-top">
+                <span>Ветеринари</span>
+                <span class="stat-icon vet-icon">✚</span>
+            </div>
+            <strong>{{ stats.users.vets }}</strong>
+            <span class="stat-description">
+                {{ stats.users.approvedVets }} одобрени
+            </span>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-card-top">
+                <span>Администратори</span>
+                <span class="stat-icon admin-icon">⚙</span>
+            </div>
+            <strong>{{ stats.users.admins }}</strong>
+            <span class="stat-description">Административни акаунти</span>
+        </article>
+    </div>
+</section>
+
+<!-- Pending vets -->
+<section class="pending-panel">
+    <div class="pending-content">
+        <div class="pending-icon">!</div>
+
+        <div>
+            <h3>Заявки за одобрение</h3>
+            <p>
+                Има <span>{{ stats.users.pendingVets }}</span>
+                чакащи заявки от ветеринарни лекари.
+            </p>
+        </div>
+    </div>
+
+    <a routerLink="/admin/vets" class="pending-link">
+        Преглед на заявките →
+    </a>
+</section>
+
+<!-- Platform statistics -->
+<section class="dashboard-section">
+    <div class="section-heading">
+        <div>
+            <h2>Платформа</h2>
+            <p>Обща информация за регистрираното съдържание</p>
+        </div>
+    </div>
+
+    <div class="stats-grid platform-grid">
+        <article class="stat-card">
+            <div class="stat-card-top">
+                <span>Животни</span>
+                <span class="stat-icon animal-icon">♡</span>
+            </div>
+            <strong>{{ stats.animals.total }}</strong>
+            <span class="stat-description">Регистрирани любимци</span>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-card-top">
+                <span>Медицински записи</span>
+                <span class="stat-icon medical-icon">✚</span>
+            </div>
+            <strong>{{ stats.medicalRecords.total }}</strong>
+            <span class="stat-description">Записи в досиетата</span>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-card-top">
+                <span>Напомняния</span>
+                <span class="stat-icon reminder-icon">◷</span>
+            </div>
+            <strong>{{ stats.reminders.total }}</strong>
+            <span class="stat-description">Създадени напомняния</span>
+        </article>
+    </div>
+</section>
+
+}

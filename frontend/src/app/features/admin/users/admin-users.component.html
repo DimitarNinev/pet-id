@@ -1,0 +1,172 @@
+<div class="users-page">
+
+    <!-- Statistics -->
+    <section class="stats-grid">
+        <article class="stat-card">
+            <div class="stat-icon total">👥</div>
+            <div>
+                <span class="stat-label">Всички потребители</span>
+                <strong class="stat-value">{{ totalUsers() }}</strong>
+            </div>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-icon owners">🐾</div>
+            <div>
+                <span class="stat-label">Собственици</span>
+                <strong class="stat-value">{{ totalOwners() }}</strong>
+            </div>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-icon vets">🩺</div>
+            <div>
+                <span class="stat-label">Ветеринари</span>
+                <strong class="stat-value">{{ totalVets() }}</strong>
+            </div>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-icon admins">⚙️</div>
+            <div>
+                <span class="stat-label">Администратори</span>
+                <strong class="stat-value">{{ totalAdmins() }}</strong>
+            </div>
+        </article>
+    </section>
+
+    <!-- Users list -->
+    <section class="users-section">
+
+        <div class="section-header">
+            <div>
+                <h2>Регистрирани потребители</h2>
+                <p>Преглед и търсене на потребителските профили</p>
+            </div>
+
+            <a type="button" class="refresh-button" (click)="loadUsers()">
+                ↻ Обнови
+            </a>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-container">
+
+            <div class="search-box">
+                <app-input type="search" placeholder="Търси по име или имейл..." [ngModel]="searchTerm()"
+                    (input)="setSearchTerm($any($event.target).value)">
+                </app-input>
+            </div>
+
+            <div class="role-filters">
+                <a [class.active]="selectedRole() === 'ALL'" (click)="setRoleFilter('ALL')">
+                    Всички
+                </a>
+
+                <a [class.active]="selectedRole() === 'OWNER'" (click)="setRoleFilter('OWNER')">
+                    Собственици
+                </a>
+
+                <a [class.active]="selectedRole() === 'VET'" (click)="setRoleFilter('VET')">
+                    Ветеринари
+                </a>
+
+                <a [class.active]="selectedRole() === 'ADMIN'" (click)="setRoleFilter('ADMIN')">
+                    Администратори
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Loading -->
+        @if (isLoading()) {
+        <div class="state-message">
+            <span class="loader"></span>
+            <p>Зареждане на потребителите...</p>
+        </div>
+        }
+
+        <!-- Error -->
+        @else if (errorMessage()) {
+        <div class="state-message error-state">
+            <p>{{ errorMessage() }}</p>
+            <button type="button" class="retry-button" (click)="loadUsers()">
+                Опитай отново
+            </button>
+        </div>
+        }
+
+        <!-- Empty -->
+        @else if (filteredUsers().length === 0) {
+        <div class="state-message empty-state">
+            <span>👥</span>
+            <h3>Няма намерени потребители</h3>
+            <p>Промени критериите за търсене или избрания филтър.</p>
+        </div>
+        }
+
+        <!-- Table -->
+        @else {
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Потребител</th>
+                        <th>Телефон</th>
+                        <th>Роля</th>
+                        <th>Статус</th>
+                        <th>Регистрация</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (user of filteredUsers(); track user.id) {
+                    <tr>
+                        <td>
+                            <div class="user-cell">
+                                <div class="user-avatar">
+                                    {{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}
+                                </div>
+
+                                <div class="user-info">
+                                    <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+                                    <span>{{ user.email }}</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>{{ user.phone || '—' }}</td>
+
+                        <td>
+                            <span class="role-badge" [ngClass]="'role-' + user.role.toLowerCase()">
+                                {{ getRoleLabel(user.role) }}
+                            </span>
+                        </td>
+
+                        <td>
+                            @if (user.role === 'VET') {
+                            <span class="status-badge" [class.approved]="user.vetApproved"
+                                [class.pending]="!user.vetApproved">
+                                {{ getVetStatusLabel(user) }}
+                            </span>
+                            } @else {
+                            <span class="status-neutral">Активен</span>
+                            }
+                        </td>
+
+                        <td>{{ user.createdAt | date:'dd.MM.yyyy' }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-footer">
+            <span>
+                Показани {{ filteredUsers().length }} от {{ totalUsers() }} потребители
+            </span>
+        </div>
+        }
+
+    </section>
+</div>

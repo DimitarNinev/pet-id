@@ -1,0 +1,86 @@
+<div class="admin-layout">
+
+    <aside class="admin-sidebar">
+
+        <div class="sidebar-brand" routerLink="/admin/dashboard">
+            <svg width="54" height="54" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <rect x="14" y="14" width="172" height="172" rx="40" ry="40" fill="var(--color-primary)" />
+
+                <path d="M 100 48 Q 108 87 147 95 Q 108 103 100 142 Q 92 103 53 95 Q 92 87 100 48 Z" fill="#FFFFFF" />
+
+                <g fill="#FFFFFF" transform="translate(4, 10)">
+                    <ellipse cx="115.5" cy="121.5" rx="5.8" ry="7.6" transform="rotate(-24 115.5 121.5)" />
+                    <ellipse cx="126" cy="109.5" rx="6" ry="8" transform="rotate(-10 126 109.5)" />
+                    <ellipse cx="140.5" cy="108.5" rx="6" ry="8" transform="rotate(8 140.5 108.5)" />
+                    <ellipse cx="152.5" cy="117.5" rx="5.8" ry="7.6" transform="rotate(24 152.5 117.5)" />
+
+                    <path
+                        d="M 134.5 119.5 C 127.5 119.8 120.5 129.5 119.3 136.5 C 118.2 142.8 123.5 145.5 129 142.8 C 133.5 140.5 138.5 139.8 143.5 141.2 C 149.2 142.8 153.8 139 152.2 133.2 C 150.2 126.2 141.5 119.2 134.5 119.5 Z" />
+                </g>
+            </svg>
+
+            <div class="brand-text">
+                <strong>Pet ID</strong>
+                <span>Administration</span>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <span class="sidebar-label">ОСНОВНО</span>
+
+            <a routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a routerLink="/admin/vets" routerLinkActive="active">
+                <span class="nav-icon">✓</span>
+                <span>Ветеринари</span>
+
+                @if (pendingVetCount() > 0) {
+                <span class="nav-count">
+                    {{ pendingVetCount() }}
+                </span>
+                }
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <span class="sidebar-label">УПРАВЛЕНИЕ</span>
+
+            <a routerLink="/admin/users" routerLinkActive="active">
+                <span class="nav-icon">♙</span>
+                <span>Потребители</span>
+            </a>
+
+            <a routerLink="/admin/animals" routerLinkActive="active">
+                <span class="nav-icon">♡</span>
+                <span>Животни</span>
+            </a>
+        </div>
+
+        <div class="sidebar-bottom">
+            <strong>Администратор</strong>
+
+            <a class="logout-button" type="button" (click)="logout()">
+                <span>↪</span> Изход
+            </a>
+        </div>
+
+    </aside>
+
+    <main class="admin-main">
+
+        <header class="admin-header">
+            <div>
+                <span class="breadcrumb">Pet ID / Administration</span>
+                <h1>{{ pageTitle() }}</h1>
+                <p>{{ pageDescription() }}</p>
+            </div>
+        </header>
+
+        <router-outlet />
+
+    </main>
+
+</div>

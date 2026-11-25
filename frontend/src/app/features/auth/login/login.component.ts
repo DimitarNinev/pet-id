@@ -55,6 +55,11 @@ export class LoginComponent {
         next: ({ user }) => {
           this.loading.set(false);
 
+          if (user.role === 'ADMIN') {
+            void this.router.navigate(['/admin/dashboard']);
+            return;
+          }
+
           if (user.role === 'VET') {
             void this.router.navigate([user.vetApproved ? '/vet/dashboard' : '/pending-approval']);
             return;
@@ -64,6 +69,7 @@ export class LoginComponent {
           const safeReturnUrl = returnUrl?.startsWith('/') && !returnUrl.startsWith('//')
             ? returnUrl
             : '/dashboard';
+
           void this.router.navigateByUrl(safeReturnUrl);
         },
         error: (error) => {
