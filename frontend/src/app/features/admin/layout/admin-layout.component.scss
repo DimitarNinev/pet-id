@@ -191,6 +191,7 @@
         height: 65px;
         flex-direction: row;
         align-items: center;
+        border-top: 1px solid var(--color-border);
 
         .sidebar-brand,
         .sidebar-section {
@@ -210,7 +211,7 @@
             }
         }
 
-        .brand-text,
+        .sidebar-brand,
         .sidebar-label,
         .sidebar-section>a span:not(.nav-icon),
         .sidebar-bottom {

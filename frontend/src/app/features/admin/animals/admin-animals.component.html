@@ -1,0 +1,146 @@
+<div class="animals-page">
+    @if (isLoading()) {
+    <div class="state-message">
+        <span class="loader"></span>
+        <p>Зареждане на животните...</p>
+    </div>
+    } @else {
+    <!-- Statistics -->
+    <section class="stats-grid">
+        <article class="stat-card">
+            <div>
+                <span class="stat-label">Всички животни</span>
+                <strong class="stat-value">{{ totalAnimals() }}</strong>
+            </div>
+        </article>
+
+        <article class="stat-card">
+            <div>
+                <span class="stat-label">Кучета</span>
+                <strong class="stat-value">{{ totalDogs() }}</strong>
+            </div>
+        </article>
+
+        <article class="stat-card">
+            <div>
+                <span class="stat-label">Котки</span>
+                <strong class="stat-value">{{ totalCats() }}</strong>
+            </div>
+        </article>
+    </section>
+
+    <!-- Animals list -->
+    <section class="animals-section">
+        <div class="section-header">
+            <div>
+                <h2>Регистрирани животни</h2>
+                <p>Преглед и търсене на всички домашни любимци в платформата</p>
+            </div>
+
+            <a class="refresh-button" (click)="loadAnimals()">
+                ↻ Обнови
+            </a>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-container">
+            <div class="search-box">
+                <app-input type="search" placeholder="Търси по име, Pet ID, микрочип или собственик..."
+                    [ngModel]="searchTerm()" (input)="setSearchTerm($any($event.target).value)">
+                </app-input>
+            </div>
+
+            <div class="role-filters">
+                <a [class.active]="selectedSpecies() === 'ALL'" (click)="setSpeciesFilter('ALL')">Всички</a>
+
+                <a [class.active]="selectedSpecies() === 'DOG'" (click)="setSpeciesFilter('DOG')">Кучета</a>
+
+                <a [class.active]="selectedSpecies() === 'CAT'" (click)="setSpeciesFilter('CAT')">Котки</a>
+            </div>
+        </div>
+
+        <!-- Error -->
+        @if (errorMessage()) {
+        <div class="state-message error-state">
+            <p>{{ errorMessage() }}</p>
+
+            <a class="retry-button" (click)="loadAnimals()">
+                Опитай отново
+            </a>
+        </div>
+        }
+
+        <!-- Empty -->
+        @else if (filteredAnimals().length === 0) {
+        <div class="state-message empty-state">
+            <span>🐾</span>
+            <h3>Няма намерени животни</h3>
+            <p>Промени критериите за търсене или избрания филтър.</p>
+        </div>
+        }
+
+        <!-- Table -->
+        @else {
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Животно</th>
+                        <th>Вид</th>
+                        <th>Порода</th>
+                        <th>Пол</th>
+                        <th>Собственик</th>
+                        <th>Имейл</th>
+                        <th>Микрочип</th>
+                        <th>Регистрация</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (animal of filteredAnimals(); track animal.id) {
+                    <tr>
+                        <td>
+                            <div class="animal-cell">
+                                <div class="animal-avatar">
+                                    {{ animal.species.toUpperCase() === 'КОТКА' ? '🐈' : '🐕' }}
+                                </div>
+
+                                <div class="animal-info">
+                                    <strong>{{ animal.name }}</strong>
+                                    <span>{{ animal.petId }}</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="species-badge">
+                                {{ getSpeciesLabel(animal.species) }}
+                            </span>
+                        </td>
+
+                        <td>{{ animal.breed || '—' }}</td>
+
+                        <td>{{ getSexLabel(animal.sex) }}</td>
+
+                        <td>{{ getOwnerName(animal) }}</td>
+
+                        <td>{{ getOwnerEmail(animal) }}</td>
+
+                        <td>{{ animal.microchipId || '—' }}</td>
+
+                        <td>{{ animal.createdAt | date:'dd.MM.yyyy' }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-footer">
+            <span>
+                Показани {{ filteredAnimals().length }} от {{ totalAnimals() }} животни
+            </span>
+        </div>
+        }
+    </section>
+    }
+</div>

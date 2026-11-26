@@ -29,7 +29,6 @@
         <article class="stat-card primary-card">
             <div class="stat-card-top">
                 <span>Общо потребители</span>
-                <span class="stat-icon">♙</span>
             </div>
             <strong>{{ stats.users.total }}</strong>
             <span class="stat-description">Всички регистрации</span>
@@ -38,7 +37,6 @@
         <article class="stat-card">
             <div class="stat-card-top">
                 <span>Собственици</span>
-                <span class="stat-icon owner-icon">♡</span>
             </div>
             <strong>{{ stats.users.owners }}</strong>
             <span class="stat-description">Регистрирани стопани</span>
@@ -47,7 +45,6 @@
         <article class="stat-card">
             <div class="stat-card-top">
                 <span>Ветеринари</span>
-                <span class="stat-icon vet-icon">✚</span>
             </div>
             <strong>{{ stats.users.vets }}</strong>
             <span class="stat-description">
@@ -58,7 +55,6 @@
         <article class="stat-card">
             <div class="stat-card-top">
                 <span>Администратори</span>
-                <span class="stat-icon admin-icon">⚙</span>
             </div>
             <strong>{{ stats.users.admins }}</strong>
             <span class="stat-description">Административни акаунти</span>
@@ -98,16 +94,17 @@
         <article class="stat-card">
             <div class="stat-card-top">
                 <span>Животни</span>
-                <span class="stat-icon animal-icon">♡</span>
             </div>
             <strong>{{ stats.animals.total }}</strong>
             <span class="stat-description">Регистрирани любимци</span>
+            <a routerLink="/admin/animals" class="link">
+                Всички любимци →
+            </a>
         </article>
 
         <article class="stat-card">
             <div class="stat-card-top">
                 <span>Медицински записи</span>
-                <span class="stat-icon medical-icon">✚</span>
             </div>
             <strong>{{ stats.medicalRecords.total }}</strong>
             <span class="stat-description">Записи в досиетата</span>
@@ -116,7 +113,6 @@
         <article class="stat-card">
             <div class="stat-card-top">
                 <span>Напомняния</span>
-                <span class="stat-icon reminder-icon">◷</span>
             </div>
             <strong>{{ stats.reminders.total }}</strong>
             <span class="stat-description">Създадени напомняния</span>

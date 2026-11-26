@@ -1,9 +1,13 @@
 <div class="users-page">
-
+    @if (isLoading()) {
+    <div class="state-message">
+        <span class="loader"></span>
+        <p>Зареждане на потребителите...</p>
+    </div>
+    } @else {
     <!-- Statistics -->
     <section class="stats-grid">
         <article class="stat-card">
-            <div class="stat-icon total">👥</div>
             <div>
                 <span class="stat-label">Всички потребители</span>
                 <strong class="stat-value">{{ totalUsers() }}</strong>
@@ -11,7 +15,6 @@
         </article>
 
         <article class="stat-card">
-            <div class="stat-icon owners">🐾</div>
             <div>
                 <span class="stat-label">Собственици</span>
                 <strong class="stat-value">{{ totalOwners() }}</strong>
@@ -19,7 +22,6 @@
         </article>
 
         <article class="stat-card">
-            <div class="stat-icon vets">🩺</div>
             <div>
                 <span class="stat-label">Ветеринари</span>
                 <strong class="stat-value">{{ totalVets() }}</strong>
@@ -27,7 +29,6 @@
         </article>
 
         <article class="stat-card">
-            <div class="stat-icon admins">⚙️</div>
             <div>
                 <span class="stat-label">Администратори</span>
                 <strong class="stat-value">{{ totalAdmins() }}</strong>
@@ -44,7 +45,7 @@
                 <p>Преглед и търсене на потребителските профили</p>
             </div>
 
-            <a type="button" class="refresh-button" (click)="loadUsers()">
+            <a class="refresh-button" (click)="loadUsers()">
                 ↻ Обнови
             </a>
         </div>
@@ -78,21 +79,13 @@
 
         </div>
 
-        <!-- Loading -->
-        @if (isLoading()) {
-        <div class="state-message">
-            <span class="loader"></span>
-            <p>Зареждане на потребителите...</p>
-        </div>
-        }
-
         <!-- Error -->
-        @else if (errorMessage()) {
+        @if (errorMessage()) {
         <div class="state-message error-state">
             <p>{{ errorMessage() }}</p>
-            <button type="button" class="retry-button" (click)="loadUsers()">
+            <a class="retry-button" (click)="loadUsers()">
                 Опитай отново
-            </button>
+            </a>
         </div>
         }
 
@@ -169,4 +162,5 @@
         }
 
     </section>
+    }
 </div>

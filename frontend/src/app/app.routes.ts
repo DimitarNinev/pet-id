@@ -178,6 +178,12 @@ export const routes: Routes = [
             .then(m => m.AdminUsersComponent),
       },
       {
+        path: 'animals',
+        loadComponent: () =>
+          import('./features/admin/animals/admin-animals.component')
+            .then(m => m.AdminAnimalsComponent),
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

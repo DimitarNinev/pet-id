@@ -36,26 +36,13 @@
         border-radius: var(--radius-lg);
         box-shadow: var(--shadow-xl);
 
-        .stat-icon {
-            display: grid;
-            place-items: center;
-            flex-shrink: 0;
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-md);
-            font-weight: var(--font-weight-semibold);
-            background: var(--color-surface-secondary);
-            font-size: var(--font-size-xl);
-            border: 1px solid var(--color-border);
-        }
-
         >div:last-child {
             display: grid;
             gap: var(--spacing-xs);
 
             span {
-                color: var(--color-text-secondary);
-                font-size: var(--font-size-sm);
+                font-size: var(--font-size-base);
+                font-weight: var(--font-weight-semibold);
             }
 
             strong {
@@ -252,7 +239,7 @@
         display: grid;
         justify-items: center;
         gap: var(--spacing-sm);
-        padding: var(--spacing-3xl) var(--spacing-lg);
+        padding: var(--spacing-lg);
         text-align: center;
 
         h3,
