@@ -26,6 +26,7 @@
           height: 40px;
           border-radius: var(--radius-md);
           background: var(--color-surface);
+          border: 1px solid var(--color-border);
         }
 
         p {
@@ -155,6 +156,7 @@
             height: 40px;
             border-radius: var(--radius-md);
             background: var(--color-surface-secondary);
+            border: 1px solid var(--color-border);
           }
 
           .reminder-info {
@@ -217,6 +219,7 @@
               color: var(--color-primary);
               font-size: var(--font-size-xs);
               font-weight: var(--font-weight-semibold);
+              border: 1px solid var(--color-border);
 
               &.overdue {
                 background: var(--bg-red);

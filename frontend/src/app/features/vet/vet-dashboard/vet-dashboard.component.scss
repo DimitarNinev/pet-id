@@ -201,8 +201,8 @@
       align-items: center;
       padding: 40px 80px;
       border-radius: var(--radius-xl);
-      background: linear-gradient(110deg, #164d38 0%, #20734e 68%, #2c8a5c 100%);
-      color: var(--color-surface);
+      background: linear-gradient(110deg, var(--start-color) 0%, var(--center-color) 68%, var(--end-color) 100%);
+      color: #f3f3f3;
       box-shadow: var(--shadow-xl);
 
       .welcome-content {

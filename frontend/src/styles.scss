@@ -1,42 +1,48 @@
 :root {
+  color-scheme: light;
+  
   // ========================================
   // COLORS
   // ========================================
 
   // Primary
-  --color-primary: #136d67;
+  --color-primary: light-dark(#136d67, #9aa49a);
   --color-primary-light: #b8e6cb;
 
   // Secondary
   --color-secondary: #178b78;
-  --color-secondary-light: #eff6ff;
+  --color-secondary-light: #b8e6cb;
 
   // Backgrounds
-  --color-background: #F7FAF9;
-  --color-surface: #ffffff;
-  --color-surface-secondary: #E6F4F1;
+  --color-background: light-dark(#F7FAF9, #22242a);
+  --color-surface: light-dark(#ffffff, #31333a);
+  --color-surface-secondary: light-dark(#E6F4F1, #22242a);
 
   // Text
-  --color-text-primary: #2F4A46;
-  --color-text-secondary: #5B7470;
-  --color-text-muted: #c9d2de;
+  --color-text-primary: light-dark(#2F4A46, #e8eaf2);
+  --color-text-secondary: light-dark(#5B7470, #9c9ea6);
 
   // Borders
-  --color-border: #DCE7E4;
+  --color-border: light-dark(#DCE7E4, #4d5156);
   --color-border-focus: var(--color-primary);
 
   // Status
-  --color-success: #067647;
-  --color-warning: #B54708;
-  --color-danger: #B42318;
-  --color-info: #4569a7;
+  --color-success: light-dark(#067647, #32b47e);
+  --color-warning: light-dark(#B54708, #d77a44);
+  --color-danger: light-dark(#B42318, #d85a50);
+  --color-info: light-dark(#4569a7, #7294ce);
 
   // Backgrounds box
-  --bg-blue: #d5e4f9;
-  --bg-green: #c8f2d6;
-  --bg-purple: #dfdaf3;
-  --bg-orange: #FEF0C7;
-  --bg-red: #FEE4E2;
+  --bg-blue: light-dark(#d5e4f9, #3d4755);
+  --bg-green: light-dark(#c8f2d6, #394e40);
+  --bg-purple: light-dark(#dfdaf3, #3b374a);
+  --bg-orange: light-dark(#FEF0C7, #433f32);
+  --bg-red: light-dark(#FEE4E2, #413130);
+
+  // Background gradient
+  --start-color: light-dark(#164d38, #090f0d);
+  --center-color: light-dark(#20734e, #173125);
+  --end-color: light-dark(#2c8a5c, #2e463a);
 
   // ========================================
   // TYPOGRAPHY
@@ -98,6 +104,10 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.10);
   --shadow-xl: 0 4px 16px rgba(15, 60, 50, 0.07), 0 1px 4px rgba(15, 60, 50, 0.04);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 * {

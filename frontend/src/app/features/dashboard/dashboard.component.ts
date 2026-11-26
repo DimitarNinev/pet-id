@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, ElementRef, HostListener, DestroyRef, inject, OnInit, signal, computed } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -8,6 +8,7 @@ import { RemindersService } from '../../core/services/reminders.service';
 import { Animal } from '../../models/animal.model';
 import { Reminder } from '../../models/reminder.model';
 import { AuthService } from '../../core/services/auth.service';
+import { ThemeService } from '../../core/services/theme.service';
 
 interface DashboardReminder {
   id: string;
@@ -31,6 +32,10 @@ interface DashboardPet extends Animal {
 })
 
 export class DashboardComponent implements OnInit {
+  protected readonly themeService = inject(ThemeService);
+  private readonly elRef = inject(ElementRef);
+  readonly isOpen = signal(false);
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
@@ -156,6 +161,26 @@ export class DashboardComponent implements OnInit {
         photoUrl: pet.photoUrl,
       },
     });
+  }
+
+  toggleMenu(): void {
+    this.isOpen.update(v => !v);
+  }
+
+  closeMenu(): void {
+    this.isOpen.set(false);
+  }
+
+  onToggleTheme(): void {
+    this.themeService.toggleTheme();
+    this.closeMenu();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.isOpen() && !this.elRef.nativeElement.contains(event.target)) {
+      this.closeMenu();
+    }
   }
 
   logout(): void {
