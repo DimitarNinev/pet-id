@@ -29,10 +29,9 @@
       <div class="empty-state">
         <h3>Все още нямаш добавени животни</h3>
         <p>Първо добави животно, за да можеш да създаваш лични бележки.</p>
-
-        <app-button type="button" [small]="true" (btnClick)="addAnimal()">
+        <a (click)="addAnimal()" class="add-button">
           + Добави животно
-        </app-button>
+        </a>
       </div>
       } @else {
       <div class="animal-selection">

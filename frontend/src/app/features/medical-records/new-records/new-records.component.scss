@@ -99,6 +99,48 @@
                 }
             }
         }
+
+        .empty-state {
+            text-align: center;
+        }
+
+        .add-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--spacing-sm);
+            width: 100%;
+            margin-top: var(--spacing-lg);
+            padding: var(--spacing-md);
+            border: 1px dashed var(--color-border);
+            border-radius: 10px;
+            color: var(--color-text-primary);
+            background: var(--color-surface-secondary);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .state-message {
+            padding: var(--spacing-2xl);
+            color: var(--color-text-secondary);
+            text-align: center;
+
+            .loader {
+                display: inline-block;
+                width: 25px;
+                height: 25px;
+                border: 3px solid var(--color-border);
+                border-top-color: var(--color-primary);
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
+
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+        }
     }
 }
 

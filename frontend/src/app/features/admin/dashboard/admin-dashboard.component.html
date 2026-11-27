@@ -11,7 +11,6 @@
     </button>
 </div>
 } @else if (statistics(); as stats) {
-
 <!-- Users -->
 <section class="dashboard-section">
     <div class="section-heading">
@@ -48,7 +47,7 @@
             </div>
             <strong>{{ stats.users.vets }}</strong>
             <span class="stat-description">
-                {{ stats.users.approvedVets }} одобрени
+                {{ stats.users.approvedVets }} одобрени / {{stats.users.pendingVets}} чакащи
             </span>
         </article>
 

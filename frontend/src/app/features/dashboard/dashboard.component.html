@@ -47,7 +47,7 @@
 
       <div class="divider"></div>
 
-      <a class="nav-item" (click)="themeService.toggleTheme()">
+      <a class="nav-item" (click)="themeService.toggleTheme()" style="text-transform: capitalize;">
         Тема: {{ themeService.theme() }}
       </a>
     </nav>
@@ -80,9 +80,9 @@
       </span>
 
       <div class="user-menu">
-        <a class="avatar-btn" (click)="toggleMenu()" [attr.aria-expanded]="isOpen()"
-          aria-label="Потребителско меню">
-          <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <a class="avatar-btn" (click)="toggleMenu()" [attr.aria-expanded]="isOpen()">
+          <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke-width="1"
+            xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_iconCarrier">
               <path opacity="0.5"
                 d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
@@ -107,7 +107,7 @@
             </a>
           </li>
           <li>
-            <a (click)="onToggleTheme()">
+            <a (click)="onToggleTheme()" style="text-transform: capitalize;">
               Тема: {{ themeService.theme() }}
             </a>
           </li>
@@ -261,20 +261,23 @@
             </div>
           </div>
 
+          @if (isLoadingPets()) {
+          <div class="state-message">
+            <span class="loader"></span>
+            <p>Зареждане на любимците...</p>
+          </div>
+          } @else if (petsError()) {
+          <p class="pets-message error">{{ petsError() }}</p>
+          } @else if (pets().length === 0) {
+          <div class="pets-empty">
+            <h3>Все още нямаш регистрирани любимци</h3>
+            <p>Добави първото си животно и съхранявай медицинската му история на едно място.</p>
+            <a routerLink="/animals/new" class="add-pet-button">
+              <span>＋</span> Добави животно
+            </a>
+          </div>
+          } @else {
           <div class="pet-grid">
-            @if (isLoadingPets()) {
-            <p class="pets-message">Зареждане на любимците...</p>
-            } @else if (petsError()) {
-            <p class="pets-message error">{{ petsError() }}</p>
-            } @else if (pets().length === 0) {
-            <div class="pets-empty">
-              <h3>Все още нямаш регистрирани любимци</h3>
-              <p>Добави първото си животно и съхранявай медицинската му история на едно място.</p>
-              <a routerLink="/animals/new" class="add-pet-button">
-                <span>＋</span> Добави животно
-              </a>
-            </div>
-            } @else {
             @for (pet of pets(); track pet.id) {
             <article class="pet-card">
               <div class="pet-image-placeholder">
@@ -286,7 +289,6 @@
                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                   <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                   <g id="SVGRepo_iconCarrier">
-                    <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
                     <defs>
                       <style>
                         .cls-1 {
@@ -330,8 +332,8 @@
               </div>
             </article>
             }
-            }
           </div>
+          }
         </article>
 
         <div class="right-column">
@@ -346,7 +348,10 @@
 
             <div class="reminder-list">
               @if (isLoadingReminders()) {
-              <p class="pets-message">Зареждане на напомнянията...</p>
+              <div class="state-message">
+                <span class="loader"></span>
+                <p>Зареждане на напомнянията...</p>
+              </div>
               } @else if (remindersError()) {
               <p class="pets-message error">{{ remindersError() }}</p>
               } @else if (reminders().length === 0) {

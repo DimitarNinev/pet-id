@@ -7,11 +7,16 @@
     </div>
 
     @if (isLoading()) {
-    <p class="state-message">Зареждане на профила...</p>
+    <div class="state-message">
+      <span class="loader"></span>
+      <p>Зареждане на профила...</p>
+    </div>
     } @else if (errorMessage()) {
     <section class="state-card">
-      <p class="error-message">{{ errorMessage() }}</p>
-      <a routerLink="/dashboard" class="back-button">Обратно към Dashboard</a>
+      <p class="error-message">{{ errorMessage()}}</p>
+      <app-button type="button" type="reset" (btnClick)="cancel()">
+        Назад
+      </app-button>
     </section>
     } @else if (animal(); as pet) {
     <section class="animal-card">

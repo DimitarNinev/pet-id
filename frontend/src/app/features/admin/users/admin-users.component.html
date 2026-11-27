@@ -11,6 +11,11 @@
             <div>
                 <span class="stat-label">Всички потребители</span>
                 <strong class="stat-value">{{ totalUsers() }}</strong>
+
+                <span class="stat-growth">
+                    <span class="growth-icon">↗</span>
+                    +{{ newUsersThisMonth() }} нови този месец
+                </span>
             </div>
         </article>
 

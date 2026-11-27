@@ -9,7 +9,71 @@ import { PrismaService } from '../prisma/prisma.service.js';
 export class AdminService {
   constructor(private readonly prisma: PrismaService) { }
 
+  private getCurrentMonthRange() {
+    const timeZone = 'Europe/Sofia';
+    const now = new Date();
+
+    const monthParts = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      year: 'numeric',
+      month: 'numeric',
+    }).formatToParts(now);
+
+    const year = Number(monthParts.find(part => part.type === 'year')?.value);
+    const month = Number(monthParts.find(part => part.type === 'month')?.value);
+
+    const getUtcDateForLocalMidnight = (
+      targetYear: number,
+      targetMonth: number,
+    ) => {
+      const utcDate = new Date(Date.UTC(targetYear, targetMonth - 1, 1));
+
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone,
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hourCycle: 'h23',
+      }).formatToParts(utcDate);
+
+      const values = Object.fromEntries(
+        parts.map(part => [part.type, Number(part.value)]),
+      );
+
+      const localTimeAsUtc = Date.UTC(
+        values['year'],
+        values['month'] - 1,
+        values['day'],
+        values['hour'],
+        values['minute'],
+        values['second'],
+      );
+
+      const offset = localTimeAsUtc - utcDate.getTime();
+
+      return new Date(utcDate.getTime() - offset);
+    };
+
+    const nextMonth = month === 12 ? 1 : month + 1;
+    const nextMonthYear = month === 12 ? year + 1 : year;
+
+    return {
+      start: getUtcDateForLocalMidnight(year, month),
+      end: getUtcDateForLocalMidnight(nextMonthYear, nextMonth),
+    };
+  }
+
   async getStatistics() {
+    const { start, end } = this.getCurrentMonthRange();
+
+    const createdThisMonth = {
+      gte: start,
+      lt: end,
+    };
+
     const [
       totalUsers,
       totalOwners,
@@ -17,7 +81,10 @@ export class AdminService {
       approvedVets,
       pendingVets,
       totalAdmins,
+      newUsersThisMonth,
+      newVetsThisMonth,
       totalAnimals,
+      newAnimalsThisMonth,
       totalMedicalRecords,
       totalReminders,
     ] = await Promise.all([
@@ -31,7 +98,22 @@ export class AdminService {
         where: { role: 'VET', vetApproved: false },
       }),
       this.prisma.user.count({ where: { role: 'ADMIN' } }),
+
+      this.prisma.user.count({
+        where: { createdAt: createdThisMonth },
+      }),
+      this.prisma.user.count({
+        where: {
+          role: 'VET',
+          createdAt: createdThisMonth,
+        },
+      }),
+
       this.prisma.animal.count(),
+      this.prisma.animal.count({
+        where: { createdAt: createdThisMonth },
+      }),
+
       this.prisma.medicalRecord.count(),
       this.prisma.reminder.count(),
     ]);
@@ -44,8 +126,15 @@ export class AdminService {
         approvedVets,
         pendingVets,
         admins: totalAdmins,
+        newThisMonth: newUsersThisMonth,
       },
-      animals: { total: totalAnimals },
+      animals: {
+        total: totalAnimals,
+        newThisMonth: newAnimalsThisMonth,
+      },
+      vets: {
+        newThisMonth: newVetsThisMonth,
+      },
       medicalRecords: { total: totalMedicalRecords },
       reminders: { total: totalReminders },
     };

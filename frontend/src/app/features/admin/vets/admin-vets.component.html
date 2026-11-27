@@ -20,6 +20,18 @@
     <section class="stats-grid">
         <article class="stat-card">
             <div>
+                <span>Общо ветеринари</span>
+                <strong>{{ pendingVets().length + approvedVets().length }}</strong>
+
+                <span class="stat-growth">
+                    <span class="growth-icon">↗</span>
+                    +{{ newVetsThisMonth() }} нови този месец
+                </span>
+            </div>
+        </article>
+        
+        <article class="stat-card">
+            <div>
                 <span>Чакащи одобрение</span>
                 <strong>{{ pendingVets().length }}</strong>
             </div>
@@ -29,13 +41,6 @@
             <div>
                 <span>Одобрени ветеринари</span>
                 <strong>{{ approvedVets().length }}</strong>
-            </div>
-        </article>
-
-        <article class="stat-card">
-            <div>
-                <span>Общо ветеринари</span>
-                <strong>{{ pendingVets().length + approvedVets().length }}</strong>
             </div>
         </article>
     </section>

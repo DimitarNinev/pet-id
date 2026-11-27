@@ -8,9 +8,11 @@ import {
 } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
+
 import { AdminService } from '../services/admin.service';
 import { AdminUser } from '../../../models/admin.model';
-import { AppInputComponent } from "../../../components/app-input/app-input";
+import { AppInputComponent } from '../../../components/app-input/app-input';
 
 type UserRoleFilter = 'ALL' | 'OWNER' | 'VET' | 'ADMIN';
 
@@ -28,6 +30,8 @@ export class AdminUsersComponent implements OnInit {
   readonly users = signal<AdminUser[]>([]);
   readonly isLoading = signal(true);
   readonly errorMessage = signal('');
+
+  readonly newUsersThisMonth = signal(0);
 
   readonly searchTerm = signal('');
   readonly selectedRole = signal<UserRoleFilter>('ALL');
@@ -52,12 +56,15 @@ export class AdminUsersComponent implements OnInit {
   });
 
   readonly totalUsers = computed(() => this.users().length);
+
   readonly totalOwners = computed(
     () => this.users().filter((user) => user.role === 'OWNER').length,
   );
+
   readonly totalVets = computed(
     () => this.users().filter((user) => user.role === 'VET').length,
   );
+
   readonly totalAdmins = computed(
     () => this.users().filter((user) => user.role === 'ADMIN').length,
   );
@@ -70,13 +77,17 @@ export class AdminUsersComponent implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.adminService.getUsers().subscribe({
-      next: (users) => {
+    forkJoin({
+      users: this.adminService.getUsers(),
+      statistics: this.adminService.getStatistics(),
+    }).subscribe({
+      next: ({ users, statistics }) => {
         this.users.set(users);
+        this.newUsersThisMonth.set(statistics.users.newThisMonth);
         this.isLoading.set(false);
       },
       error: (error) => {
-        console.error('Error loading users:', error);
+        console.error('Error loading users and statistics:', error);
         this.errorMessage.set(
           'Възникна грешка при зареждането на потребителите.',
         );

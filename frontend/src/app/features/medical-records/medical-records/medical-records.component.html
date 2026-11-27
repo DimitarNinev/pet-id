@@ -15,7 +15,10 @@
       }
 
       @if (isLoading()) {
-      <p class="status-message">Зареждане на медицинската история...</p>
+      <div class="state-message">
+        <span class="loader"></span>
+        <p>Зареждане на медицинската история...</p>
+      </div>
       } @else if (errorMessage()) {
       <p class="error-message">{{ errorMessage() }}</p>
 

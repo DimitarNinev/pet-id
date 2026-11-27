@@ -33,6 +33,12 @@
       <a class="nav-item" routerLink="/profile">
         Настройки на профила
       </a>
+
+      <div class="divider"></div>
+
+      <a class="nav-item" (click)="themeService.toggleTheme()" style="text-transform: capitalize;">
+        Тема: {{ themeService.theme() }}
+      </a>
     </nav>
 
     <div class="sidebar-bottom">
@@ -41,7 +47,7 @@
         <p>Информацията за пациентите е достъпна чрез техния идентификатор.</p>
       </div>
 
-      <a class="logout-button" type="button" routerLink="/login">
+      <a class="logout-button" type="button" (click)="logout()">
         <span>↪</span> Изход
       </a>
     </div>
@@ -65,12 +71,27 @@
         Pet ID
       </span>
 
-      <div class="profile" routerLink="/profile">
+      <div class="profile" (click)="toggleMenu()" [attr.aria-expanded]="isOpen()">
         <div class="profile-avatar">{{userName().charAt(0)}}</div>
         <a class="profile-info">
           <strong>Д-р {{userName()}}</strong>
           <span>Одобрен профил</span>
         </a>
+
+        @if (isOpen()) {
+        <ul class="dropdown">
+          <li>
+            <a routerLink="/profile" (click)="closeMenu()">
+              Моят профил
+            </a>
+          </li>
+          <li>
+            <a (click)="onToggleTheme()" style="text-transform: capitalize;">
+              Тема: {{ themeService.theme() }}
+            </a>
+          </li>
+        </ul>
+        }
       </div>
     </header>
 

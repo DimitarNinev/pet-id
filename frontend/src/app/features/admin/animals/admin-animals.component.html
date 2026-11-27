@@ -11,6 +11,11 @@
             <div>
                 <span class="stat-label">Всички животни</span>
                 <strong class="stat-value">{{ totalAnimals() }}</strong>
+
+                <span class="stat-growth">
+                    <span class="growth-icon">↗</span>
+                    +{{ newAnimalsThisMonth() }} нови този месец
+                </span>
             </div>
         </article>
 

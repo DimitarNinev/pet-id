@@ -1,3 +1,4 @@
+
 export interface AdminStatistics {
     users: {
         total: number;
@@ -6,9 +7,14 @@ export interface AdminStatistics {
         approvedVets: number;
         pendingVets: number;
         admins: number;
+        newThisMonth: number;
+    };
+    vets: {
+        newThisMonth: number;
     };
     animals: {
         total: number;
+        newThisMonth: number;
     };
     medicalRecords: {
         total: number;
@@ -17,6 +23,7 @@ export interface AdminStatistics {
         total: number;
     };
 }
+
 
 export interface PendingVet {
     id: string;

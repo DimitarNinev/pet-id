@@ -8,7 +8,10 @@
     </div>
 
     @if (isLoading()) {
-    <p class="state-message">Зареждане на профила...</p>
+    <div class="state-message">
+      <span class="loader"></span>
+      <p>Зареждане на профила...</p>
+    </div>
     } @else {
     <section class="profile-section">
       <form [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()">

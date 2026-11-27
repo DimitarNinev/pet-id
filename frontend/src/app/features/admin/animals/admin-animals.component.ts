@@ -6,6 +6,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../services/admin.service';
@@ -32,6 +33,7 @@ export class AdminAnimalsComponent implements OnInit {
   readonly searchTerm = signal('');
   readonly selectedSpecies = signal<AnimalSpeciesFilter>('ALL');
 
+  readonly newAnimalsThisMonth = signal(0);
 
   readonly filteredAnimals = computed(() => {
     const search = this.searchTerm().trim().toLowerCase();
@@ -87,13 +89,17 @@ export class AdminAnimalsComponent implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.adminService.getAnimals().subscribe({
-      next: (animals) => {
+    forkJoin({
+      animals: this.adminService.getAnimals(),
+      statistics: this.adminService.getStatistics(),
+    }).subscribe({
+      next: ({ animals, statistics }) => {
         this.animals.set(animals);
+        this.newAnimalsThisMonth.set(statistics.animals.newThisMonth);
         this.isLoading.set(false);
       },
       error: (error) => {
-        console.error('Error loading animals:', error);
+        console.error('Error loading animals and statistics:', error);
         this.errorMessage.set(
           'Възникна грешка при зареждането на животните.',
         );

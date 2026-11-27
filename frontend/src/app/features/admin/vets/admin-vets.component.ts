@@ -6,6 +6,7 @@ import {
     signal,
 } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { forkJoin } from 'rxjs';
 
 import { AdminService } from '../services/admin.service';
 import { AdminUser, PendingVet } from '../../../models/admin.model';
@@ -25,6 +26,8 @@ export class AdminVetsComponent implements OnInit {
     readonly pendingVets = signal<PendingVet[]>([]);
     readonly approvedVets = signal<AdminUser[]>([]);
 
+    readonly newVetsThisMonth = signal(0);
+
     readonly isLoading = signal(true);
     readonly isApproving = signal<string | null>(null);
     readonly errorMessage = signal('');
@@ -39,35 +42,28 @@ export class AdminVetsComponent implements OnInit {
         this.errorMessage.set('');
         this.successMessage.set('');
 
-        this.adminService.getPendingVets().subscribe({
-            next: (vets) => {
-                this.pendingVets.set(vets);
-                this.loadApprovedVets();
-            },
-            error: (error) => {
-                console.error('Error loading pending vets:', error);
-                this.errorMessage.set(
-                    'Възникна грешка при зареждането на заявките за одобрение.',
-                );
-                this.isLoading.set(false);
-            },
-        });
-    }
+        forkJoin({
+            pendingVets: this.adminService.getPendingVets(),
+            users: this.adminService.getUsers(),
+            statistics: this.adminService.getStatistics(),
+        }).subscribe({
+            next: ({ pendingVets, users, statistics }) => {
+                this.pendingVets.set(pendingVets);
 
-    private loadApprovedVets(): void {
-        this.adminService.getUsers().subscribe({
-            next: (users) => {
                 this.approvedVets.set(
                     users.filter(
                         (user) => user.role === 'VET' && user.vetApproved,
                     ),
                 );
+
+                this.newVetsThisMonth.set(statistics.vets.newThisMonth);
+
                 this.isLoading.set(false);
             },
             error: (error) => {
-                console.error('Error loading approved vets:', error);
+                console.error('Error loading vets and statistics:', error);
                 this.errorMessage.set(
-                    'Заявките са заредени, но възникна грешка при зареждането на одобрените ветеринари.',
+                    'Възникна грешка при зареждането на информацията за ветеринарите.',
                 );
                 this.isLoading.set(false);
             },

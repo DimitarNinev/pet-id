@@ -231,4 +231,8 @@ export class AnimalDetailsComponent implements OnInit {
     this.errorMessage.set('');
     this.isLoading.set(false);
   }
+
+  cancel() {
+    this.router.navigate(['/dashboard']);
+  }
 }
