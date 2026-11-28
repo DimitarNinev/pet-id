@@ -24,14 +24,14 @@
       </div>
 
       <div class="filters">
-        <button type="button" [class.active]="selectedCity() === ''" (click)="selectCity('')">
+        <a [class.active]="selectedCity() === ''" (click)="selectCity('')">
           Всички
-        </button>
+        </a>
 
         @for (city of cities; track city) {
-        <button type="button" [class.active]="selectedCity() === city" (click)="selectCity(city)">
+        <a [class.active]="selectedCity() === city" (click)="selectCity(city)">
           {{ city }}
-        </button>
+        </a>
         }
       </div>
 

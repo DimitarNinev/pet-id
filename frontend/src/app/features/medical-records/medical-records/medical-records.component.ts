@@ -6,6 +6,7 @@ import {
   OnInit,
   inject,
   signal,
+  computed,
 } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -57,6 +58,21 @@ export class MedicalRecordsComponent implements OnInit {
   readonly errorMessage = signal('');
 
   readonly userRole = this.authService.currentRole;
+
+  readonly activeFilter = signal<string>('ALL');
+  readonly filteredRecords = computed(() => {
+    const filter = this.activeFilter();
+
+    if (filter === 'ALL') {
+      return this.records();
+    }
+
+    if (filter === 'OWNER_NOTE') {
+      return this.records().filter((item) => item.type === filter);
+    }
+
+    return this.records().filter((item) => item.type !== 'OWNER_NOTE');
+  });
 
   ngOnInit(): void {
     this.route.paramMap
@@ -158,5 +174,9 @@ export class MedicalRecordsComponent implements OnInit {
 
   newRecordsForm() {
     this.router.navigate(['/animals', this.animalId(), 'medical-records', 'new']);
+  }
+
+  setFilter(filter: any) {
+    this.activeFilter.set(filter);
   }
 }

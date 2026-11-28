@@ -14,6 +14,22 @@
       </app-button>
       }
 
+      @if (records().length > 0) {
+      <div class="filters">
+        <a [class.active]="activeFilter() === 'ALL'" (click)="setFilter('ALL')">
+          Всички
+        </a>
+
+        <a [class.active]="activeFilter() === 'OWNER_NOTE'" (click)="setFilter('OWNER_NOTE')">
+          Лични
+        </a>
+
+        <a [class.active]="activeFilter() === 'MEDICAL_NOTE'" (click)="setFilter('MEDICAL_NOTE')">
+          Лекарски
+        </a>
+      </div>
+      }
+
       @if (isLoading()) {
       <div class="state-message">
         <span class="loader"></span>
@@ -33,7 +49,7 @@
       </div>
       } @else {
       <div class="records-list">
-        @for (record of records(); track record.id) {
+        @for (record of filteredRecords(); track record.id) {
         <article class="record-card">
           <div class="record-header">
             <span class="record-type">{{ getRecordTypeLabel(record.type) }}</span>
